@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:macpenas/utils/routes.dart';
 
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
 import '../../widgets/textfield_widget.dart';
-import '../home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -60,7 +60,7 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 50,
                 ),
                 SingleChildScrollView(
                   child: Container(
@@ -87,35 +87,37 @@ class LoginScreen extends StatelessWidget {
                           ButtonWidget(
                               label: 'Login',
                               onPressed: (() async {
-                                if (emailController.text == 'admin' &&
-                                    passController.text == 'admin') {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomeScreen()));
-                                } else {
-                                  // try {
-                                  //   await FirebaseAuth.instance
-                                  //       .signInWithEmailAndPassword(
-                                  //           email: emailController.text,
-                                  //           password: passController.text);
-                                  //   Navigator.of(context).pushReplacement(
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               const HomeScreen(
-                                  //                 userType: UserType.user,
-                                  //               )));
-                                  // } catch (e) {
-                                  //   ScaffoldMessenger.of(context).showSnackBar(
-                                  //     SnackBar(
-                                  //       content: TextRegular(
-                                  //           text: e.toString(),
-                                  //           fontSize: 14,
-                                  //           color: Colors.white),
-                                  //     ),
-                                  //   );
-                                  // }
-                                }
+                                Navigator.of(context)
+                                    .pushReplacementNamed(Routes().homescreen);
+                                // if (emailController.text == 'admin' &&
+                                //     passController.text == 'admin') {
+                                //   Navigator.of(context).pushReplacement(
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               const HomeScreen()));
+                                // } else {
+                                //   // try {
+                                //   //   await FirebaseAuth.instance
+                                //   //       .signInWithEmailAndPassword(
+                                //   //           email: emailController.text,
+                                //   //           password: passController.text);
+                                //   //   Navigator.of(context).pushReplacement(
+                                //   //       MaterialPageRoute(
+                                //   //           builder: (context) =>
+                                //   //               const HomeScreen(
+                                //   //                 userType: UserType.user,
+                                //   //               )));
+                                //   // } catch (e) {
+                                //   //   ScaffoldMessenger.of(context).showSnackBar(
+                                //   //     SnackBar(
+                                //   //       content: TextRegular(
+                                //   //           text: e.toString(),
+                                //   //           fontSize: 14,
+                                //   //           color: Colors.white),
+                                //   //     ),
+                                //   //   );
+                                //   // }
+                                // }
                               })),
                           const SizedBox(
                             height: 20,
