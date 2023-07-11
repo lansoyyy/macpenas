@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macpenas/screens/home_screen.dart';
+import 'package:macpenas/utils/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,8 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MaterialApp(
+      title: 'Macpenas',
+      home: const HomeScreen(),
+      initialRoute: '/homescreen',
+      routes: {Routes().homescreen: (context) => const HomeScreen()},
     );
   }
 }
