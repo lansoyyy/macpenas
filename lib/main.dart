@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macpenas/screens/auth/login_screen.dart';
 import 'package:macpenas/screens/home_screen.dart';
 import 'package:macpenas/utils/routes.dart';
 
@@ -13,9 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Macpenas',
-      home: const HomeScreen(),
-      initialRoute: '/homescreen',
-      routes: {Routes().homescreen: (context) => const HomeScreen()},
+      home: LoginScreen(),
+      initialRoute: '/loginscreen',
+      routes: {
+        Routes().loginscreen: (context) => LoginScreen(),
+        Routes().homescreen: (context) => const HomeScreen(),
+      },
     );
   }
 }
