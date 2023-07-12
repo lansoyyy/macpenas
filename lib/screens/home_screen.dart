@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:macpenas/screens/pages/about_us_page.dart';
+import 'package:macpenas/screens/pages/user_home_page.dart';
 import 'package:macpenas/utils/routes.dart';
 
 import '../widgets/text_widget.dart';
@@ -209,56 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Container(
-            color: Colors.white,
-            width: 1025,
-            height: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 75,
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 20),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: TextBold(
-                        text: 'Welcome to Macpenas!',
-                        fontSize: 32,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-                Container(
-                  height: 125,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Icon(
-                    Icons.campaign_rounded,
-                    color: Colors.white,
-                    size: 68,
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                TextRegular(
-                  text: 'Press the Red Button to trigger Report',
-                  fontSize: 18,
-                  color: Colors.red,
-                ),
-              ],
-            ),
-          ),
+          isHome
+              ? const UserHomePage()
+              : isInfo
+                  ? const AboutUsPage()
+                  : const SizedBox()
         ],
       ),
     );
