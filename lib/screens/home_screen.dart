@@ -21,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isInfo = false;
 
   bool isProfile = false;
+  bool isRole = false;
+  bool isUser = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             isDashboard = false;
                             isInfo = false;
                             isProfile = false;
+                            isRole = false;
+                            isUser = false;
                           });
                         },
                         leading: Icon(
@@ -99,6 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             isDashboard = true;
                             isInfo = false;
                             isProfile = false;
+                            isRole = false;
+                            isUser = false;
                           });
                         },
                         leading: Icon(
@@ -116,8 +122,52 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             isHome = false;
                             isDashboard = false;
+                            isInfo = false;
+                            isProfile = false;
+                            isRole = false;
+                            isUser = true;
+                          });
+                        },
+                        leading: Icon(
+                          Icons.person,
+                          color: isUser ? Colors.blue : Colors.grey,
+                        ),
+                        title: TextRegular(
+                          text: 'User Management',
+                          fontSize: 16,
+                          color: isUser ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          setState(() {
+                            isHome = false;
+                            isDashboard = false;
+                            isInfo = false;
+                            isProfile = false;
+                            isRole = true;
+                            isUser = false;
+                          });
+                        },
+                        leading: Icon(
+                          Icons.work_outline,
+                          color: isRole ? Colors.blue : Colors.grey,
+                        ),
+                        title: TextRegular(
+                          text: 'Role Management',
+                          fontSize: 16,
+                          color: isRole ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          setState(() {
+                            isHome = false;
+                            isDashboard = false;
                             isInfo = true;
                             isProfile = false;
+                            isRole = false;
+                            isUser = false;
                           });
                         },
                         leading: Icon(
@@ -147,6 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         isDashboard = false;
                         isInfo = false;
                         isProfile = true;
+                        isRole = false;
+                        isUser = false;
                       });
                     },
                     leading: Icon(
