@@ -12,6 +12,8 @@ class LoginScreen extends StatelessWidget {
   final newEmailController = TextEditingController();
   final newPassController = TextEditingController();
   final newNameController = TextEditingController();
+  final newAddressController = TextEditingController();
+  final newNumberController = TextEditingController();
 
   LoginScreen({super.key});
 
@@ -176,6 +178,20 @@ class LoginScreen extends StatelessWidget {
                                                       label: 'Full Name',
                                                       controller:
                                                           newNameController),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextFieldWidget(
+                                                      label: 'Contact Number',
+                                                      controller:
+                                                          newNumberController),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextFieldWidget(
+                                                      label: 'Address',
+                                                      controller:
+                                                          newAddressController),
                                                   const SizedBox(
                                                     height: 10,
                                                   ),

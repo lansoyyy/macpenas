@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
+import 'package:macpenas/screens/pages/profile_tab.dart';
 import 'package:macpenas/screens/pages/user_home_page.dart';
 import 'package:macpenas/utils/routes.dart';
 
@@ -215,7 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ? const UserHomePage()
               : isInfo
                   ? const AboutUsPage()
-                  : const SizedBox()
+                  : isProfile
+                      ? const ProfileScreen()
+                      : const SizedBox()
         ],
       ),
     );
