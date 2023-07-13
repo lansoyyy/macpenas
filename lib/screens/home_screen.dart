@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
-import 'package:macpenas/screens/pages/profile_tab.dart';
+import 'package:macpenas/screens/pages/admin_dashboard_page.dart';
+import 'package:macpenas/screens/pages/profile_page.dart';
+import 'package:macpenas/screens/pages/role_management_page.dart';
 import 'package:macpenas/screens/pages/user_home_page.dart';
+import 'package:macpenas/screens/pages/user_management_page.dart';
 import 'package:macpenas/utils/routes.dart';
 
 import '../widgets/text_widget.dart';
@@ -270,7 +273,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const AboutUsPage()
                   : isProfile
                       ? const ProfileScreen()
-                      : const SizedBox()
+                      : isDashboard
+                          ? const AdminDashboardScreen()
+                          : isRole
+                              ? const RoleManagementScreen()
+                              : isUser
+                                  ? const UserManagementScreen()
+                                  : const SizedBox()
         ],
       ),
     );
