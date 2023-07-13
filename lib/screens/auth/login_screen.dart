@@ -170,95 +170,99 @@ class LoginScreen extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.fromLTRB(
                                                       20, 10, 20, 10),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  TextFieldWidget(
-                                                      label: 'Full Name',
-                                                      controller:
-                                                          newNameController),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  TextFieldWidget(
-                                                      label: 'Contact Number',
-                                                      controller:
-                                                          newNumberController),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  TextFieldWidget(
-                                                      label: 'Address',
-                                                      controller:
-                                                          newAddressController),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  TextFieldWidget(
-                                                      label: 'Email',
-                                                      controller:
-                                                          newEmailController),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  TextFieldWidget(
-                                                      label: 'Password',
-                                                      controller:
-                                                          newPassController),
-                                                  const SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  ButtonWidget(
-                                                      label: 'Register',
-                                                      onPressed: (() async {
-                                                        // try {
-                                                        //   await FirebaseAuth
-                                                        //       .instance
-                                                        //       .createUserWithEmailAndPassword(
-                                                        //           email:
-                                                        //               newEmailController
-                                                        //                   .text,
-                                                        //           password:
-                                                        //               newPassController
-                                                        //                   .text);
-                                                        //   addUser(
-                                                        //       newNameController
-                                                        //           .text,
-                                                        //       newEmailController
-                                                        //           .text,
-                                                        //       newPassController
-                                                        //           .text);
-                                                        //   Navigator.pop(
-                                                        //       context);
-                                                        //   ScaffoldMessenger.of(
-                                                        //           context)
-                                                        //       .showSnackBar(
-                                                        //     SnackBar(
-                                                        //       content: TextRegular(
-                                                        //           text:
-                                                        //               'Account created succesfully!',
-                                                        //           fontSize: 14,
-                                                        //           color: Colors
-                                                        //               .white),
-                                                        //     ),
-                                                        //   );
-                                                        // } catch (e) {
-                                                        //   ScaffoldMessenger.of(
-                                                        //           context)
-                                                        //       .showSnackBar(
-                                                        //     SnackBar(
-                                                        //       content: TextRegular(
-                                                        //           text: e
-                                                        //               .toString(),
-                                                        //           fontSize: 14,
-                                                        //           color: Colors
-                                                        //               .white),
-                                                        //     ),
-                                                        //   );
-                                                        // }
-                                                      })),
-                                                ],
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    TextFieldWidget(
+                                                        label: 'Full Name',
+                                                        controller:
+                                                            newNameController),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextFieldWidget(
+                                                        label: 'Contact Number',
+                                                        controller:
+                                                            newNumberController),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextFieldWidget(
+                                                        label: 'Address',
+                                                        controller:
+                                                            newAddressController),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextFieldWidget(
+                                                        label: 'Email',
+                                                        controller:
+                                                            newEmailController),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextFieldWidget(
+                                                        label: 'Password',
+                                                        controller:
+                                                            newPassController),
+                                                    const SizedBox(
+                                                      height: 30,
+                                                    ),
+                                                    ButtonWidget(
+                                                        label: 'Register',
+                                                        onPressed: (() async {
+                                                          // try {
+                                                          //   await FirebaseAuth
+                                                          //       .instance
+                                                          //       .createUserWithEmailAndPassword(
+                                                          //           email:
+                                                          //               newEmailController
+                                                          //                   .text,
+                                                          //           password:
+                                                          //               newPassController
+                                                          //                   .text);
+                                                          //   addUser(
+                                                          //       newNameController
+                                                          //           .text,
+                                                          //       newEmailController
+                                                          //           .text,
+                                                          //       newPassController
+                                                          //           .text);
+                                                          //   Navigator.pop(
+                                                          //       context);
+                                                          //   ScaffoldMessenger.of(
+                                                          //           context)
+                                                          //       .showSnackBar(
+                                                          //     SnackBar(
+                                                          //       content: TextRegular(
+                                                          //           text:
+                                                          //               'Account created succesfully!',
+                                                          //           fontSize: 14,
+                                                          //           color: Colors
+                                                          //               .white),
+                                                          //     ),
+                                                          //   );
+                                                          // } catch (e) {
+                                                          //   ScaffoldMessenger.of(
+                                                          //           context)
+                                                          //       .showSnackBar(
+                                                          //     SnackBar(
+                                                          //       content: TextRegular(
+                                                          //           text: e
+                                                          //               .toString(),
+                                                          //           fontSize: 14,
+                                                          //           color: Colors
+                                                          //               .white),
+                                                          //     ),
+                                                          //   );
+                                                          // }
+                                                        })),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ));

@@ -12,9 +12,11 @@ class AboutUsPage extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
-          opacity: 150.0,
-          image: AssetImage('assets/images/back.jpg'),
-        ),
+            opacity: 150.0,
+            image: AssetImage(
+              'assets/images/back.jpg',
+            ),
+            fit: BoxFit.cover),
       ),
       child: Center(
         child: Column(
