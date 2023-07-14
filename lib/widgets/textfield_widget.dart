@@ -46,27 +46,30 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 color: Colors.black,
               ),
               borderRadius: BorderRadius.circular(5)),
-          child: TextFormField(
-            keyboardType: widget.inputType,
-            decoration: InputDecoration(
-              suffixIcon: widget.isPassword!
-                  ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          widget.isObscure = !widget.isObscure!;
-                        });
-                      },
-                      icon: widget.isObscure!
-                          ? const Icon(Icons.remove_red_eye)
-                          : const Icon(Icons.visibility_off),
-                    )
-                  : const SizedBox(),
-              hintText: widget.hint,
-              border: InputBorder.none,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: TextFormField(
+              keyboardType: widget.inputType,
+              decoration: InputDecoration(
+                suffixIcon: widget.isPassword!
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.isObscure = !widget.isObscure!;
+                          });
+                        },
+                        icon: widget.isObscure!
+                            ? const Icon(Icons.remove_red_eye)
+                            : const Icon(Icons.visibility_off),
+                      )
+                    : const SizedBox(),
+                hintText: widget.hint,
+                border: InputBorder.none,
+              ),
+              maxLines: widget.maxLine,
+              obscureText: widget.isObscure!,
+              controller: widget.controller,
             ),
-            maxLines: widget.maxLine,
-            obscureText: widget.isObscure!,
-            controller: widget.controller,
           ),
         ),
       ],

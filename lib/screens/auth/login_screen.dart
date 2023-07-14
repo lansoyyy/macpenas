@@ -89,37 +89,33 @@ class LoginScreen extends StatelessWidget {
                           ButtonWidget(
                               label: 'Login',
                               onPressed: (() async {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(Routes().homescreen);
-                                // if (emailController.text == 'admin' &&
-                                //     passController.text == 'admin') {
-                                //   Navigator.of(context).pushReplacement(
-                                //       MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               const HomeScreen()));
-                                // } else {
-                                //   // try {
-                                //   //   await FirebaseAuth.instance
-                                //   //       .signInWithEmailAndPassword(
-                                //   //           email: emailController.text,
-                                //   //           password: passController.text);
-                                //   //   Navigator.of(context).pushReplacement(
-                                //   //       MaterialPageRoute(
-                                //   //           builder: (context) =>
-                                //   //               const HomeScreen(
-                                //   //                 userType: UserType.user,
-                                //   //               )));
-                                //   // } catch (e) {
-                                //   //   ScaffoldMessenger.of(context).showSnackBar(
-                                //   //     SnackBar(
-                                //   //       content: TextRegular(
-                                //   //           text: e.toString(),
-                                //   //           fontSize: 14,
-                                //   //           color: Colors.white),
-                                //   //     ),
-                                //   //   );
-                                //   // }
-                                // }
+                                if (emailController.text == 'admin-username' &&
+                                    passController.text == 'admin-password') {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      Routes().homescreen);
+                                } else {
+                                  // try {
+                                  //   await FirebaseAuth.instance
+                                  //       .signInWithEmailAndPassword(
+                                  //           email: emailController.text,
+                                  //           password: passController.text);
+                                  //   Navigator.of(context).pushReplacement(
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               const HomeScreen(
+                                  //                 userType: UserType.user,
+                                  //               )));
+                                  // } catch (e) {
+                                  //   ScaffoldMessenger.of(context).showSnackBar(
+                                  //     SnackBar(
+                                  //       content: TextRegular(
+                                  //           text: e.toString(),
+                                  //           fontSize: 14,
+                                  //           color: Colors.white),
+                                  //     ),
+                                  //   );
+                                  // }
+                                }
                               })),
                           const SizedBox(
                             height: 20,
