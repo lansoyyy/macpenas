@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -90,31 +91,57 @@ class AdminDashboardScreen extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            SizedBox(
-                              width: 300,
-                              height: 150,
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: ListTile(
-                                      leading: Image.asset(
-                                        'assets/images/profile.png',
-                                        height: 50,
-                                      ),
-                                      title: TextBold(
-                                          text: 'Incident Type',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                      subtitle: TextRegular(
-                                          text: 'Reporter Name',
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                      trailing: const Icon(Icons.check_box),
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Reports')
+                                    .where('status', isEqualTo: 'Completed')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error);
+                                    return const Center(child: Text('Error'));
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(top: 50),
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      )),
+                                    );
+                                  }
+
+                                  final data = snapshot.requireData;
+                                  return SizedBox(
+                                    width: 300,
+                                    height: 150,
+                                    child: ListView.builder(
+                                      itemCount: data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: ListTile(
+                                            leading: Image.asset(
+                                              'assets/images/profile.png',
+                                              height: 50,
+                                            ),
+                                            title: TextBold(
+                                                text: data.docs[index]['type'],
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            subtitle: TextRegular(
+                                                text: data.docs[index]['name'],
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                            trailing:
+                                                const Icon(Icons.check_box),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
-                                },
-                              ),
-                            ),
+                                }),
                           ],
                         ),
                         const SizedBox(
@@ -136,32 +163,57 @@ class AdminDashboardScreen extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            SizedBox(
-                              width: 300,
-                              height: 150,
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: ListTile(
-                                      leading: Image.asset(
-                                        'assets/images/profile.png',
-                                        height: 50,
-                                      ),
-                                      title: TextBold(
-                                          text: 'Incident Type',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                      subtitle: TextRegular(
-                                          text: 'Reporter Name',
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                      trailing: const Icon(Icons
-                                          .check_box_outline_blank_outlined),
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Reports')
+                                    .where('status', isEqualTo: 'Pending')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error);
+                                    return const Center(child: Text('Error'));
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(top: 50),
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      )),
+                                    );
+                                  }
+
+                                  final data = snapshot.requireData;
+                                  return SizedBox(
+                                    width: 300,
+                                    height: 150,
+                                    child: ListView.builder(
+                                      itemCount: data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: ListTile(
+                                            leading: Image.asset(
+                                              'assets/images/profile.png',
+                                              height: 50,
+                                            ),
+                                            title: TextBold(
+                                                text: data.docs[index]['type'],
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            subtitle: TextRegular(
+                                                text: data.docs[index]['name'],
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                            trailing: const Icon(Icons
+                                                .check_box_outline_blank_outlined),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
-                                },
-                              ),
-                            ),
+                                }),
                           ],
                         ),
                       ],

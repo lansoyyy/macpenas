@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:macpenas/services/add_report.dart';
 
 Future addUser(name, email, contactNumber, address) async {
   final docUser = FirebaseFirestore.instance
@@ -14,6 +15,8 @@ Future addUser(name, email, contactNumber, address) async {
     'id': docUser.id,
     'role': 'user'
   };
+
+  addReport(name, contactNumber, address, 0, 0, 'Others', 'No');
 
   await docUser.set(json);
 }

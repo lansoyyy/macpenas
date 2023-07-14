@@ -126,8 +126,14 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(myName, myNumber,
-                                                  myAddress, lat, long, 'Rape');
+                                              addReport(
+                                                  myName,
+                                                  myNumber,
+                                                  myAddress,
+                                                  lat,
+                                                  long,
+                                                  'Rape',
+                                                  'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -155,7 +161,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Traffic Incident');
+                                                  'Traffic Incident',
+                                                  'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -183,7 +190,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Robbery');
+                                                  'Robbery',
+                                                  'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -211,7 +219,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Others');
+                                                  'Others',
+                                                  'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(

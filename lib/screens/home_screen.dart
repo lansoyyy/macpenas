@@ -10,6 +10,8 @@ import 'package:macpenas/utils/routes.dart';
 
 import '../widgets/text_widget.dart';
 
+final box = GetStorage();
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -18,16 +20,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isHome = true;
+  bool isHome = box.read('user') == 'admin' ? false : true;
 
-  bool isDashboard = false;
+  bool isDashboard = box.read('user') == 'user' ? false : true;
 
   bool isInfo = false;
 
   bool isProfile = false;
   bool isRole = false;
   bool isUser = false;
-  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -80,27 +81,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.grey,
                     ),
                     children: [
-                      ListTile(
-                        onTap: () {
-                          setState(() {
-                            isHome = true;
-                            isDashboard = false;
-                            isInfo = false;
-                            isProfile = false;
-                            isRole = false;
-                            isUser = false;
-                          });
-                        },
-                        leading: Icon(
-                          Icons.home,
-                          color: isHome ? Colors.blue : Colors.grey,
-                        ),
-                        title: TextRegular(
-                          text: 'Home',
-                          fontSize: 16,
-                          color: isHome ? Colors.blue : Colors.grey,
-                        ),
-                      ),
+                      box.read('user') != 'admin'
+                          ? ListTile(
+                              onTap: () {
+                                setState(() {
+                                  isHome = true;
+                                  isDashboard = false;
+                                  isInfo = false;
+                                  isProfile = false;
+                                  isRole = false;
+                                  isUser = false;
+                                });
+                              },
+                              leading: Icon(
+                                Icons.home,
+                                color: isHome ? Colors.blue : Colors.grey,
+                              ),
+                              title: TextRegular(
+                                text: 'Home',
+                                fontSize: 16,
+                                color: isHome ? Colors.blue : Colors.grey,
+                              ),
+                            )
+                          : const SizedBox(),
                       box.read('user') == 'admin'
                           ? ListTile(
                               onTap: () {
