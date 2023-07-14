@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Macpenas',
-      home: LoginScreen(),
+      home: const LoginScreen(),
       initialRoute: '/loginscreen',
       routes: {
-        Routes().loginscreen: (context) => LoginScreen(),
+        Routes().loginscreen: (context) => const LoginScreen(),
         Routes().homescreen: (context) => const HomeScreen(),
       },
     );

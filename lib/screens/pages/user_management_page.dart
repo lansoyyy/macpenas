@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../../widgets/text_widget.dart';
 
 class UserManagementScreen extends StatefulWidget {
@@ -77,88 +78,116 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Card(
-              child: DataTable(columns: [
-                DataColumn(
-                  label: TextBold(
-                    text: 'ID',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Name',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Email',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Contact Number',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Address',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-              ], rows: [
-                DataRow(
-                  cells: [
-                    DataCell(
-                      TextRegular(
-                        text: '0',
-                        fontSize: 14,
-                        color: Colors.black,
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Users')
+                  .where('name',
+                      isGreaterThanOrEqualTo:
+                          toBeginningOfSentenceCase(nameSearched))
+                  .where('name',
+                      isLessThan: '${toBeginningOfSentenceCase(nameSearched)}z')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.black,
+                    )),
+                  );
+                }
+
+                final data = snapshot.requireData;
+                return Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Card(
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: TextBold(
+                          text: 'ID',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'John Doe',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Name',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'doe123@gmail.com',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Email',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: '09090104355',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Contact Number',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'Malaybalay City Bukidnon',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Address',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ]),
-            ),
-          )
+                    ], rows: [
+                      for (int i = 0; i < data.docs.length; i++)
+                        DataRow(
+                          cells: [
+                            DataCell(
+                              TextRegular(
+                                text: (i + 1).toString(),
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['name'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['email'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['contactNumber'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['address'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ]),
+                  ),
+                );
+              })
         ],
       ),
     );

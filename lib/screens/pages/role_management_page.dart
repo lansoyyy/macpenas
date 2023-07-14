@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macpenas/widgets/button_widget.dart';
-
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
+import '../../services/add_user.dart';
 import '../../widgets/text_widget.dart';
 import '../../widgets/textfield_widget.dart';
 
@@ -139,51 +142,42 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                                         ButtonWidget(
                                             label: 'Register',
                                             onPressed: (() async {
-                                              // try {
-                                              //   await FirebaseAuth
-                                              //       .instance
-                                              //       .createUserWithEmailAndPassword(
-                                              //           email:
-                                              //               newEmailController
-                                              //                   .text,
-                                              //           password:
-                                              //               newPassController
-                                              //                   .text);
-                                              //   addUser(
-                                              //       newNameController
-                                              //           .text,
-                                              //       newEmailController
-                                              //           .text,
-                                              //       newPassController
-                                              //           .text);
-                                              //   Navigator.pop(
-                                              //       context);
-                                              //   ScaffoldMessenger.of(
-                                              //           context)
-                                              //       .showSnackBar(
-                                              //     SnackBar(
-                                              //       content: TextRegular(
-                                              //           text:
-                                              //               'Account created succesfully!',
-                                              //           fontSize: 14,
-                                              //           color: Colors
-                                              //               .white),
-                                              //     ),
-                                              //   );
-                                              // } catch (e) {
-                                              //   ScaffoldMessenger.of(
-                                              //           context)
-                                              //       .showSnackBar(
-                                              //     SnackBar(
-                                              //       content: TextRegular(
-                                              //           text: e
-                                              //               .toString(),
-                                              //           fontSize: 14,
-                                              //           color: Colors
-                                              //               .white),
-                                              //     ),
-                                              //   );
-                                              // }
+                                              try {
+                                                await FirebaseAuth.instance
+                                                    .createUserWithEmailAndPassword(
+                                                        email:
+                                                            newEmailController
+                                                                .text,
+                                                        password:
+                                                            newPassController
+                                                                .text);
+                                                addUser(
+                                                    newNameController.text,
+                                                    newEmailController.text,
+                                                    newNumberController.text,
+                                                    newAddressController.text);
+                                                Navigator.pop(context);
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: TextRegular(
+                                                        text:
+                                                            'Account created succesfully!',
+                                                        fontSize: 14,
+                                                        color: Colors.white),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: TextRegular(
+                                                        text: e.toString(),
+                                                        fontSize: 14,
+                                                        color: Colors.white),
+                                                  ),
+                                                );
+                                              }
                                             })),
                                       ],
                                     ),
@@ -199,120 +193,160 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
           const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Card(
-              child: DataTable(columns: [
-                DataColumn(
-                  label: TextBold(
-                    text: 'ID',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Name',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Email',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Contact Number',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Address',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                DataColumn(
-                  label: TextBold(
-                    text: 'Role',
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-              ], rows: [
-                DataRow(
-                  cells: [
-                    DataCell(
-                      TextRegular(
-                        text: '0',
-                        fontSize: 14,
-                        color: Colors.black,
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Users')
+                  .where('name',
+                      isGreaterThanOrEqualTo:
+                          toBeginningOfSentenceCase(nameSearched))
+                  .where('name',
+                      isLessThan: '${toBeginningOfSentenceCase(nameSearched)}z')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.black,
+                    )),
+                  );
+                }
+
+                final data = snapshot.requireData;
+                return Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Card(
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: TextBold(
+                          text: 'ID',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'John Doe',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Name',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'doe123@gmail.com',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Email',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: '09090104355',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Contact Number',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextRegular(
-                        text: 'Malaybalay City Bukidnon',
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Address',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            TextRegular(
-                              text: 'User',
-                              fontSize: 14,
-                              color: Colors.black,
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Role',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ], rows: [
+                      for (int i = 0; i < data.docs.length; i++)
+                        DataRow(
+                          cells: [
+                            DataCell(
+                              TextRegular(
+                                text: (i + 1).toString(),
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['name'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.refresh_rounded,
-                                size: 24,
-                                color: Colors.blue,
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['email'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['contactNumber'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              TextRegular(
+                                text: data.docs[i]['address'],
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    TextRegular(
+                                      text: data.docs[i]['role'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        if (data.docs[i]['role'] == 'user') {
+                                          await FirebaseFirestore.instance
+                                              .collection('Users')
+                                              .doc(data.docs[i].id)
+                                              .update({'role': 'admin'});
+                                        } else {
+                                          await FirebaseFirestore.instance
+                                              .collection('Users')
+                                              .doc(data.docs[i].id)
+                                              .update({'role': 'user'});
+                                        }
+                                      },
+                                      child: const Icon(
+                                        Icons.refresh_rounded,
+                                        size: 24,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ]),
-            ),
-          )
+                    ]),
+                  ),
+                );
+              })
         ],
       ),
     );
