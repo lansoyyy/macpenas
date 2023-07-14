@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,18 +9,29 @@ import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
 import '../../widgets/textfield_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
+
   final passController = TextEditingController();
 
   final newEmailController = TextEditingController();
-  final newPassController = TextEditingController();
-  final newNameController = TextEditingController();
-  final newAddressController = TextEditingController();
-  final newNumberController = TextEditingController();
-  final box = GetStorage();
 
-  LoginScreen({super.key});
+  final newPassController = TextEditingController();
+
+  final newNameController = TextEditingController();
+
+  final newAddressController = TextEditingController();
+
+  final newNumberController = TextEditingController();
+
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -93,30 +105,38 @@ class LoginScreen extends StatelessWidget {
                           ButtonWidget(
                               label: 'Login',
                               onPressed: (() async {
-                                if (emailController.text == 'admin-username' &&
-                                    passController.text == 'admin-password') {
-                                  box.write('user', 'admin');
-                                  Navigator.of(context).pushReplacementNamed(
-                                      Routes().homescreen);
-                                } else {
-                                  try {
-                                    box.write('user', 'user');
-                                    await FirebaseAuth.instance
-                                        .signInWithEmailAndPassword(
-                                            email: emailController.text,
-                                            password: passController.text);
-                                    Navigator.of(context).pushReplacementNamed(
-                                        Routes().homescreen);
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: TextRegular(
-                                            text: e.toString(),
-                                            fontSize: 14,
-                                            color: Colors.white),
-                                      ),
-                                    );
-                                  }
+                                try {
+                                  await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                          email: emailController.text,
+                                          password: passController.text)
+                                      .then((value) {
+                                    FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .where('id',
+                                            isEqualTo: FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                        .get()
+                                        .then((QuerySnapshot
+                                            querySnapshot) async {
+                                      for (var doc in querySnapshot.docs) {
+                                        box.write('user', doc['role']);
+                                      }
+                                    }).then((value) {
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              Routes().homescreen);
+                                    });
+                                  });
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: TextRegular(
+                                          text: e.toString(),
+                                          fontSize: 14,
+                                          color: Colors.white),
+                                    ),
+                                  );
                                 }
                               })),
                           const SizedBox(

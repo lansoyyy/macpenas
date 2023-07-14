@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
 import 'package:macpenas/screens/pages/admin_dashboard_page.dart';
 import 'package:macpenas/screens/pages/profile_page.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isProfile = false;
   bool isRole = false;
   bool isUser = false;
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -99,69 +101,75 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: isHome ? Colors.blue : Colors.grey,
                         ),
                       ),
-                      ListTile(
-                        onTap: () {
-                          setState(() {
-                            isHome = false;
-                            isDashboard = true;
-                            isInfo = false;
-                            isProfile = false;
-                            isRole = false;
-                            isUser = false;
-                          });
-                        },
-                        leading: Icon(
-                          Icons.dashboard,
-                          color: isDashboard ? Colors.blue : Colors.grey,
-                        ),
-                        title: TextRegular(
-                          text: 'Admin Dashboard',
-                          fontSize: 16,
-                          color: isDashboard ? Colors.blue : Colors.grey,
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {
-                          setState(() {
-                            isHome = false;
-                            isDashboard = false;
-                            isInfo = false;
-                            isProfile = false;
-                            isRole = false;
-                            isUser = true;
-                          });
-                        },
-                        leading: Icon(
-                          Icons.person,
-                          color: isUser ? Colors.blue : Colors.grey,
-                        ),
-                        title: TextRegular(
-                          text: 'User Management',
-                          fontSize: 16,
-                          color: isUser ? Colors.blue : Colors.grey,
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {
-                          setState(() {
-                            isHome = false;
-                            isDashboard = false;
-                            isInfo = false;
-                            isProfile = false;
-                            isRole = true;
-                            isUser = false;
-                          });
-                        },
-                        leading: Icon(
-                          Icons.work_outline,
-                          color: isRole ? Colors.blue : Colors.grey,
-                        ),
-                        title: TextRegular(
-                          text: 'Role Management',
-                          fontSize: 16,
-                          color: isRole ? Colors.blue : Colors.grey,
-                        ),
-                      ),
+                      box.read('user') == 'admin'
+                          ? ListTile(
+                              onTap: () {
+                                setState(() {
+                                  isHome = false;
+                                  isDashboard = true;
+                                  isInfo = false;
+                                  isProfile = false;
+                                  isRole = false;
+                                  isUser = false;
+                                });
+                              },
+                              leading: Icon(
+                                Icons.dashboard,
+                                color: isDashboard ? Colors.blue : Colors.grey,
+                              ),
+                              title: TextRegular(
+                                text: 'Admin Dashboard',
+                                fontSize: 16,
+                                color: isDashboard ? Colors.blue : Colors.grey,
+                              ),
+                            )
+                          : const SizedBox(),
+                      box.read('user') == 'admin'
+                          ? ListTile(
+                              onTap: () {
+                                setState(() {
+                                  isHome = false;
+                                  isDashboard = false;
+                                  isInfo = false;
+                                  isProfile = false;
+                                  isRole = false;
+                                  isUser = true;
+                                });
+                              },
+                              leading: Icon(
+                                Icons.person,
+                                color: isUser ? Colors.blue : Colors.grey,
+                              ),
+                              title: TextRegular(
+                                text: 'User Management',
+                                fontSize: 16,
+                                color: isUser ? Colors.blue : Colors.grey,
+                              ),
+                            )
+                          : const SizedBox(),
+                      box.read('user') == 'admin'
+                          ? ListTile(
+                              onTap: () {
+                                setState(() {
+                                  isHome = false;
+                                  isDashboard = false;
+                                  isInfo = false;
+                                  isProfile = false;
+                                  isRole = true;
+                                  isUser = false;
+                                });
+                              },
+                              leading: Icon(
+                                Icons.work_outline,
+                                color: isRole ? Colors.blue : Colors.grey,
+                              ),
+                              title: TextRegular(
+                                text: 'Role Management',
+                                fontSize: 16,
+                                color: isRole ? Colors.blue : Colors.grey,
+                              ),
+                            )
+                          : const SizedBox(),
                       ListTile(
                         onTap: () {
                           setState(() {
