@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:macpenas/services/add_user.dart';
 import 'package:macpenas/utils/routes.dart';
 
 import '../../widgets/button_widget.dart';
@@ -14,6 +17,7 @@ class LoginScreen extends StatelessWidget {
   final newNameController = TextEditingController();
   final newAddressController = TextEditingController();
   final newNumberController = TextEditingController();
+  final box = GetStorage();
 
   LoginScreen({super.key});
 
@@ -91,30 +95,28 @@ class LoginScreen extends StatelessWidget {
                               onPressed: (() async {
                                 if (emailController.text == 'admin-username' &&
                                     passController.text == 'admin-password') {
+                                  box.write('user', 'admin');
                                   Navigator.of(context).pushReplacementNamed(
                                       Routes().homescreen);
                                 } else {
-                                  // try {
-                                  //   await FirebaseAuth.instance
-                                  //       .signInWithEmailAndPassword(
-                                  //           email: emailController.text,
-                                  //           password: passController.text);
-                                  //   Navigator.of(context).pushReplacement(
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               const HomeScreen(
-                                  //                 userType: UserType.user,
-                                  //               )));
-                                  // } catch (e) {
-                                  //   ScaffoldMessenger.of(context).showSnackBar(
-                                  //     SnackBar(
-                                  //       content: TextRegular(
-                                  //           text: e.toString(),
-                                  //           fontSize: 14,
-                                  //           color: Colors.white),
-                                  //     ),
-                                  //   );
-                                  // }
+                                  try {
+                                    box.write('user', 'user');
+                                    await FirebaseAuth.instance
+                                        .signInWithEmailAndPassword(
+                                            email: emailController.text,
+                                            password: passController.text);
+                                    Navigator.of(context).pushReplacementNamed(
+                                        Routes().homescreen);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: TextRegular(
+                                            text: e.toString(),
+                                            fontSize: 14,
+                                            color: Colors.white),
+                                      ),
+                                    );
+                                  }
                                 }
                               })),
                           const SizedBox(
@@ -211,51 +213,55 @@ class LoginScreen extends StatelessWidget {
                                                     ButtonWidget(
                                                         label: 'Register',
                                                         onPressed: (() async {
-                                                          // try {
-                                                          //   await FirebaseAuth
-                                                          //       .instance
-                                                          //       .createUserWithEmailAndPassword(
-                                                          //           email:
-                                                          //               newEmailController
-                                                          //                   .text,
-                                                          //           password:
-                                                          //               newPassController
-                                                          //                   .text);
-                                                          //   addUser(
-                                                          //       newNameController
-                                                          //           .text,
-                                                          //       newEmailController
-                                                          //           .text,
-                                                          //       newPassController
-                                                          //           .text);
-                                                          //   Navigator.pop(
-                                                          //       context);
-                                                          //   ScaffoldMessenger.of(
-                                                          //           context)
-                                                          //       .showSnackBar(
-                                                          //     SnackBar(
-                                                          //       content: TextRegular(
-                                                          //           text:
-                                                          //               'Account created succesfully!',
-                                                          //           fontSize: 14,
-                                                          //           color: Colors
-                                                          //               .white),
-                                                          //     ),
-                                                          //   );
-                                                          // } catch (e) {
-                                                          //   ScaffoldMessenger.of(
-                                                          //           context)
-                                                          //       .showSnackBar(
-                                                          //     SnackBar(
-                                                          //       content: TextRegular(
-                                                          //           text: e
-                                                          //               .toString(),
-                                                          //           fontSize: 14,
-                                                          //           color: Colors
-                                                          //               .white),
-                                                          //     ),
-                                                          //   );
-                                                          // }
+                                                          try {
+                                                            await FirebaseAuth
+                                                                .instance
+                                                                .createUserWithEmailAndPassword(
+                                                                    email:
+                                                                        newEmailController
+                                                                            .text,
+                                                                    password:
+                                                                        newPassController
+                                                                            .text);
+                                                            addUser(
+                                                                newNameController
+                                                                    .text,
+                                                                newEmailController
+                                                                    .text,
+                                                                newNumberController
+                                                                    .text,
+                                                                newAddressController
+                                                                    .text);
+                                                            Navigator.pop(
+                                                                context);
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                              SnackBar(
+                                                                content: TextRegular(
+                                                                    text:
+                                                                        'Account created succesfully!',
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            );
+                                                          } catch (e) {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                              SnackBar(
+                                                                content: TextRegular(
+                                                                    text: e
+                                                                        .toString(),
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            );
+                                                          }
                                                         })),
                                                   ],
                                                 ),
