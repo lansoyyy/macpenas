@@ -40,7 +40,7 @@ class AdminDashboardScreen extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            height: 500,
+            height: 425,
             child: FlutterMap(
               options: MapOptions(
                 center: LatLng(8.1479, 125.1321),
