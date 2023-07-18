@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:macpenas/services/add_user.dart';
@@ -32,6 +35,33 @@ class _LoginScreenState extends State<LoginScreen> {
   final newNumberController = TextEditingController();
 
   final box = GetStorage();
+
+  late String? imgUrl = '';
+
+  uploadToStorage() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files!.first;
+      final reader = FileReader();
+      reader.readAsDataUrl(file);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot = await fs.ref().child('newfile').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: TextRegular(
+                text: 'Uploaded Succesfully! Click update to see changes',
+                fontSize: 14,
+                color: Colors.white)));
+
+        setState(() {
+          imgUrl = downloadUrl;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,54 +263,70 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     ButtonWidget(
                                                         label: 'Register',
                                                         onPressed: (() async {
-                                                          try {
-                                                            await FirebaseAuth
-                                                                .instance
-                                                                .createUserWithEmailAndPassword(
-                                                                    email:
-                                                                        newEmailController
-                                                                            .text,
-                                                                    password:
-                                                                        newPassController
-                                                                            .text);
-                                                            addUser(
-                                                                newNameController
-                                                                    .text,
-                                                                newEmailController
-                                                                    .text,
-                                                                newNumberController
-                                                                    .text,
-                                                                newAddressController
-                                                                    .text);
-                                                            Navigator.pop(
-                                                                context);
+                                                          if (imgUrl == '') {
                                                             ScaffoldMessenger
                                                                     .of(context)
                                                                 .showSnackBar(
                                                               SnackBar(
                                                                 content: TextRegular(
                                                                     text:
-                                                                        'Account created succesfully!',
+                                                                        'Please upload your ID for verification',
                                                                     fontSize:
                                                                         14,
                                                                     color: Colors
                                                                         .white),
                                                               ),
                                                             );
-                                                          } catch (e) {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                              SnackBar(
-                                                                content: TextRegular(
-                                                                    text: e
-                                                                        .toString(),
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                            );
+                                                          } else {
+                                                            try {
+                                                              await FirebaseAuth
+                                                                  .instance
+                                                                  .createUserWithEmailAndPassword(
+                                                                      email: newEmailController
+                                                                          .text,
+                                                                      password:
+                                                                          newPassController
+                                                                              .text);
+                                                              addUser(
+                                                                  newNameController
+                                                                      .text,
+                                                                  newEmailController
+                                                                      .text,
+                                                                  newNumberController
+                                                                      .text,
+                                                                  newAddressController
+                                                                      .text,
+                                                                  imgUrl);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                SnackBar(
+                                                                  content: TextRegular(
+                                                                      text:
+                                                                          'Account created succesfully!',
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                              );
+                                                            } catch (e) {
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                SnackBar(
+                                                                  content: TextRegular(
+                                                                      text: e
+                                                                          .toString(),
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                              );
+                                                            }
                                                           }
                                                         })),
                                                   ],

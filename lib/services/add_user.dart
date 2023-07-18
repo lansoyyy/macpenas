@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macpenas/services/add_report.dart';
 
-Future addUser(name, email, contactNumber, address) async {
+Future addUser(name, email, contactNumber, address, imageId) async {
   final docUser = FirebaseFirestore.instance
       .collection('Users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -13,7 +13,9 @@ Future addUser(name, email, contactNumber, address) async {
     'contactNumber': contactNumber,
     'address': address,
     'id': docUser.id,
-    'role': 'user'
+    'role': 'user',
+    'imageId': imageId,
+    'isVerified': false,
   };
 
   addReport(name, contactNumber, address, 0, 0, 'Others', 'No');
