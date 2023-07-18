@@ -11,6 +11,7 @@ class TextFieldWidget extends StatefulWidget {
   final int? maxLine;
   final TextInputType? inputType;
   final bool? isPassword;
+  final bool? isEmail;
 
   TextFieldWidget(
       {super.key,
@@ -22,6 +23,7 @@ class TextFieldWidget extends StatefulWidget {
       this.height = 40,
       this.maxLine = 1,
       this.isPassword = false,
+      this.isEmail = false,
       this.inputType = TextInputType.text});
 
   @override
@@ -49,6 +51,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: TextFormField(
+              textCapitalization: widget.isEmail! && widget.isPassword!
+                  ? TextCapitalization.none
+                  : TextCapitalization.words,
               keyboardType: widget.inputType,
               decoration: InputDecoration(
                 suffixIcon: widget.isPassword!

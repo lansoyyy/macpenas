@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final newEmailController = TextEditingController();
 
   final newPassController = TextEditingController();
+  final newConfirmPassController = TextEditingController();
 
   final newNameController = TextEditingController();
 
@@ -96,12 +97,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextFieldWidget(
-                              label: 'Email', controller: emailController),
+                              isEmail: true,
+                              label: 'Email',
+                              controller: emailController),
                           const SizedBox(
                             height: 10,
                           ),
                           TextFieldWidget(
                               isObscure: true,
+                              isPassword: true,
                               label: 'Password',
                               controller: passController),
                           const SizedBox(
@@ -393,6 +397,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         height: 10,
                                                       ),
                                                       TextFieldWidget(
+                                                          isEmail: true,
                                                           label: 'Email',
                                                           controller:
                                                               newEmailController),
@@ -400,23 +405,52 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         height: 10,
                                                       ),
                                                       TextFieldWidget(
+                                                          isObscure: true,
+                                                          isPassword: true,
                                                           label: 'Password',
                                                           controller:
                                                               newPassController),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          isObscure: true,
+                                                          isPassword: true,
+                                                          label:
+                                                              'Confirm Password',
+                                                          controller:
+                                                              newConfirmPassController),
                                                       const SizedBox(
                                                         height: 30,
                                                       ),
                                                       ButtonWidget(
                                                           label: 'Register',
                                                           onPressed: (() async {
-                                                            if (imgUrl == '') {
+                                                            if (newNameController.text == '' ||
+                                                                newNumberController
+                                                                        .text ==
+                                                                    '' ||
+                                                                newAddressController
+                                                                        .text ==
+                                                                    '' ||
+                                                                newEmailController
+                                                                        .text ==
+                                                                    '' ||
+                                                                newPassController
+                                                                        .text ==
+                                                                    '' ||
+                                                                newConfirmPassController
+                                                                        .text ==
+                                                                    '') {
+                                                              Navigator.pop(
+                                                                  context);
                                                               ScaffoldMessenger
                                                                       .of(context)
                                                                   .showSnackBar(
                                                                 SnackBar(
                                                                   content: TextRegular(
                                                                       text:
-                                                                          'Please upload your ID for verification',
+                                                                          'Please supply all the missing fields',
                                                                       fontSize:
                                                                           14,
                                                                       color: Colors
@@ -424,24 +458,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                 ),
                                                               );
                                                             } else {
-                                                              try {
-                                                                await FirebaseAuth
-                                                                    .instance
-                                                                    .createUserWithEmailAndPassword(
-                                                                        email: newEmailController
-                                                                            .text,
-                                                                        password:
-                                                                            newPassController.text);
-                                                                addUser(
-                                                                    newNameController
-                                                                        .text,
-                                                                    newEmailController
-                                                                        .text,
-                                                                    newNumberController
-                                                                        .text,
-                                                                    newAddressController
-                                                                        .text,
-                                                                    imgUrl);
+                                                              if (newConfirmPassController
+                                                                      .text !=
+                                                                  newPassController
+                                                                      .text) {
                                                                 Navigator.pop(
                                                                     context);
                                                                 ScaffoldMessenger.of(
@@ -450,27 +470,78 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                   SnackBar(
                                                                     content: TextRegular(
                                                                         text:
-                                                                            'Account created succesfully!',
+                                                                            'Password do not match!',
                                                                         fontSize:
                                                                             14,
                                                                         color: Colors
                                                                             .white),
                                                                   ),
                                                                 );
-                                                              } catch (e) {
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
-                                                                  SnackBar(
-                                                                    content: TextRegular(
-                                                                        text: e
-                                                                            .toString(),
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                );
+                                                              } else {
+                                                                if (imgUrl ==
+                                                                    '') {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    SnackBar(
+                                                                      content: TextRegular(
+                                                                          text:
+                                                                              'Please upload your ID for verification',
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  );
+                                                                } else {
+                                                                  try {
+                                                                    await FirebaseAuth
+                                                                        .instance
+                                                                        .createUserWithEmailAndPassword(
+                                                                            email:
+                                                                                newEmailController.text,
+                                                                            password: newPassController.text);
+                                                                    addUser(
+                                                                        newNameController
+                                                                            .text,
+                                                                        newEmailController
+                                                                            .text,
+                                                                        newNumberController
+                                                                            .text,
+                                                                        newAddressController
+                                                                            .text,
+                                                                        imgUrl);
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Account created succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                    );
+                                                                  } catch (e) {
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        content: TextRegular(
+                                                                            text: e
+                                                                                .toString(),
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                }
                                                               }
                                                             }
                                                           })),
