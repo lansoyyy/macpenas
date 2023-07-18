@@ -182,8 +182,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: Container(
                                             color:
                                                 Colors.white.withOpacity(0.5),
-                                            height: 375,
-                                            width: 300,
+                                            height: 450,
+                                            width: 400,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
