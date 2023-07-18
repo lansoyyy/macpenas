@@ -110,36 +110,50 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                     child: DataTable(columns: [
                       DataColumn(
                         label: TextBold(
+                          text: '',
+                          fontSize: 0,
+                          color: Colors.black,
+                        ),
+                      ),
+                      DataColumn(
+                        label: TextBold(
                           text: 'ID',
-                          fontSize: 18,
+                          fontSize: 14,
                           color: Colors.black,
                         ),
                       ),
                       DataColumn(
                         label: TextBold(
                           text: 'Name',
-                          fontSize: 18,
+                          fontSize: 14,
                           color: Colors.black,
                         ),
                       ),
                       DataColumn(
                         label: TextBold(
                           text: 'Email',
-                          fontSize: 18,
+                          fontSize: 14,
                           color: Colors.black,
                         ),
                       ),
                       DataColumn(
                         label: TextBold(
                           text: 'Contact Number',
-                          fontSize: 18,
+                          fontSize: 14,
                           color: Colors.black,
                         ),
                       ),
                       DataColumn(
                         label: TextBold(
                           text: 'Address',
-                          fontSize: 18,
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      DataColumn(
+                        label: TextBold(
+                          text: 'Verified',
+                          fontSize: 0,
                           color: Colors.black,
                         ),
                       ),
@@ -148,38 +162,153 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                         DataRow(
                           cells: [
                             DataCell(
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: TextBold(
+                                            text: 'User ID',
+                                            fontSize: 14,
+                                            color: Colors.black),
+                                        content: Image.network(
+                                            data.docs[i]['imageId']),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: TextRegular(
+                                              text: 'Close',
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.visibility,
+                                ),
+                              ),
+                            ),
+                            DataCell(
                               TextRegular(
                                 text: (i + 1).toString(),
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: Colors.black,
                               ),
                             ),
                             DataCell(
                               TextRegular(
                                 text: data.docs[i]['name'],
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: Colors.black,
                               ),
                             ),
                             DataCell(
                               TextRegular(
                                 text: data.docs[i]['email'],
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: Colors.black,
                               ),
                             ),
                             DataCell(
                               TextRegular(
                                 text: data.docs[i]['contactNumber'],
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: Colors.black,
                               ),
                             ),
                             DataCell(
                               TextRegular(
                                 text: data.docs[i]['address'],
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  TextRegular(
+                                    text: data.docs[i]['isVerified'].toString(),
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  data.docs[i]['isVerified'] == true
+                                      ? const SizedBox()
+                                      : IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                      title: const Text(
+                                                        'Verified Confirmation',
+                                                        style: TextStyle(
+                                                            fontFamily: 'QBold',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      content: const Text(
+                                                        'Are you sure you want to verify this user?',
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'QRegular'),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        MaterialButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(true),
+                                                          child: const Text(
+                                                            'Close',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'QRegular',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                        MaterialButton(
+                                                          onPressed: () async {
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'Users')
+                                                                .doc(data
+                                                                    .docs[i].id)
+                                                                .update({
+                                                              'isVerified': true
+                                                            });
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                            'Continue',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'QRegular',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ));
+                                          },
+                                          icon: const Icon(
+                                            Icons.verified_outlined,
+                                          ),
+                                        ),
+                                ],
                               ),
                             ),
                           ],

@@ -36,32 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final box = GetStorage();
 
-  late String? imgUrl = '';
-
-  uploadToStorage() {
-    InputElement input = FileUploadInputElement() as InputElement
-      ..accept = 'image/*';
-    FirebaseStorage fs = FirebaseStorage.instance;
-    input.click();
-    input.onChange.listen((event) {
-      final file = input.files!.first;
-      final reader = FileReader();
-      reader.readAsDataUrl(file);
-      reader.onLoadEnd.listen((event) async {
-        var snapshot = await fs.ref().child('newfile').putBlob(file);
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: TextRegular(
-                text: 'Uploaded Succesfully! Click update to see changes',
-                fontSize: 14,
-                color: Colors.white)));
-
-        setState(() {
-          imgUrl = downloadUrl;
-        });
-      });
-    });
-  }
+  String imgUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ButtonWidget(
                               label: 'Login',
                               onPressed: (() async {
+                                bool isVerified = false;
                                 try {
                                   await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
@@ -151,11 +127,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                             querySnapshot) async {
                                       for (var doc in querySnapshot.docs) {
                                         box.write('user', doc['role']);
+
+                                        setState(() {
+                                          isVerified = doc['isVerified'];
+                                        });
                                       }
                                     }).then((value) {
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              Routes().homescreen);
+                                      if (isVerified) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                Routes().homescreen);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: TextRegular(
+                                                text:
+                                                    'Your account has not been verified! Wait for the admins response',
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                        );
+                                      }
                                     });
                                   });
                                 } catch (e) {
@@ -209,131 +202,284 @@ class _LoginScreenState extends State<LoginScreen> {
                                       return Dialog(
                                           backgroundColor:
                                               Colors.white.withOpacity(0.8),
-                                          child: Container(
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            height: 450,
-                                            width: 400,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 10, 20, 10),
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    TextFieldWidget(
-                                                        label: 'Full Name',
-                                                        controller:
-                                                            newNameController),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    TextFieldWidget(
-                                                        label: 'Contact Number',
-                                                        controller:
-                                                            newNumberController),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    TextFieldWidget(
-                                                        label: 'Address',
-                                                        controller:
-                                                            newAddressController),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    TextFieldWidget(
-                                                        label: 'Email',
-                                                        controller:
-                                                            newEmailController),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    TextFieldWidget(
-                                                        label: 'Password',
-                                                        controller:
-                                                            newPassController),
-                                                    const SizedBox(
-                                                      height: 30,
-                                                    ),
-                                                    ButtonWidget(
-                                                        label: 'Register',
-                                                        onPressed: (() async {
-                                                          if (imgUrl == '') {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                              SnackBar(
-                                                                content: TextRegular(
-                                                                    text:
-                                                                        'Please upload your ID for verification',
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .white),
+                                          child: StatefulBuilder(
+                                              builder: (context, setState) {
+                                            return Container(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              height: 450,
+                                              width: 400,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 10),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      imgUrl == ''
+                                                          ? GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(
+                                                                            'newfile')
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Uploaded Succesfully! Click update to see changes',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 150,
+                                                                width: 150,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.add,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
                                                               ),
-                                                            );
-                                                          } else {
-                                                            try {
-                                                              await FirebaseAuth
-                                                                  .instance
-                                                                  .createUserWithEmailAndPassword(
-                                                                      email: newEmailController
-                                                                          .text,
-                                                                      password:
-                                                                          newPassController
-                                                                              .text);
-                                                              addUser(
-                                                                  newNameController
-                                                                      .text,
-                                                                  newEmailController
-                                                                      .text,
-                                                                  newNumberController
-                                                                      .text,
-                                                                  newAddressController
-                                                                      .text,
-                                                                  imgUrl);
-                                                              Navigator.pop(
-                                                                  context);
+                                                            )
+                                                          : GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(
+                                                                            'newfile')
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Uploaded Succesfully! Click update to see changes',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 150,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  image: DecorationImage(
+                                                                      image: NetworkImage(
+                                                                          imgUrl),
+                                                                      fit: BoxFit
+                                                                          .cover),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          label: 'Full Name',
+                                                          controller:
+                                                              newNameController),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          label:
+                                                              'Contact Number',
+                                                          controller:
+                                                              newNumberController),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          label: 'Address',
+                                                          controller:
+                                                              newAddressController),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          label: 'Email',
+                                                          controller:
+                                                              newEmailController),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextFieldWidget(
+                                                          label: 'Password',
+                                                          controller:
+                                                              newPassController),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      ButtonWidget(
+                                                          label: 'Register',
+                                                          onPressed: (() async {
+                                                            if (imgUrl == '') {
                                                               ScaffoldMessenger
                                                                       .of(context)
                                                                   .showSnackBar(
                                                                 SnackBar(
                                                                   content: TextRegular(
                                                                       text:
-                                                                          'Account created succesfully!',
+                                                                          'Please upload your ID for verification',
                                                                       fontSize:
                                                                           14,
                                                                       color: Colors
                                                                           .white),
                                                                 ),
                                                               );
-                                                            } catch (e) {
-                                                              ScaffoldMessenger
-                                                                      .of(context)
-                                                                  .showSnackBar(
-                                                                SnackBar(
-                                                                  content: TextRegular(
-                                                                      text: e
-                                                                          .toString(),
-                                                                      fontSize:
-                                                                          14,
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                              );
+                                                            } else {
+                                                              try {
+                                                                await FirebaseAuth
+                                                                    .instance
+                                                                    .createUserWithEmailAndPassword(
+                                                                        email: newEmailController
+                                                                            .text,
+                                                                        password:
+                                                                            newPassController.text);
+                                                                addUser(
+                                                                    newNameController
+                                                                        .text,
+                                                                    newEmailController
+                                                                        .text,
+                                                                    newNumberController
+                                                                        .text,
+                                                                    newAddressController
+                                                                        .text,
+                                                                    imgUrl);
+                                                                Navigator.pop(
+                                                                    context);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    content: TextRegular(
+                                                                        text:
+                                                                            'Account created succesfully!',
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                );
+                                                              } catch (e) {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    content: TextRegular(
+                                                                        text: e
+                                                                            .toString(),
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                );
+                                                              }
                                                             }
-                                                          }
-                                                        })),
-                                                  ],
+                                                          })),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ));
+                                            );
+                                          }));
                                     });
                               },
                               child: TextBold(
