@@ -50,10 +50,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        'assets/images/logo.png',
-                        height: isLargeScreen ? 100 : 50,
-                      ),
+                      isLargeScreen
+                          ? Image.asset(
+                              'assets/images/logo.png',
+                              height: isLargeScreen ? 100 : 75,
+                            )
+                          : Center(
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                                height: isLargeScreen ? 100 : 75,
+                              ),
+                            ),
                       const SizedBox(
                         width: 20,
                       ),
@@ -74,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 50,
+                  SizedBox(
+                    height: isLargeScreen ? 50 : 10,
                   ),
                   ExpansionTile(
                     title: TextBold(
@@ -107,20 +114,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: isHome ? Colors.blue : Colors.grey,
                                   ),
                                 )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isHome = true;
-                                      isDashboard = false;
-                                      isInfo = false;
-                                      isProfile = false;
-                                      isRole = false;
-                                      isUser = false;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.home,
-                                    color: isHome ? Colors.blue : Colors.grey,
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isHome = true;
+                                        isDashboard = false;
+                                        isInfo = false;
+                                        isProfile = false;
+                                        isRole = false;
+                                        isUser = false;
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.home,
+                                      color: isHome ? Colors.blue : Colors.grey,
+                                    ),
                                   ),
                                 )
                           : const SizedBox(),
@@ -149,21 +160,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isDashboard ? Colors.blue : Colors.grey,
                                   ),
                                 )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isHome = false;
-                                      isDashboard = true;
-                                      isInfo = false;
-                                      isProfile = false;
-                                      isRole = false;
-                                      isUser = false;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.dashboard,
-                                    color:
-                                        isDashboard ? Colors.blue : Colors.grey,
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isHome = false;
+                                        isDashboard = true;
+                                        isInfo = false;
+                                        isProfile = false;
+                                        isRole = false;
+                                        isUser = false;
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.dashboard,
+                                      color: isDashboard
+                                          ? Colors.blue
+                                          : Colors.grey,
+                                    ),
                                   ),
                                 )
                           : const SizedBox(),
@@ -190,20 +206,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: isUser ? Colors.blue : Colors.grey,
                                   ),
                                 )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isHome = false;
-                                      isDashboard = false;
-                                      isInfo = false;
-                                      isProfile = false;
-                                      isRole = false;
-                                      isUser = true;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.person,
-                                    color: isUser ? Colors.blue : Colors.grey,
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isHome = false;
+                                        isDashboard = false;
+                                        isInfo = false;
+                                        isProfile = false;
+                                        isRole = false;
+                                        isUser = true;
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.person,
+                                      color: isUser ? Colors.blue : Colors.grey,
+                                    ),
                                   ),
                                 )
                           : const SizedBox(),
@@ -230,20 +250,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: isRole ? Colors.blue : Colors.grey,
                                   ),
                                 )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isHome = false;
-                                      isDashboard = false;
-                                      isInfo = false;
-                                      isProfile = false;
-                                      isRole = true;
-                                      isUser = false;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.work_outline,
-                                    color: isRole ? Colors.blue : Colors.grey,
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isHome = false;
+                                        isDashboard = false;
+                                        isInfo = false;
+                                        isProfile = false;
+                                        isRole = true;
+                                        isUser = false;
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.work_outline,
+                                      color: isRole ? Colors.blue : Colors.grey,
+                                    ),
                                   ),
                                 )
                           : const SizedBox(),
@@ -269,20 +293,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: isInfo ? Colors.blue : Colors.grey,
                               ),
                             )
-                          : GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isHome = false;
-                                  isDashboard = false;
-                                  isInfo = true;
-                                  isProfile = false;
-                                  isRole = false;
-                                  isUser = false;
-                                });
-                              },
-                              child: Icon(
-                                Icons.info,
-                                color: isInfo ? Colors.blue : Colors.grey,
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isHome = false;
+                                    isDashboard = false;
+                                    isInfo = true;
+                                    isProfile = false;
+                                    isRole = false;
+                                    isUser = false;
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.info,
+                                  color: isInfo ? Colors.blue : Colors.grey,
+                                ),
                               ),
                             )
                     ],
@@ -320,8 +348,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       : Padding(
-                          padding:
-                              EdgeInsets.only(left: isLargeScreen ? 0 : 15),
+                          padding: EdgeInsets.only(
+                              left: isLargeScreen ? 0 : 15,
+                              top: 10,
+                              bottom: 10),
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
