@@ -7,8 +7,11 @@ class AboutUsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return Container(
-      width: 1025,
+      width: isLargeScreen ? 1025 : 350,
       decoration: const BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
@@ -38,13 +41,15 @@ class AboutUsPage extends StatelessWidget {
                   color: Colors.white),
             ),
             const SizedBox(height: 16),
-            const SizedBox(
-              width: 500,
+            SizedBox(
+              width: isLargeScreen ? 500 : 400,
               child: Text(
                 'We are a team of dedicated professionals who are responsible for helping the PNP to maintain Peace and Order here in Malaybalay City. Our mission is to help the Philippine National Police of Malaybalay City to quickly monitor illegal activities',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 16, fontFamily: 'QRegular', color: Colors.white),
+                    fontSize: isLargeScreen ? 16 : 13,
+                    fontFamily: 'QRegular',
+                    color: Colors.white),
               ),
             ),
             const SizedBox(height: 16),

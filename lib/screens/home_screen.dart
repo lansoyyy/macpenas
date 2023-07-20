@@ -32,13 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             color: Colors.grey[200],
-            width: 400,
+            width: isLargeScreen ? 400 : 150,
             height: double.infinity,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
@@ -49,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Image.asset(
                         'assets/images/logo.png',
-                        height: 100,
+                        height: isLargeScreen ? 100 : 50,
                       ),
                       const SizedBox(
                         width: 20,
@@ -59,12 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           TextBold(
                             text: 'MACPENAS',
-                            fontSize: 28,
+                            fontSize: isLargeScreen ? 28 : 0,
                             color: Colors.blue,
                           ),
                           TextRegular(
                             text: 'Malaybalay City, Bukidnon',
-                            fontSize: 14,
+                            fontSize: isLargeScreen ? 14 : 0,
                             color: Colors.blue,
                           ),
                         ],
@@ -76,204 +79,316 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ExpansionTile(
                     title: TextBold(
-                      text: 'Main Menu',
-                      fontSize: 18,
+                      text: isLargeScreen ? 'Main Menu' : 'Menu',
+                      fontSize: isLargeScreen ? 18 : 12,
                       color: Colors.grey,
                     ),
                     children: [
                       box.read('user') != 'admin'
+                          ? isLargeScreen
+                              ? ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = true;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = false;
+                                    });
+                                  },
+                                  leading: Icon(
+                                    Icons.home,
+                                    color: isHome ? Colors.blue : Colors.grey,
+                                  ),
+                                  title: TextRegular(
+                                    text: 'Home',
+                                    fontSize: 16,
+                                    color: isHome ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = true;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.home,
+                                    color: isHome ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                          : const SizedBox(),
+                      box.read('user') == 'admin'
+                          ? isLargeScreen
+                              ? ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = true;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = false;
+                                    });
+                                  },
+                                  leading: Icon(
+                                    Icons.dashboard,
+                                    color:
+                                        isDashboard ? Colors.blue : Colors.grey,
+                                  ),
+                                  title: TextRegular(
+                                    text: 'Admin Dashboard',
+                                    fontSize: 16,
+                                    color:
+                                        isDashboard ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = true;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.dashboard,
+                                    color:
+                                        isDashboard ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                          : const SizedBox(),
+                      box.read('user') == 'admin'
+                          ? isLargeScreen
+                              ? ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = true;
+                                    });
+                                  },
+                                  leading: Icon(
+                                    Icons.person,
+                                    color: isUser ? Colors.blue : Colors.grey,
+                                  ),
+                                  title: TextRegular(
+                                    text: 'User Management',
+                                    fontSize: 16,
+                                    color: isUser ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = false;
+                                      isUser = true;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.person,
+                                    color: isUser ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                          : const SizedBox(),
+                      box.read('user') == 'admin'
+                          ? isLargeScreen
+                              ? ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = true;
+                                      isUser = false;
+                                    });
+                                  },
+                                  leading: Icon(
+                                    Icons.work_outline,
+                                    color: isRole ? Colors.blue : Colors.grey,
+                                  ),
+                                  title: TextRegular(
+                                    text: 'Role Management',
+                                    fontSize: 16,
+                                    color: isRole ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isHome = false;
+                                      isDashboard = false;
+                                      isInfo = false;
+                                      isProfile = false;
+                                      isRole = true;
+                                      isUser = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.work_outline,
+                                    color: isRole ? Colors.blue : Colors.grey,
+                                  ),
+                                )
+                          : const SizedBox(),
+                      isLargeScreen
                           ? ListTile(
                               onTap: () {
                                 setState(() {
-                                  isHome = true;
+                                  isHome = false;
                                   isDashboard = false;
-                                  isInfo = false;
+                                  isInfo = true;
                                   isProfile = false;
                                   isRole = false;
                                   isUser = false;
                                 });
                               },
                               leading: Icon(
-                                Icons.home,
-                                color: isHome ? Colors.blue : Colors.grey,
+                                Icons.info,
+                                color: isInfo ? Colors.blue : Colors.grey,
                               ),
                               title: TextRegular(
-                                text: 'Home',
+                                text: 'Info',
                                 fontSize: 16,
-                                color: isHome ? Colors.blue : Colors.grey,
+                                color: isInfo ? Colors.blue : Colors.grey,
                               ),
                             )
-                          : const SizedBox(),
-                      box.read('user') == 'admin'
-                          ? ListTile(
+                          : GestureDetector(
                               onTap: () {
                                 setState(() {
                                   isHome = false;
-                                  isDashboard = true;
-                                  isInfo = false;
+                                  isDashboard = false;
+                                  isInfo = true;
                                   isProfile = false;
                                   isRole = false;
                                   isUser = false;
                                 });
                               },
-                              leading: Icon(
-                                Icons.dashboard,
-                                color: isDashboard ? Colors.blue : Colors.grey,
-                              ),
-                              title: TextRegular(
-                                text: 'Admin Dashboard',
-                                fontSize: 16,
-                                color: isDashboard ? Colors.blue : Colors.grey,
+                              child: Icon(
+                                Icons.info,
+                                color: isInfo ? Colors.blue : Colors.grey,
                               ),
                             )
-                          : const SizedBox(),
-                      box.read('user') == 'admin'
-                          ? ListTile(
-                              onTap: () {
-                                setState(() {
-                                  isHome = false;
-                                  isDashboard = false;
-                                  isInfo = false;
-                                  isProfile = false;
-                                  isRole = false;
-                                  isUser = true;
-                                });
-                              },
-                              leading: Icon(
-                                Icons.person,
-                                color: isUser ? Colors.blue : Colors.grey,
-                              ),
-                              title: TextRegular(
-                                text: 'User Management',
-                                fontSize: 16,
-                                color: isUser ? Colors.blue : Colors.grey,
-                              ),
-                            )
-                          : const SizedBox(),
-                      box.read('user') == 'admin'
-                          ? ListTile(
-                              onTap: () {
-                                setState(() {
-                                  isHome = false;
-                                  isDashboard = false;
-                                  isInfo = false;
-                                  isProfile = false;
-                                  isRole = true;
-                                  isUser = false;
-                                });
-                              },
-                              leading: Icon(
-                                Icons.work_outline,
-                                color: isRole ? Colors.blue : Colors.grey,
-                              ),
-                              title: TextRegular(
-                                text: 'Role Management',
-                                fontSize: 16,
-                                color: isRole ? Colors.blue : Colors.grey,
-                              ),
-                            )
-                          : const SizedBox(),
-                      ListTile(
-                        onTap: () {
-                          setState(() {
-                            isHome = false;
-                            isDashboard = false;
-                            isInfo = true;
-                            isProfile = false;
-                            isRole = false;
-                            isUser = false;
-                          });
-                        },
-                        leading: Icon(
-                          Icons.info,
-                          color: isInfo ? Colors.blue : Colors.grey,
-                        ),
-                        title: TextRegular(
-                          text: 'Info',
-                          fontSize: 16,
-                          color: isInfo ? Colors.blue : Colors.grey,
-                        ),
-                      ),
                     ],
                   ),
-                  ExpansionTile(
-                    trailing: const SizedBox(),
-                    title: TextBold(
-                      text: 'Account',
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  isLargeScreen
+                      ? ExpansionTile(
+                          trailing: const SizedBox(),
+                          title: TextBold(
+                            text: 'Account',
+                            fontSize: isLargeScreen ? 18 : 14,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : const SizedBox(),
+                  isLargeScreen
+                      ? ListTile(
+                          onTap: () {
+                            setState(() {
+                              isHome = false;
+                              isDashboard = false;
+                              isInfo = false;
+                              isProfile = true;
+                              isRole = false;
+                              isUser = false;
+                            });
+                          },
+                          leading: Icon(
+                            Icons.person,
+                            color: isProfile ? Colors.blue : Colors.grey,
+                          ),
+                          title: TextRegular(
+                            text: 'My Account',
+                            fontSize: 16,
+                            color: isProfile ? Colors.blue : Colors.grey,
+                          ),
+                        )
+                      : Padding(
+                          padding:
+                              EdgeInsets.only(left: isLargeScreen ? 0 : 15),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isHome = false;
+                                isDashboard = false;
+                                isInfo = false;
+                                isProfile = true;
+                                isRole = false;
+                                isUser = false;
+                              });
+                            },
+                            child: Icon(
+                              Icons.person,
+                              color: isProfile ? Colors.blue : Colors.grey,
+                            ),
+                          ),
+                        ),
                   ListTile(
-                    onTap: () {
-                      setState(() {
-                        isHome = false;
-                        isDashboard = false;
-                        isInfo = false;
-                        isProfile = true;
-                        isRole = false;
-                        isUser = false;
-                      });
-                    },
-                    leading: Icon(
-                      Icons.person,
-                      color: isProfile ? Colors.blue : Colors.grey,
-                    ),
-                    title: TextRegular(
-                      text: 'My Account',
-                      fontSize: 16,
-                      color: isProfile ? Colors.blue : Colors.grey,
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: const Text(
-                                  'Logout Confirmation',
-                                  style: TextStyle(
-                                      fontFamily: 'QBold',
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                content: const Text(
-                                  'Are you sure you want to Logout?',
-                                  style: TextStyle(fontFamily: 'QRegular'),
-                                ),
-                                actions: <Widget>[
-                                  MaterialButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                    child: const Text(
-                                      'Close',
-                                      style: TextStyle(
-                                          fontFamily: 'QRegular',
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text(
+                                    'Logout Confirmation',
+                                    style: TextStyle(
+                                        fontFamily: 'QBold',
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  MaterialButton(
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              Routes().loginscreen);
-                                    },
-                                    child: const Text(
-                                      'Continue',
-                                      style: TextStyle(
-                                          fontFamily: 'QRegular',
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                  content: const Text(
+                                    'Are you sure you want to Logout?',
+                                    style: TextStyle(fontFamily: 'QRegular'),
                                   ),
-                                ],
-                              ));
-                    },
-                    leading: const Icon(Icons.logout),
-                    title: TextRegular(
-                      text: 'Logout',
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
+                                  actions: <Widget>[
+                                    MaterialButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const Text(
+                                        'Close',
+                                        style: TextStyle(
+                                            fontFamily: 'QRegular',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    MaterialButton(
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                Routes().loginscreen);
+                                      },
+                                      child: const Text(
+                                        'Continue',
+                                        style: TextStyle(
+                                            fontFamily: 'QRegular',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ));
+                      },
+                      leading: const Icon(Icons.logout),
+                      title: isLargeScreen
+                          ? TextRegular(
+                              text: 'Logout',
+                              fontSize: isLargeScreen ? 16 : 12,
+                              color: Colors.grey,
+                            )
+                          : const SizedBox()),
                 ],
               ),
             ),

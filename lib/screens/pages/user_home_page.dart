@@ -54,6 +54,9 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
         .collection('Reports')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -76,7 +79,7 @@ class _UserHomePageState extends State<UserHomePage> {
                       alignment: Alignment.topLeft,
                       child: TextBold(
                         text: 'Welcome to Macpenas!',
-                        fontSize: 32,
+                        fontSize: isLargeScreen ? 32 : 14,
                         color: Colors.white,
                       ),
                     ),
@@ -324,8 +327,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                         ));
                               },
                               child: Container(
-                                height: 125,
-                                width: 150,
+                                height: isLargeScreen ? 125 : 50,
+                                width: isLargeScreen ? 150 : 50,
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(5),
@@ -349,9 +352,9 @@ class _UserHomePageState extends State<UserHomePage> {
               ],
             ),
           )
-        : const SizedBox(
-            width: 1025,
-            child: Center(
+        : SizedBox(
+            width: isLargeScreen ? 1025 : 50,
+            child: const Center(
               child: CircularProgressIndicator(),
             ),
           );

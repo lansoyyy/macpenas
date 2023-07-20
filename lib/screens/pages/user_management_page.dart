@@ -13,11 +13,16 @@ class UserManagementScreen extends StatefulWidget {
 class _UserManagementScreenState extends State<UserManagementScreen> {
   String nameSearched = '';
   final searchController = TextEditingController();
+
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return Container(
       color: Colors.white,
-      width: 1025,
+      width: isLargeScreen ? 1025 : 350,
       height: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +44,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 alignment: Alignment.topLeft,
                 child: TextBold(
                   text: 'User Management',
-                  fontSize: 32,
+                  fontSize: isLargeScreen ? 32 : 18,
                   color: Colors.black,
                 ),
               ),
@@ -52,7 +57,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Container(
               height: 50,
-              width: 300,
+              width: isLargeScreen ? 300 : 200,
               decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black,
@@ -104,218 +109,442 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 }
 
                 final data = snapshot.requireData;
-                return Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Card(
-                    child: DataTable(columns: [
-                      DataColumn(
-                        label: TextBold(
-                          text: '',
-                          fontSize: 0,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'ID',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Name',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Email',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Contact Number',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Address',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Verified',
-                          fontSize: 0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ], rows: [
-                      for (int i = 0; i < data.docs.length; i++)
-                        DataRow(
-                          cells: [
-                            DataCell(
-                              IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: TextBold(
-                                            text: 'User ID',
-                                            fontSize: 14,
-                                            color: Colors.black),
-                                        content: Image.network(
-                                            data.docs[i]['imageId']),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: TextRegular(
-                                              text: 'Close',
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.visibility,
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              TextRegular(
-                                text: (i + 1).toString(),
-                                fontSize: 12,
+                return isLargeScreen
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Card(
+                          child: DataTable(columns: [
+                            DataColumn(
+                              label: TextBold(
+                                text: '',
+                                fontSize: 0,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['name'],
-                                fontSize: 12,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'ID',
+                                fontSize: 14,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['email'],
-                                fontSize: 12,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Name',
+                                fontSize: 14,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['contactNumber'],
-                                fontSize: 12,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Email',
+                                fontSize: 14,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['address'],
-                                fontSize: 12,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Contact Number',
+                                fontSize: 14,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  TextRegular(
-                                    text: data.docs[i]['isVerified'].toString(),
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
-                                  data.docs[i]['isVerified'] == true
-                                      ? const SizedBox()
-                                      : IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    AlertDialog(
-                                                      title: const Text(
-                                                        'Verified Confirmation',
-                                                        style: TextStyle(
-                                                            fontFamily: 'QBold',
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      content: const Text(
-                                                        'Are you sure you want to verify this user?',
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'QRegular'),
-                                                      ),
-                                                      actions: <Widget>[
-                                                        MaterialButton(
-                                                          onPressed: () =>
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(true),
-                                                          child: const Text(
-                                                            'Close',
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'QRegular',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ),
-                                                        MaterialButton(
-                                                          onPressed: () async {
-                                                            await FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'Users')
-                                                                .doc(data
-                                                                    .docs[i].id)
-                                                                .update({
-                                                              'isVerified': true
-                                                            });
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: const Text(
-                                                            'Continue',
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'QRegular',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ));
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Address',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Verified',
+                                fontSize: 0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ], rows: [
+                            for (int i = 0; i < data.docs.length; i++)
+                              DataRow(
+                                cells: [
+                                  DataCell(
+                                    IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: TextBold(
+                                                  text: 'User ID',
+                                                  fontSize: 14,
+                                                  color: Colors.black),
+                                              content: Image.network(
+                                                  data.docs[i]['imageId']),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: TextRegular(
+                                                    text: 'Close',
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
                                           },
-                                          icon: const Icon(
-                                            Icons.verified_outlined,
-                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.visibility,
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: (i + 1).toString(),
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['name'],
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['email'],
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['contactNumber'],
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['address'],
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        TextRegular(
+                                          text: data.docs[i]['isVerified']
+                                              .toString(),
+                                          fontSize: 12,
+                                          color: Colors.black,
                                         ),
+                                        data.docs[i]['isVerified'] == true
+                                            ? const SizedBox()
+                                            : IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          AlertDialog(
+                                                            title: const Text(
+                                                              'Verified Confirmation',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'QBold',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            content: const Text(
+                                                              'Are you sure you want to verify this user?',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'QRegular'),
+                                                            ),
+                                                            actions: <Widget>[
+                                                              MaterialButton(
+                                                                onPressed: () =>
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop(
+                                                                            true),
+                                                                child:
+                                                                    const Text(
+                                                                  'Close',
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'QRegular',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ),
+                                                              MaterialButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'Users')
+                                                                      .doc(data
+                                                                          .docs[
+                                                                              i]
+                                                                          .id)
+                                                                      .update({
+                                                                    'isVerified':
+                                                                        true
+                                                                  });
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'Continue',
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'QRegular',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ));
+                                                },
+                                                icon: const Icon(
+                                                  Icons.verified_outlined,
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
+                          ]),
                         ),
-                    ]),
-                  ),
-                );
+                      )
+                    : Scrollbar(
+                        controller: scrollController,
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Card(
+                              child: DataTable(columns: [
+                                DataColumn(
+                                  label: TextBold(
+                                    text: '',
+                                    fontSize: 0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'ID',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Name',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Email',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Contact Number',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Address',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Verified',
+                                    fontSize: 0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ], rows: [
+                                for (int i = 0; i < data.docs.length; i++)
+                                  DataRow(
+                                    cells: [
+                                      DataCell(
+                                        IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: TextBold(
+                                                      text: 'User ID',
+                                                      fontSize: 14,
+                                                      color: Colors.black),
+                                                  content: Image.network(
+                                                      data.docs[i]['imageId']),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: TextRegular(
+                                                        text: 'Close',
+                                                        fontSize: 18,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.visibility,
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: (i + 1).toString(),
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['name'],
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['email'],
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['contactNumber'],
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['address'],
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Row(
+                                          children: [
+                                            TextRegular(
+                                              text: data.docs[i]['isVerified']
+                                                  .toString(),
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                            ),
+                                            data.docs[i]['isVerified'] == true
+                                                ? const SizedBox()
+                                                : IconButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder:
+                                                              (context) =>
+                                                                  AlertDialog(
+                                                                    title:
+                                                                        const Text(
+                                                                      'Verified Confirmation',
+                                                                      style: TextStyle(
+                                                                          fontFamily:
+                                                                              'QBold',
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                    content:
+                                                                        const Text(
+                                                                      'Are you sure you want to verify this user?',
+                                                                      style: TextStyle(
+                                                                          fontFamily:
+                                                                              'QRegular'),
+                                                                    ),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      MaterialButton(
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.of(context).pop(true),
+                                                                        child:
+                                                                            const Text(
+                                                                          'Close',
+                                                                          style: TextStyle(
+                                                                              fontFamily: 'QRegular',
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      MaterialButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          await FirebaseFirestore.instance.collection('Users').doc(data.docs[i].id).update({
+                                                                            'isVerified':
+                                                                                true
+                                                                          });
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'Continue',
+                                                                          style: TextStyle(
+                                                                              fontFamily: 'QRegular',
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.verified_outlined,
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      );
               })
         ],
       ),

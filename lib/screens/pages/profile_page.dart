@@ -44,11 +44,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return hasLoaded
         ? SizedBox(
-            width: 1025,
+            width: isLargeScreen ? 1025 : 350,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 50, 30, 50),
+              padding: isLargeScreen
+                  ? const EdgeInsets.fromLTRB(30, 50, 30, 50)
+                  : const EdgeInsets.fromLTRB(15, 50, 15, 50),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -57,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Image.asset(
                         'assets/images/profile.png',
-                        height: 125,
+                        height: isLargeScreen ? 125 : 75,
                       ),
                       const SizedBox(
                         height: 5,
@@ -77,12 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    width: 20,
+                  SizedBox(
+                    width: isLargeScreen ? 20 : 10,
                   ),
                   const VerticalDivider(),
-                  const SizedBox(
-                    width: 20,
+                  SizedBox(
+                    width: isLargeScreen ? 20 : 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 75),

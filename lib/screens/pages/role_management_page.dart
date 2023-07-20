@@ -22,11 +22,16 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   final newNameController = TextEditingController();
   final newAddressController = TextEditingController();
   final newNumberController = TextEditingController();
+
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return Container(
       color: Colors.white,
-      width: 1025,
+      width: isLargeScreen ? 1025 : 350,
       height: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +53,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                 alignment: Alignment.topLeft,
                 child: TextBold(
                   text: 'Role Management',
-                  fontSize: 32,
+                  fontSize: isLargeScreen ? 32 : 18,
                   color: Colors.black,
                 ),
               ),
@@ -64,7 +69,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
               children: [
                 Container(
                   height: 50,
-                  width: 300,
+                  width: isLargeScreen ? 300 : 200,
                   decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.black,
@@ -87,8 +92,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                   ),
                 ),
                 ButtonWidget(
-                  width: 150,
-                  fontSize: 16,
+                  width: isLargeScreen ? 150 : 100,
+                  fontSize: isLargeScreen ? 16 : 12,
                   label: 'Create',
                   onPressed: () {
                     showDialog(
@@ -220,133 +225,274 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                 }
 
                 final data = snapshot.requireData;
-                return Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Card(
-                    child: DataTable(columns: [
-                      DataColumn(
-                        label: TextBold(
-                          text: 'ID',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Name',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Email',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Contact Number',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Address',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataColumn(
-                        label: TextBold(
-                          text: 'Role',
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ], rows: [
-                      for (int i = 0; i < data.docs.length; i++)
-                        DataRow(
-                          cells: [
-                            DataCell(
-                              TextRegular(
-                                text: (i + 1).toString(),
-                                fontSize: 14,
+                return isLargeScreen
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Card(
+                          child: DataTable(columns: [
+                            DataColumn(
+                              label: TextBold(
+                                text: 'ID',
+                                fontSize: 18,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['name'],
-                                fontSize: 14,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Name',
+                                fontSize: 18,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['email'],
-                                fontSize: 14,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Email',
+                                fontSize: 18,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['contactNumber'],
-                                fontSize: 14,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Contact Number',
+                                fontSize: 18,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              TextRegular(
-                                text: data.docs[i]['address'],
-                                fontSize: 14,
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Address',
+                                fontSize: 18,
                                 color: Colors.black,
                               ),
                             ),
-                            DataCell(
-                              SizedBox(
-                                width: 100,
-                                child: Row(
-                                  children: [
+                            DataColumn(
+                              label: TextBold(
+                                text: 'Role',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ], rows: [
+                            for (int i = 0; i < data.docs.length; i++)
+                              DataRow(
+                                cells: [
+                                  DataCell(
                                     TextRegular(
-                                      text: data.docs[i]['role'],
+                                      text: (i + 1).toString(),
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(
-                                      width: 10,
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['name'],
+                                      fontSize: 14,
+                                      color: Colors.black,
                                     ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        if (data.docs[i]['role'] == 'user') {
-                                          await FirebaseFirestore.instance
-                                              .collection('Users')
-                                              .doc(data.docs[i].id)
-                                              .update({'role': 'admin'});
-                                        } else {
-                                          await FirebaseFirestore.instance
-                                              .collection('Users')
-                                              .doc(data.docs[i].id)
-                                              .update({'role': 'user'});
-                                        }
-                                      },
-                                      child: const Icon(
-                                        Icons.refresh_rounded,
-                                        size: 24,
-                                        color: Colors.blue,
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['email'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['contactNumber'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['address'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 100,
+                                      child: Row(
+                                        children: [
+                                          TextRegular(
+                                            text: data.docs[i]['role'],
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              if (data.docs[i]['role'] ==
+                                                  'user') {
+                                                await FirebaseFirestore.instance
+                                                    .collection('Users')
+                                                    .doc(data.docs[i].id)
+                                                    .update({'role': 'admin'});
+                                              } else {
+                                                await FirebaseFirestore.instance
+                                                    .collection('Users')
+                                                    .doc(data.docs[i].id)
+                                                    .update({'role': 'user'});
+                                              }
+                                            },
+                                            child: const Icon(
+                                              Icons.refresh_rounded,
+                                              size: 24,
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                          ]),
                         ),
-                    ]),
-                  ),
-                );
+                      )
+                    : Scrollbar(
+                        controller: scrollController,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: scrollController,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Card(
+                              child: DataTable(columns: [
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'ID',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Name',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Email',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Contact Number',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Address',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: TextBold(
+                                    text: 'Role',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ], rows: [
+                                for (int i = 0; i < data.docs.length; i++)
+                                  DataRow(
+                                    cells: [
+                                      DataCell(
+                                        TextRegular(
+                                          text: (i + 1).toString(),
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['name'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['email'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['contactNumber'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['address'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        SizedBox(
+                                          width: 100,
+                                          child: Row(
+                                            children: [
+                                              TextRegular(
+                                                text: data.docs[i]['role'],
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  if (data.docs[i]['role'] ==
+                                                      'user') {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Users')
+                                                        .doc(data.docs[i].id)
+                                                        .update(
+                                                            {'role': 'admin'});
+                                                  } else {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Users')
+                                                        .doc(data.docs[i].id)
+                                                        .update(
+                                                            {'role': 'user'});
+                                                  }
+                                                },
+                                                child: const Icon(
+                                                  Icons.refresh_rounded,
+                                                  size: 24,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      );
               })
         ],
       ),
