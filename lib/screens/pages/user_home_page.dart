@@ -64,7 +64,7 @@ class _UserHomePageState extends State<UserHomePage> {
     return hasLoaded
         ? Container(
             color: Colors.white,
-            width: 1025,
+            width: isLargeScreen ? 1025 : 350,
             height: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +79,7 @@ class _UserHomePageState extends State<UserHomePage> {
                       alignment: Alignment.topLeft,
                       child: TextBold(
                         text: 'Welcome to Macpenas!',
-                        fontSize: isLargeScreen ? 32 : 14,
+                        fontSize: isLargeScreen ? 32 : 18,
                         color: Colors.white,
                       ),
                     ),
@@ -267,10 +267,10 @@ class _UserHomePageState extends State<UserHomePage> {
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.campaign_rounded,
                                   color: Colors.white,
-                                  size: 68,
+                                  size: isLargeScreen ? 68 : 32,
                                 ),
                               ),
                             )
@@ -333,10 +333,10 @@ class _UserHomePageState extends State<UserHomePage> {
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.cancel,
                                   color: Colors.white,
-                                  size: 68,
+                                  size: isLargeScreen ? 68 : 32,
                                 ),
                               ),
                             );
@@ -346,7 +346,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 ),
                 TextRegular(
                   text: 'Press the Red Button to trigger Report',
-                  fontSize: 18,
+                  fontSize: isLargeScreen ? 18 : 14,
                   color: Colors.red,
                 ),
               ],
