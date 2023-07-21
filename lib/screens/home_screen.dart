@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     bool isLargeScreen = screenWidth >= 600;
     return Scaffold(
+      appBar: isLargeScreen ? null : AppBar(),
       drawer: isLargeScreen
           ? null
           : Container(

@@ -18,6 +18,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   double long = 0;
 
   bool hasLoaded = false;
+  final mapController = MapController();
 
   @override
   void initState() {
@@ -108,6 +109,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         child: SizedBox(
                           height: 425,
                           child: FlutterMap(
+                            mapController: mapController,
                             options: MapOptions(
                               center: LatLng(lat, long),
                               zoom: 18.0,
@@ -214,23 +216,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                     )
                                 ],
                               ),
-                              // CircleLayer(
-                              //   circles: myCircles,
-                              // ),
-                              // PolylineLayer(
-                              //   polylines: [
-                              //     for (int i = 0; i < data.docs.length; i++)
-                              //       Polyline(
-                              //           isDotted: true,
-                              //           strokeWidth: 5,
-                              //           color: Colors.red,
-                              //           points: [
-                              //             LatLng(lat, long),
-                              //             LatLng(data.docs[i]['lat'],
-                              //                 data.docs[i]['long']),
-                              //           ])
-                              //   ],
-                              // ),
+                              CircleLayer(
+                                circles: myCircles,
+                              ),
+                              PolylineLayer(
+                                polylines: [
+                                  for (int i = 0; i < data.docs.length; i++)
+                                    Polyline(
+                                        isDotted: true,
+                                        strokeWidth: 5,
+                                        color: Colors.red,
+                                        points: [
+                                          LatLng(lat, long),
+                                          LatLng(data.docs[i]['lat'],
+                                              data.docs[i]['long']),
+                                        ])
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -302,7 +304,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: isLargeScreen ? 300 : 160,
+                                          width: isLargeScreen ? 300 : 200,
                                           height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
@@ -399,13 +401,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: isLargeScreen ? 300 : 160,
+                                          width: isLargeScreen ? 300 : 200,
                                           height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
                                             itemBuilder: (context, index) {
                                               return Card(
                                                 child: ListTile(
+                                                  onTap: () {
+                                                    mapController.move(
+                                                        LatLng(
+                                                            data.docs[index]
+                                                                ['lat'],
+                                                            data.docs[index]
+                                                                ['long']),
+                                                        18);
+                                                  },
                                                   leading: isLargeScreen
                                                       ? Image.asset(
                                                           'assets/images/profile.png',
