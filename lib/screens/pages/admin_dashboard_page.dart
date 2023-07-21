@@ -216,15 +216,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                     )
                                 ],
                               ),
-                              CircleLayer(
-                                circles: myCircles,
-                              ),
                               PolylineLayer(
                                 polylines: [
                                   for (int i = 0; i < data.docs.length; i++)
                                     Polyline(
-                                        isDotted: true,
-                                        strokeWidth: 5,
+                                        strokeWidth: isLargeScreen ? 5 : 2.5,
                                         color: Colors.red,
                                         points: [
                                           LatLng(lat, long),
@@ -232,6 +228,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                               data.docs[i]['long']),
                                         ])
                                 ],
+                              ),
+                              CircleLayer(
+                                circles: myCircles,
                               ),
                             ],
                           ),
