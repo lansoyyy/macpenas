@@ -11,7 +11,7 @@ class AboutUsPage extends StatelessWidget {
 
     bool isLargeScreen = screenWidth >= 600;
     return Container(
-      width: isLargeScreen ? 1025 : 350,
+      width: isLargeScreen ? 1025 : 500,
       decoration: const BoxDecoration(
         color: Colors.black,
         image: DecorationImage(

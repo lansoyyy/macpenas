@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool isLargeScreen = screenWidth >= 600;
     return hasLoaded
         ? SizedBox(
-            width: isLargeScreen ? 1025 : 350,
+            width: isLargeScreen ? 1025 : 500,
             child: Padding(
               padding: isLargeScreen
                   ? const EdgeInsets.fromLTRB(30, 50, 30, 50)

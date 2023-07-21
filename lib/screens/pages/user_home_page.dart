@@ -64,7 +64,7 @@ class _UserHomePageState extends State<UserHomePage> {
     return hasLoaded
         ? Container(
             color: Colors.white,
-            width: isLargeScreen ? 1025 : 350,
+            width: isLargeScreen ? 1025 : 500,
             height: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
