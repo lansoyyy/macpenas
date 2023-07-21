@@ -48,10 +48,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    bool isLargeScreen = screenWidth >= 600;
     return hasLoaded
         ? Container(
             color: Colors.white,
-            width: 1025,
+            width: isLargeScreen ? 1025 : 350,
             height: double.infinity,
             child: Column(
               children: [
@@ -72,7 +75,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       alignment: Alignment.topLeft,
                       child: TextBold(
                         text: 'Malaybalay Police Station',
-                        fontSize: 32,
+                        fontSize: isLargeScreen ? 32 : 18,
                         color: Colors.black,
                       ),
                     ),
@@ -101,132 +104,135 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                       final data = snapshot.requireData;
 
-                      return SizedBox(
-                        width: double.infinity,
-                        height: 425,
-                        child: FlutterMap(
-                          options: MapOptions(
-                            center: LatLng(lat, long),
-                            zoom: 18.0,
-                          ),
-                          children: [
-                            TileLayer(
-                              urlTemplate:
-                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                              userAgentPackageName: 'com.example.app',
+                      return Expanded(
+                        child: SizedBox(
+                          height: 425,
+                          child: FlutterMap(
+                            options: MapOptions(
+                              center: LatLng(lat, long),
+                              zoom: 18.0,
                             ),
-                            MarkerLayer(
-                              markers: [
-                                for (int i = 0; i < data.docs.length; i++)
-                                  Marker(
-                                    height: 150,
-                                    width: 50,
-                                    point: LatLng(data.docs[i]['lat'],
-                                        data.docs[i]['long']),
-                                    builder: (context) {
-                                      return SizedBox(
-                                        width: 300,
-                                        height: 150,
-                                        child: Row(
-                                          children: [
-                                            const SizedBox(),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Container(
-                                                width: 300,
-                                                height: 150,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white60,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 10, 20, 10),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      TextBold(
-                                                        text: data.docs[i]
-                                                            ['name'],
-                                                        fontSize: 16,
-                                                        color: Colors.black,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      TextRegular(
-                                                        text: data.docs[i]
-                                                            ['contactNumber'],
-                                                        fontSize: 12,
-                                                        color: Colors.grey,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 2.5,
-                                                      ),
-                                                      TextRegular(
-                                                        text: data.docs[i]
-                                                            ['address'],
-                                                        fontSize: 12,
-                                                        color: Colors.grey,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      TextBold(
-                                                        text: data.docs[i]
-                                                            ['type'],
-                                                        fontSize: 14,
-                                                        color: Colors.black,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 2.5,
-                                                      ),
-                                                      TextRegular(
-                                                        text: DateFormat.yMMMd()
-                                                            .add_jm()
-                                                            .format(data.docs[i]
-                                                                    ['dateTime']
-                                                                .toDate()),
-                                                        fontSize: 12,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ],
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                userAgentPackageName: 'com.example.app',
+                              ),
+                              MarkerLayer(
+                                markers: [
+                                  for (int i = 0; i < data.docs.length; i++)
+                                    Marker(
+                                      height: 150,
+                                      width: 50,
+                                      point: LatLng(data.docs[i]['lat'],
+                                          data.docs[i]['long']),
+                                      builder: (context) {
+                                        return SizedBox(
+                                          width: 300,
+                                          height: 150,
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(),
+                                              Align(
+                                                alignment: Alignment.topRight,
+                                                child: Container(
+                                                  width: 300,
+                                                  height: 150,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white60,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .fromLTRB(
+                                                        20, 10, 20, 10),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        TextBold(
+                                                          text: data.docs[i]
+                                                              ['name'],
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        TextRegular(
+                                                          text: data.docs[i]
+                                                              ['contactNumber'],
+                                                          fontSize: 12,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2.5,
+                                                        ),
+                                                        TextRegular(
+                                                          text: data.docs[i]
+                                                              ['address'],
+                                                          fontSize: 12,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        TextBold(
+                                                          text: data.docs[i]
+                                                              ['type'],
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2.5,
+                                                        ),
+                                                        TextRegular(
+                                                          text: DateFormat
+                                                                  .yMMMd()
+                                                              .add_jm()
+                                                              .format(data
+                                                                  .docs[i][
+                                                                      'dateTime']
+                                                                  .toDate()),
+                                                          fontSize: 12,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  )
-                              ],
-                            ),
-                            CircleLayer(
-                              circles: myCircles,
-                            ),
-                            PolylineLayer(
-                              polylines: [
-                                for (int i = 0; i < data.docs.length; i++)
-                                  Polyline(
-                                      isDotted: true,
-                                      strokeWidth: 5,
-                                      color: Colors.red,
-                                      points: [
-                                        LatLng(lat, long),
-                                        LatLng(data.docs[i]['lat'],
-                                            data.docs[i]['long']),
-                                      ])
-                              ],
-                            ),
-                          ],
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    )
+                                ],
+                              ),
+                              // CircleLayer(
+                              //   circles: myCircles,
+                              // ),
+                              // PolylineLayer(
+                              //   polylines: [
+                              //     for (int i = 0; i < data.docs.length; i++)
+                              //       Polyline(
+                              //           isDotted: true,
+                              //           strokeWidth: 5,
+                              //           color: Colors.red,
+                              //           points: [
+                              //             LatLng(lat, long),
+                              //             LatLng(data.docs[i]['lat'],
+                              //                 data.docs[i]['long']),
+                              //           ])
+                              //   ],
+                              // ),
+                            ],
+                          ),
                         ),
                       );
                     }),
@@ -242,7 +248,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     ),
                   ),
                   child: Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 20),
+                      padding: EdgeInsets.only(
+                          top: 20, left: isLargeScreen ? 20 : 5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -295,26 +302,34 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: 300,
-                                          height: 150,
+                                          width: isLargeScreen ? 300 : 160,
+                                          height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
                                             itemBuilder: (context, index) {
                                               return Card(
                                                 child: ListTile(
-                                                  leading: Image.asset(
-                                                    'assets/images/profile.png',
-                                                    height: 50,
-                                                  ),
+                                                  leading: isLargeScreen
+                                                      ? Image.asset(
+                                                          'assets/images/profile.png',
+                                                          height: isLargeScreen
+                                                              ? 50
+                                                              : 25,
+                                                        )
+                                                      : null,
                                                   title: TextBold(
                                                       text: data.docs[index]
                                                           ['type'],
-                                                      fontSize: 14,
+                                                      fontSize: isLargeScreen
+                                                          ? 14
+                                                          : 12,
                                                       color: Colors.black),
                                                   subtitle: TextRegular(
                                                       text: data.docs[index]
                                                           ['name'],
-                                                      fontSize: 12,
+                                                      fontSize: isLargeScreen
+                                                          ? 12
+                                                          : 10,
                                                       color: Colors.grey),
                                                   trailing: IconButton(
                                                       onPressed: () async {
@@ -338,12 +353,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                       }),
                                 ],
                               ),
-                              const SizedBox(
-                                width: 20,
+                              SizedBox(
+                                width: isLargeScreen ? 20 : 0,
                               ),
                               const VerticalDivider(),
-                              const SizedBox(
-                                width: 20,
+                              SizedBox(
+                                width: isLargeScreen ? 20 : 0,
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -384,26 +399,34 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: 300,
-                                          height: 150,
+                                          width: isLargeScreen ? 300 : 160,
+                                          height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
                                             itemBuilder: (context, index) {
                                               return Card(
                                                 child: ListTile(
-                                                  leading: Image.asset(
-                                                    'assets/images/profile.png',
-                                                    height: 50,
-                                                  ),
+                                                  leading: isLargeScreen
+                                                      ? Image.asset(
+                                                          'assets/images/profile.png',
+                                                          height: isLargeScreen
+                                                              ? 50
+                                                              : 25,
+                                                        )
+                                                      : null,
                                                   title: TextBold(
                                                       text: data.docs[index]
                                                           ['type'],
-                                                      fontSize: 14,
+                                                      fontSize: isLargeScreen
+                                                          ? 14
+                                                          : 12,
                                                       color: Colors.black),
                                                   subtitle: TextRegular(
                                                       text: data.docs[index]
                                                           ['name'],
-                                                      fontSize: 12,
+                                                      fontSize: isLargeScreen
+                                                          ? 12
+                                                          : 10,
                                                       color: Colors.grey),
                                                   trailing: IconButton(
                                                       onPressed: () async {
