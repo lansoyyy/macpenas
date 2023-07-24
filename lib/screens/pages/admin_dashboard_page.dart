@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -23,6 +25,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     Geolocator.getCurrentPosition().then((position) {
       setState(() {
         lat = position.latitude;
@@ -38,20 +41,90 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               color: Colors.blue),
         );
       });
+      // getDirections(LatLng(position.latitude, position.longitude),
+      //     LatLng(8.306295, 124.992959));
     }).catchError((error) {
       print('Error getting location: $error');
     });
+
+    update();
   }
 
   late List<CircleMarker> myCircles = [];
   late List<Polyline> myPoly = [];
   late List<Marker> myMarker = [];
 
+  // PolylinePoints polylinePoints = PolylinePoints();
+
+  // Future<List<LatLng>> getDirections(LatLng origin, LatLng destination) async {
+  //   const String apiKey = kGoogleApiKey;
+  //   final String url =
+  //       'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey';
+
+  //   final response = await http.get(Uri.parse(url));
+  //   if (response.statusCode == 200) {
+  //     final decoded = jsonDecode(response.body);
+  //     final List<LatLng> points = [];
+
+  //     List steps = decoded['routes'][0]['legs'][0]['steps'];
+  //     for (var step in steps) {
+  //       String pointsString = step['polyline']['points'];
+  //       List<PointLatLng> decodedPolyline =
+  //           PolylinePoints().decodePolyline(pointsString);
+  //       for (var point in decodedPolyline) {
+  //         points.add(LatLng(point.latitude, point.longitude));
+  //       }
+  //     }
+
+  //     print('Points: $points');
+
+  //     return points;
+  //   } else {
+  //     throw Exception('Failed to load directions');
+  //   }
+  // }
+
+  update() async {
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      Geolocator.getCurrentPosition().then((position) {
+        setState(() {
+          myPoly.clear();
+          myCircles.clear();
+
+          myCircles.add(
+            CircleMarker(
+                point: LatLng(position.latitude, position.longitude),
+                radius: 5,
+                borderStrokeWidth: 1,
+                borderColor: Colors.black,
+                useRadiusInMeter: true,
+                color: Colors.blue),
+          );
+        });
+        FirebaseFirestore.instance
+            .collection('Reports')
+            .where('status', isEqualTo: 'Pending')
+            .get()
+            .then((QuerySnapshot querySnapshot) async {
+          for (var doc in querySnapshot.docs) {
+            myPoly.add(Polyline(points: [
+              LatLng(position.latitude, position.longitude),
+              LatLng(doc['lat'], doc['long']),
+            ]));
+          }
+        });
+      }).catchError((error) {
+        print('Error getting location: $error');
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
     bool isLargeScreen = screenWidth >= 600;
+
     return hasLoaded
         ? Container(
             color: Colors.white,
@@ -217,17 +290,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 ],
                               ),
                               PolylineLayer(
-                                polylines: [
-                                  for (int i = 0; i < data.docs.length; i++)
-                                    Polyline(
-                                        strokeWidth: isLargeScreen ? 5 : 2.5,
-                                        color: Colors.red,
-                                        points: [
-                                          LatLng(lat, long),
-                                          LatLng(data.docs[i]['lat'],
-                                              data.docs[i]['long']),
-                                        ])
-                                ],
+                                polylines: myPoly,
                               ),
                               CircleLayer(
                                 circles: myCircles,

@@ -47,6 +47,9 @@ dependencies:
   geolocator: ^9.0.2
   image_picker:
   firebase_storage:
+  flutter_polyline_points: ^1.0.0
+  map_polyline_draw:
+  http:
 
 dev_dependencies:
   flutter_test:
