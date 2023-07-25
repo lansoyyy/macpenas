@@ -50,6 +50,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   map_polyline_draw:
   http:
+  flutter_google_places: ^0.3.0
 
 dev_dependencies:
   flutter_test:

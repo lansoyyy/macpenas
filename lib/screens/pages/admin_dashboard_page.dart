@@ -54,36 +54,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   late List<Polyline> myPoly = [];
   late List<Marker> myMarker = [];
 
-  // PolylinePoints polylinePoints = PolylinePoints();
-
-  // Future<List<LatLng>> getDirections(LatLng origin, LatLng destination) async {
-  //   const String apiKey = kGoogleApiKey;
-  //   final String url =
-  //       'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey';
-
-  //   final response = await http.get(Uri.parse(url));
-  //   if (response.statusCode == 200) {
-  //     final decoded = jsonDecode(response.body);
-  //     final List<LatLng> points = [];
-
-  //     List steps = decoded['routes'][0]['legs'][0]['steps'];
-  //     for (var step in steps) {
-  //       String pointsString = step['polyline']['points'];
-  //       List<PointLatLng> decodedPolyline =
-  //           PolylinePoints().decodePolyline(pointsString);
-  //       for (var point in decodedPolyline) {
-  //         points.add(LatLng(point.latitude, point.longitude));
-  //       }
-  //     }
-
-  //     print('Points: $points');
-
-  //     return points;
-  //   } else {
-  //     throw Exception('Failed to load directions');
-  //   }
-  // }
-
   update() async {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       Geolocator.getCurrentPosition().then((position) {
