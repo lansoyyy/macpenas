@@ -588,7 +588,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                             .showSnackBar(
                                                                           SnackBar(
                                                                             content: TextRegular(
-                                                                                text: 'Account created succesfully!',
+                                                                                text: 'Account created succesfully! Please wait for admin to approve your registration',
                                                                                 fontSize: 14,
                                                                                 color: Colors.white),
                                                                           ),
