@@ -346,6 +346,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                           color: Colors.black,
                                                         ),
                                                         const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        TextBold(
+                                                          text:
+                                                              'Reporter is a ${data.docs[i]['reporterType']}',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                        const SizedBox(
                                                           height: 2.5,
                                                         ),
                                                         TextRegular(
