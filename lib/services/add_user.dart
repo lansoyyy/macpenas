@@ -18,7 +18,7 @@ Future addUser(name, email, contactNumber, address, imageId) async {
     'isVerified': false,
   };
 
-  addReport(name, contactNumber, address, 0, 0, 'Others', 'No');
+  addReport(name, contactNumber, address, 0, 0, 'Others', 'No', 'Witness');
 
   await docUser.set(json);
 }

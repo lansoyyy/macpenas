@@ -52,6 +52,8 @@ class _UserHomePageState extends State<UserHomePage> {
     });
   }
 
+  String _selectedOption = '';
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -129,24 +131,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Attemp Homicide',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Attemp Homicide',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -158,24 +227,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Kidnapping',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Kidnapping',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -187,24 +323,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Theft',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Theft',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -216,24 +419,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Carnapping',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Carnapping',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -245,24 +515,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Act of Lasciviousness',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Act of Lasciviousness',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -274,24 +611,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Attemp Murder',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Attempt Murder',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
@@ -303,24 +707,91 @@ class _UserHomePageState extends State<UserHomePage> {
                                           ),
                                           ListTile(
                                             onTap: () {
-                                              addReport(
-                                                  myName,
-                                                  myNumber,
-                                                  myAddress,
-                                                  lat,
-                                                  long,
-                                                  'Others',
-                                                  'Pending');
                                               Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: TextRegular(
-                                                      text:
-                                                          'Emergency Alert Sent! Wait for further response',
-                                                      fontSize: 14,
-                                                      color: Colors.white),
-                                                ),
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: TextBold(
+                                                        text: 'I am the',
+                                                        fontSize: 18,
+                                                        color: Colors.black),
+                                                    content: StatefulBuilder(
+                                                        builder: (context,
+                                                            setState) {
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Witness'),
+                                                            value: 'Witness',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                          RadioListTile(
+                                                            title: const Text(
+                                                                'Victim'),
+                                                            value: 'Victim',
+                                                            groupValue:
+                                                                _selectedOption,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selectedOption =
+                                                                    value!;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          addReport(
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Others',
+                                                              'Pending',
+                                                              _selectedOption);
+                                                          Navigator.pop(
+                                                              context);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: TextRegular(
+                                                                  text:
+                                                                      'Emergency Alert Sent! Wait for further response',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: TextBold(
+                                                          text: 'Continue',
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             trailing: const Icon(Icons
