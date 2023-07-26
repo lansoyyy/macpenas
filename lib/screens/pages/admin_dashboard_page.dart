@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -117,10 +117,122 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     padding: const EdgeInsets.only(top: 20, left: 20),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: TextBold(
-                        text: 'Malaybalay Police Station',
-                        fontSize: isLargeScreen ? 32 : 18,
-                        color: Colors.black,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextBold(
+                            text: 'Malaybalay Police Station',
+                            fontSize: isLargeScreen ? 32 : 18,
+                            color: Colors.black,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 30),
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Reports')
+                                    .where('status', isEqualTo: 'Pending')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error);
+                                    return const Center(child: Text('Error'));
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(top: 50),
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      )),
+                                    );
+                                  }
+
+                                  final data = snapshot.requireData;
+                                  return IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                                height: 300,
+                                                width: 300,
+                                                child: ListView.builder(
+                                                  itemCount: data.docs.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      child: ListTile(
+                                                        leading: isLargeScreen
+                                                            ? Image.asset(
+                                                                'assets/images/profile.png',
+                                                                height:
+                                                                    isLargeScreen
+                                                                        ? 50
+                                                                        : 25,
+                                                              )
+                                                            : null,
+                                                        title: TextBold(
+                                                            text:
+                                                                data.docs[index]
+                                                                    ['type'],
+                                                            fontSize:
+                                                                isLargeScreen
+                                                                    ? 14
+                                                                    : 12,
+                                                            color:
+                                                                Colors.black),
+                                                        subtitle: TextRegular(
+                                                            text:
+                                                                data.docs[index]
+                                                                    ['name'],
+                                                            fontSize:
+                                                                isLargeScreen
+                                                                    ? 12
+                                                                    : 10,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    );
+                                                  },
+                                                )),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: TextBold(
+                                                  text: 'Close',
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: b.Badge(
+                                      showBadge: data.docs.isNotEmpty,
+                                      badgeAnimation:
+                                          const b.BadgeAnimation.fade(),
+                                      badgeStyle: const b.BadgeStyle(
+                                        badgeColor: Colors.red,
+                                      ),
+                                      badgeContent: TextRegular(
+                                          text: data.docs.length.toString(),
+                                          fontSize: 12,
+                                          color: Colors.white),
+                                      child: const Icon(
+                                        Icons.notifications,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ],
                       ),
                     ),
                   ),
