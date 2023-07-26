@@ -162,6 +162,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                                                       newEmailController.text,
                                                       newNumberController.text,
                                                       newAddressController.text,
+                                                      '',
                                                       '');
                                                   Navigator.pop(context);
                                                   ScaffoldMessenger.of(context)

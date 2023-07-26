@@ -41,6 +41,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isChecked = false;
 
+  List ids = [
+    'School ID',
+    'Philippine Password',
+    'Drivers License',
+    'SSS ID',
+    'PhilHealth ID',
+    'TIN Card',
+    'Postal ID',
+    'Voters ID',
+  ];
+
+  String id = 'School ID';
+
+  int dropValue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -376,6 +391,106 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 35),
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topLeft,
+                                                              child:
+                                                                  TextRegular(
+                                                                text:
+                                                                    'Uploaded ID Type: ',
+                                                                fontSize: 14,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            5)),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10),
+                                                              child: SizedBox(
+                                                                height: 40,
+                                                                width: 275,
+                                                                child:
+                                                                    DropdownButton(
+                                                                  underline:
+                                                                      const SizedBox(),
+                                                                  value:
+                                                                      dropValue,
+                                                                  items: [
+                                                                    for (int i =
+                                                                            0;
+                                                                        i < ids.length;
+                                                                        i++)
+                                                                      DropdownMenuItem(
+                                                                        onTap:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            id =
+                                                                                ids[i];
+                                                                          });
+                                                                        },
+                                                                        value:
+                                                                            i,
+                                                                        child:
+                                                                            TextRegular(
+                                                                          text:
+                                                                              ids[i],
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                  ],
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    setState(
+                                                                        () {
+                                                                      dropValue =
+                                                                          int.parse(
+                                                                              value.toString());
+                                                                    });
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
                                                       TextFieldWidget(
                                                           label: 'Full Name',
                                                           controller:
@@ -581,7 +696,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                             newEmailController.text,
                                                                             newNumberController.text,
                                                                             newAddressController.text,
-                                                                            imgUrl);
+                                                                            imgUrl,
+                                                                            id);
                                                                         Navigator.pop(
                                                                             context);
                                                                         ScaffoldMessenger.of(context)
