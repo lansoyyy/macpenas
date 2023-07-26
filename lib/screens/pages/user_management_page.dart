@@ -179,7 +179,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   title: TextBold(
-                                                      text: 'User ID',
+                                                      text:
+                                                          'Type of ID: ${data.docs[i]['idType']}',
                                                       fontSize: 14,
                                                       color: Colors.black),
                                                   content: Image.network(
