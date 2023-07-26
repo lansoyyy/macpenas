@@ -51,6 +51,7 @@ dependencies:
   map_polyline_draw:
   http:
   flutter_google_places: ^0.3.0
+  badges:
 
 dev_dependencies:
   flutter_test:
