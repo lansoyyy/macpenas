@@ -135,7 +135,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Rape',
+                                                  'Attemp Homicide',
                                                   'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
@@ -152,7 +152,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                             trailing: const Icon(Icons
                                                 .keyboard_arrow_right_rounded),
                                             title: TextRegular(
-                                                text: 'RAPE',
+                                                text: 'ATTEMPT HOMICIDE',
                                                 fontSize: 18,
                                                 color: Colors.black),
                                           ),
@@ -164,7 +164,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Traffic Incident',
+                                                  'Kidnapping',
                                                   'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
@@ -181,7 +181,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                             trailing: const Icon(Icons
                                                 .keyboard_arrow_right_rounded),
                                             title: TextRegular(
-                                                text: 'TRAFFIC INCIDENT',
+                                                text: 'KIDNAPPING',
                                                 fontSize: 18,
                                                 color: Colors.black),
                                           ),
@@ -193,7 +193,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   myAddress,
                                                   lat,
                                                   long,
-                                                  'Robbery',
+                                                  'Theft',
                                                   'Pending');
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
@@ -210,7 +210,94 @@ class _UserHomePageState extends State<UserHomePage> {
                                             trailing: const Icon(Icons
                                                 .keyboard_arrow_right_rounded),
                                             title: TextRegular(
-                                                text: 'ROBBERY',
+                                                text: 'THEFT',
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              addReport(
+                                                  myName,
+                                                  myNumber,
+                                                  myAddress,
+                                                  lat,
+                                                  long,
+                                                  'Carnapping',
+                                                  'Pending');
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Emergency Alert Sent! Wait for further response',
+                                                      fontSize: 14,
+                                                      color: Colors.white),
+                                                ),
+                                              );
+                                            },
+                                            trailing: const Icon(Icons
+                                                .keyboard_arrow_right_rounded),
+                                            title: TextRegular(
+                                                text: 'CARNAPPING',
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              addReport(
+                                                  myName,
+                                                  myNumber,
+                                                  myAddress,
+                                                  lat,
+                                                  long,
+                                                  'Act of Lasciviousness',
+                                                  'Pending');
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Emergency Alert Sent! Wait for further response',
+                                                      fontSize: 14,
+                                                      color: Colors.white),
+                                                ),
+                                              );
+                                            },
+                                            trailing: const Icon(Icons
+                                                .keyboard_arrow_right_rounded),
+                                            title: TextRegular(
+                                                text: 'ACT OF LASCIVIOUSNESS',
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              addReport(
+                                                  myName,
+                                                  myNumber,
+                                                  myAddress,
+                                                  lat,
+                                                  long,
+                                                  'Attemp Murder',
+                                                  'Pending');
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Emergency Alert Sent! Wait for further response',
+                                                      fontSize: 14,
+                                                      color: Colors.white),
+                                                ),
+                                              );
+                                            },
+                                            trailing: const Icon(Icons
+                                                .keyboard_arrow_right_rounded),
+                                            title: TextRegular(
+                                                text: 'ATTEMPT MURDER',
                                                 fontSize: 18,
                                                 color: Colors.black),
                                           ),
