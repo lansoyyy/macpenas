@@ -70,6 +70,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 useRadiusInMeter: true,
                 color: Colors.blue),
           );
+
+          mapController.move(LatLng(position.latitude, position.longitude), 18);
+
+          lat = position.latitude;
+          long = position.longitude;
         });
         FirebaseFirestore.instance
             .collection('Reports')
