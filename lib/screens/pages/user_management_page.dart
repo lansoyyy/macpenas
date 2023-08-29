@@ -178,13 +178,113 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: TextBold(
-                                                      text:
-                                                          'Type of ID: ${data.docs[i]['idType']}',
-                                                      fontSize: 14,
-                                                      color: Colors.black),
-                                                  content: Image.network(
-                                                      data.docs[i]['imageId']),
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      TextBold(
+                                                          text:
+                                                              'Type of ID #1: ${data.docs[i]['id1Type']}',
+                                                          fontSize: 14,
+                                                          color: Colors.black),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Container(
+                                                            height: 150,
+                                                            width: 125,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.grey,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      data.docs[
+                                                                              i]
+                                                                          [
+                                                                          'id1Front']),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Container(
+                                                            height: 150,
+                                                            width: 125,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.grey,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      data.docs[
+                                                                              i]
+                                                                          [
+                                                                          'id1Back']),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      TextBold(
+                                                          text:
+                                                              'Type of ID #2: ${data.docs[i]['id2Type']}',
+                                                          fontSize: 14,
+                                                          color: Colors.black),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Container(
+                                                            height: 150,
+                                                            width: 125,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.grey,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      data.docs[
+                                                                              i]
+                                                                          [
+                                                                          'id2Front']),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Container(
+                                                            height: 150,
+                                                            width: 125,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.grey,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      data.docs[
+                                                                              i]
+                                                                          [
+                                                                          'id2Back']),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                   actions: [
                                                     TextButton(
                                                       onPressed: () {
@@ -275,8 +375,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                                                           fontFamily:
                                                                               'QRegular'),
                                                                     ),
-                                                                    actions: <
-                                                                        Widget>[
+                                                                    actions: <Widget>[
                                                                       MaterialButton(
                                                                         onPressed:
                                                                             () =>
@@ -489,8 +588,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                                                           style:
                                                                               TextStyle(fontFamily: 'QRegular'),
                                                                         ),
-                                                                        actions: <
-                                                                            Widget>[
+                                                                        actions: <Widget>[
                                                                           MaterialButton(
                                                                             onPressed: () =>
                                                                                 Navigator.of(context).pop(true),
