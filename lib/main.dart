@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:macpenas/screens/auth/landing_page.dart';
 import 'package:macpenas/screens/auth/login_screen.dart';
 import 'package:macpenas/screens/home_screen.dart';
 import 'package:macpenas/utils/routes.dart';
@@ -24,11 +25,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Macpenas',
-      home: const LoginScreen(),
-      initialRoute: '/loginscreen',
+      home: const LandingScreen(),
+      initialRoute: '/landingscreen',
       routes: {
         Routes().loginscreen: (context) => const LoginScreen(),
         Routes().homescreen: (context) => const HomeScreen(),
+        Routes().landingscreen: (context) => const LandingScreen(),
       },
     );
   }

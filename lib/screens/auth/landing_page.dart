@@ -1,6 +1,5 @@
 import 'dart:html';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +11,14 @@ import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
 import '../../widgets/textfield_widget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LandingScreen extends StatefulWidget {
+  const LandingScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LandingScreen> createState() => _LandingScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LandingScreenState extends State<LandingScreen> {
   final emailController = TextEditingController();
 
   final passController = TextEditingController();
@@ -81,32 +80,21 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 120,
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    SizedBox(
-                      width: 800,
-                      child: TextBold(
-                          text: 'Macpenas', fontSize: 28, color: Colors.white),
-                    ),
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                  ],
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 120,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: TextBold(
+                      text: 'Macpenas', fontSize: 28, color: Colors.white),
                 ),
                 const SizedBox(
                   height: 50,
@@ -114,83 +102,89 @@ class _LoginScreenState extends State<LoginScreen> {
                 SingleChildScrollView(
                   child: Container(
                     color: Colors.white.withOpacity(0.8),
-                    height: 375,
+                    height: 400,
                     width: 300,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextFieldWidget(
-                              isEmail: true,
-                              label: 'Email',
-                              controller: emailController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              isObscure: true,
-                              isPassword: true,
-                              label: 'Password',
-                              controller: passController),
                           const SizedBox(
                             height: 30,
                           ),
                           ButtonWidget(
-                              label: 'Login',
-                              onPressed: (() async {
-                                bool isVerified = false;
-                                try {
-                                  await FirebaseAuth.instance
-                                      .signInWithEmailAndPassword(
-                                          email: emailController.text,
-                                          password: passController.text)
-                                      .then((value) {
-                                    FirebaseFirestore.instance
-                                        .collection('Users')
-                                        .where('id',
-                                            isEqualTo: FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                        .get()
-                                        .then((QuerySnapshot
-                                            querySnapshot) async {
-                                      for (var doc in querySnapshot.docs) {
-                                        box.write('user', doc['role']);
-
-                                        setState(() {
-                                          isVerified = doc['isVerified'];
-                                        });
-                                      }
-                                    }).then((value) {
-                                      if (isVerified) {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                Routes().homescreen);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: TextRegular(
-                                                text:
-                                                    'Your account has not been verified! Wait for the admins response',
-                                                fontSize: 14,
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      }
-                                    });
-                                  });
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: TextRegular(
-                                          text: e.toString(),
-                                          fontSize: 14,
-                                          color: Colors.white),
-                                    ),
-                                  );
-                                }
+                              label: 'Main Administration',
+                              onPressed: (() {
+                                Navigator.pushNamed(
+                                    context, Routes().loginscreen);
                               })),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ButtonWidget(
+                              label: 'Administration',
+                              onPressed: (() {
+                                Navigator.pushNamed(
+                                    context, Routes().loginscreen);
+                              })),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ButtonWidget(
+                              label: 'Intelligence',
+                              onPressed: (() {
+                                Navigator.pushNamed(
+                                    context, Routes().loginscreen);
+                              })),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ButtonWidget(
+                              label: 'Users',
+                              onPressed: (() {
+                                Navigator.pushNamed(
+                                    context, Routes().loginscreen);
+                              })),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  width: 100,
+                                  child: Divider(),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                TextBold(
+                                    text: 'or',
+                                    fontSize: 14,
+                                    color: Colors.black),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const SizedBox(
+                                  width: 100,
+                                  child: Divider(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                registerDialog();
+                              },
+                              child: TextBold(
+                                  text: 'Register here',
+                                  fontSize: 14,
+                                  color: Colors.black)),
                           const SizedBox(
                             height: 20,
                           ),
