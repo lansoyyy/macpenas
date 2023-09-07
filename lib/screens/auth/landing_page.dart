@@ -1,15 +1,14 @@
 import 'dart:html';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:macpenas/services/add_user.dart';
+import 'package:intl/intl.dart';
 import 'package:macpenas/utils/routes.dart';
+import 'package:macpenas/widgets/textfield_widget.dart';
 
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
-import '../../widgets/textfield_widget.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -41,7 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
   String id2Front = '';
   String id2Back = '';
 
-  bool _isChecked = false;
+  final bool _isChecked = false;
 
   List ids = [
     'UMID',
@@ -179,7 +178,8 @@ class _LandingScreenState extends State<LandingScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-                                registerDialog();
+                                one();
+                                // registerDialog();
                               },
                               child: TextBold(
                                   text: 'Register here',
@@ -201,857 +201,1990 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  registerDialog() {
+  final newemailController = TextEditingController();
+
+  one() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-              backgroundColor: Colors.white.withOpacity(0.8),
-              child: StatefulBuilder(builder: (context, setState) {
-                return Container(
-                  color: Colors.white.withOpacity(0.5),
-                  height: 450,
-                  width: 400,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              id1Front == ''
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #1 (Front)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFieldWidget(
+                    label: 'Enter your Email',
+                    controller: newEmailController,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextRegular(
+                    text:
+                        "By tapping next, we'll collect your Email Address information to be able to send you a verification code",
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                two();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-                                                setState(() {
-                                                  id1Front = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.grey,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #1 (Front)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
+  two() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextRegular(
+                    text:
+                        "We send you a verification code. If you verify your email, you can proceed to registration",
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                three();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-                                                setState(() {
-                                                  id1Front = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(id1Front),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                              id1Back == ''
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #1 (Back)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
+  final newname = TextEditingController();
+  final newregion = TextEditingController();
+  final newprovince = TextEditingController();
+  final newmunicipality = TextEditingController();
+  final newbrgy = TextEditingController();
+  final newstreet = TextEditingController();
+  final newnumber = TextEditingController();
 
-                                                setState(() {
-                                                  id1Back = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.grey,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #1 (Back)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
-
-                                                setState(() {
-                                                  id1Back = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(id1Front),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                            ],
+  three() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFieldWidget(label: 'Full Name', controller: newname),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        label: 'Contact Number', controller: newnumber),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextRegular(
+                          text: 'Birthday', fontSize: 12, color: Colors.black),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        halfDayDatePicker(context);
+                      },
+                      child: SizedBox(
+                        width: 325,
+                        height: 50,
+                        child: TextFormField(
+                          enabled: false,
+                          style: const TextStyle(
+                            fontFamily: 'Regular',
+                            fontSize: 14,
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 35),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: TextRegular(
-                                    text: 'Uploaded ID Type: ',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
+
+                          decoration: InputDecoration(
+                            suffixIcon: const Icon(
+                              Icons.calendar_month_outlined,
+                              color: Colors.blue,
+                            ),
+                            hintStyle: const TextStyle(
+                              fontFamily: 'Regular',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                            hintText: bdayController.text,
+                            border: InputBorder.none,
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.black,
                               ),
-                              const SizedBox(
-                                height: 5,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.black,
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 275,
-                                    child: DropdownButton(
-                                      underline: const SizedBox(),
-                                      value: dropValue,
-                                      items: [
-                                        for (int i = 0; i < ids.length; i++)
-                                          DropdownMenuItem(
-                                            onTap: () {
-                                              setState(() {
-                                                id1 = ids[i];
-                                              });
-                                            },
-                                            value: i,
-                                            child: TextRegular(
-                                              text: ids[i],
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                      ],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          dropValue =
-                                              int.parse(value.toString());
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.black,
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              id1Front == ''
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #2 (Front)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
-
-                                                setState(() {
-                                                  id2Front = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.grey,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #2 (Front)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
-
-                                                setState(() {
-                                                  id2Front = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(id1Front),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                              id1Back == ''
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #2 (Back)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
-
-                                                setState(() {
-                                                  id2Back = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.grey,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextRegular(
-                                            text: 'ID #2 (Back)',
-                                            fontSize: 14,
-                                            color: Colors.grey),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            InputElement input =
-                                                FileUploadInputElement()
-                                                    as InputElement
-                                                  ..accept = 'image/*';
-                                            FirebaseStorage fs =
-                                                FirebaseStorage.instance;
-                                            input.click();
-                                            input.onChange.listen((event) {
-                                              final file = input.files!.first;
-                                              final reader = FileReader();
-                                              reader.readAsDataUrl(file);
-                                              reader.onLoadEnd
-                                                  .listen((event) async {
-                                                var snapshot = await fs
-                                                    .ref()
-                                                    .child('newfile')
-                                                    .putBlob(file);
-                                                String downloadUrl =
-                                                    await snapshot.ref
-                                                        .getDownloadURL();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: TextRegular(
-                                                            text:
-                                                                'Uploaded Succesfully! Click update to see changes',
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.white)));
-
-                                                setState(() {
-                                                  id2Back = downloadUrl;
-                                                });
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(id1Front),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 35),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: TextRegular(
-                                    text: 'Uploaded ID Type: ',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
                               ),
-                              const SizedBox(
-                                height: 5,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            errorStyle: const TextStyle(
+                                fontFamily: 'Bold', fontSize: 12),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 275,
-                                    child: DropdownButton(
-                                      underline: const SizedBox(),
-                                      value: dropValue1,
-                                      items: [
-                                        for (int i = 0; i < ids.length; i++)
-                                          DropdownMenuItem(
-                                            onTap: () {
-                                              setState(() {
-                                                id2 = ids[i];
-                                              });
-                                            },
-                                            value: i,
-                                            child: TextRegular(
-                                              text: ids[i],
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                      ],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          dropValue1 =
-                                              int.parse(value.toString());
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              label: 'Full Name',
-                              controller: newNameController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              label: 'Contact Number',
-                              controller: newNumberController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              label: 'Address',
-                              controller: newAddressController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              isEmail: true,
-                              label: 'Email',
-                              controller: newEmailController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              isObscure: true,
-                              isPassword: true,
-                              label: 'Password',
-                              controller: newPassController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFieldWidget(
-                              isObscure: true,
-                              isPassword: true,
-                              label: 'Confirm Password',
-                              controller: newConfirmPassController),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: CheckboxListTile(
-                              title: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: TextBold(
-                                          text: 'Macpenas Policy',
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                        ),
-                                        content: SizedBox(
-                                          width: 500,
-                                          height: 300,
-                                          child: TextRegular(
-                                              text:
-                                                  'MACPENAS App Policy\n\nBy using the MACPENAS App, you agree to the following policy:\n\nFalse Reporting: You understand and agree that providing false information through the MACPENAS App may result in false reporting of crimes, which is a punishable offense.\n\nAccuracy of Information: You are responsible for ensuring the accuracy and truthfulness of the information you provide when using the App.\n\nPlease read and understand this policy before using the MACPENAS App. Your use of the App indicates your acceptance of these terms.',
-                                              fontSize: 14,
-                                              color: Colors.grey),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: TextRegular(
-                                              text: 'Close',
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text('I agree to the policies'),
-                              ),
-                              value: _isChecked,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isChecked = value!;
-                                });
-                              },
+                              borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          _isChecked
-                              ? ButtonWidget(
-                                  label: 'Register',
-                                  onPressed: (() async {
-                                    if (newNameController.text == '' ||
-                                        newNumberController.text == '' ||
-                                        newAddressController.text == '' ||
-                                        newEmailController.text == '' ||
-                                        newPassController.text == '' ||
-                                        newConfirmPassController.text == '' ||
-                                        id1Front == '' ||
-                                        id1Back == '' ||
-                                        id2Front == '' ||
-                                        id2Back == '') {
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: TextRegular(
-                                              text:
-                                                  'Please supply all the missing fields',
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                        ),
-                                      );
-                                    } else {
-                                      if (newConfirmPassController.text !=
-                                          newPassController.text) {
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: TextRegular(
-                                                text: 'Password do not match!',
-                                                fontSize: 14,
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      } else {
-                                        if (id1Front == '') {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: TextRegular(
-                                                  text:
-                                                      'Please upload your ID for verification',
-                                                  fontSize: 14,
-                                                  color: Colors.white),
-                                            ),
-                                          );
-                                        } else {
-                                          try {
-                                            await FirebaseAuth.instance
-                                                .createUserWithEmailAndPassword(
-                                                    email:
-                                                        newEmailController.text,
-                                                    password:
-                                                        newPassController.text);
-                                            addUser(
-                                                newNameController.text,
-                                                newEmailController.text,
-                                                newNumberController.text,
-                                                newAddressController.text,
-                                                id1Front,
-                                                id1Back,
-                                                id1,
-                                                id2Front,
-                                                id2Back,
-                                                id2);
-                                            Navigator.pop(context);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: TextRegular(
-                                                    text:
-                                                        'Account created succesfully! Please wait for admin to approve your registration',
-                                                    fontSize: 14,
-                                                    color: Colors.white),
-                                              ),
-                                            );
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: TextRegular(
-                                                    text: e.toString(),
-                                                    fontSize: 14,
-                                                    color: Colors.white),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }))
-                              : const SizedBox()
-                        ],
+
+                          controller: bdayController,
+                          // Pass the validator to the TextFormField
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }));
-        });
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(label: 'Region', controller: newregion),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(label: 'Province', controller: newprovince),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        label: 'Municipality', controller: newmunicipality),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(label: 'Baranggay', controller: newbrgy),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(label: 'Street', controller: newstreet),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                four();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
+
+  four() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRegular(
+                        text:
+                            'Review your information\nCheck your spelling and important details',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextRegular(
+                        text: 'Name: ', fontSize: 12, color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text: 'Contact Number: ',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text: 'Birthday: ', fontSize: 12, color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text: 'Address: ', fontSize: 12, color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                three();
+              },
+              child: TextBold(
+                text: 'Back',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                five();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  final newmpin = TextEditingController();
+  final newconfirmpin = TextEditingController();
+
+  five() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRegular(
+                        text:
+                            'Set your MPIN.\nYour MPIN is the password to your account. For your account security, never share your MPIN with anyone',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFieldWidget(
+                        label: 'Enter your MPIN: ', controller: newmpin),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        label: 'Confirm MPIN: ', controller: newconfirmpin),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                six();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  six() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRegular(
+                        text: 'Upload your ID',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        id1Front == ''
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #1 (Front)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id1Front = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #1 (Front)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id1Front = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        image: DecorationImage(
+                                            image: NetworkImage(id1Front),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        id1Back == ''
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #1 (Back)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id1Back = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #1 (Back)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id1Back = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        image: DecorationImage(
+                                            image: NetworkImage(id1Front),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 35),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: TextRegular(
+                              text: 'Uploaded ID Type: ',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: SizedBox(
+                              height: 40,
+                              width: 275,
+                              child: DropdownButton(
+                                underline: const SizedBox(),
+                                value: dropValue,
+                                items: [
+                                  for (int i = 0; i < ids.length; i++)
+                                    DropdownMenuItem(
+                                      onTap: () {
+                                        setState(() {
+                                          id1 = ids[i];
+                                        });
+                                      },
+                                      value: i,
+                                      child: TextRegular(
+                                        text: ids[i],
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    dropValue = int.parse(value.toString());
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        id1Front == ''
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #2 (Front)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id2Front = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #2 (Front)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id2Front = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        image: DecorationImage(
+                                            image: NetworkImage(id1Front),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        id1Back == ''
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #2 (Back)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id2Back = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextRegular(
+                                      text: 'ID #2 (Back)',
+                                      fontSize: 14,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      InputElement input =
+                                          FileUploadInputElement()
+                                              as InputElement
+                                            ..accept = 'image/*';
+                                      FirebaseStorage fs =
+                                          FirebaseStorage.instance;
+                                      input.click();
+                                      input.onChange.listen((event) {
+                                        final file = input.files!.first;
+                                        final reader = FileReader();
+                                        reader.readAsDataUrl(file);
+                                        reader.onLoadEnd.listen((event) async {
+                                          var snapshot = await fs
+                                              .ref()
+                                              .child('newfile')
+                                              .putBlob(file);
+                                          String downloadUrl = await snapshot
+                                              .ref
+                                              .getDownloadURL();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: TextRegular(
+                                                      text:
+                                                          'Uploaded Succesfully! Click update to see changes',
+                                                      fontSize: 14,
+                                                      color: Colors.white)));
+
+                                          setState(() {
+                                            id2Back = downloadUrl;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        image: DecorationImage(
+                                            image: NetworkImage(id1Front),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 35),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: TextRegular(
+                              text: 'Uploaded ID Type: ',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: SizedBox(
+                              height: 40,
+                              width: 275,
+                              child: DropdownButton(
+                                underline: const SizedBox(),
+                                value: dropValue1,
+                                items: [
+                                  for (int i = 0; i < ids.length; i++)
+                                    DropdownMenuItem(
+                                      onTap: () {
+                                        setState(() {
+                                          id2 = ids[i];
+                                        });
+                                      },
+                                      value: i,
+                                      child: TextRegular(
+                                        text: ids[i],
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    dropValue1 = int.parse(value.toString());
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                seven();
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  seven() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextBold(
+            text: 'Pre-Registration',
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextRegular(
+                        text:
+                            'You are now Pre-registered to MACPENAS, kindly present this code to the Police Station to fully register your account.\n Ref. No.\n09090104355\n\nNote: Bring your 2 Valid IDs during physical registration',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: TextBold(
+                text: 'Next',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  final bdayController = TextEditingController();
+  void halfDayDatePicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+                onSurface: Colors.grey,
+              ),
+            ),
+            child: child!,
+          );
+        },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2050));
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('MM-dd-yyy').format(pickedDate);
+
+      setState(() {
+        bdayController.text = formattedDate;
+      });
+    } else {
+      return null;
+    }
+  }
+
+  // registerDialog() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return Dialog(
+  //             backgroundColor: Colors.white.withOpacity(0.8),
+  //             child: StatefulBuilder(builder: (context, setState) {
+  //               return Container(
+  //                 color: Colors.white.withOpacity(0.5),
+  //                 height: 450,
+  //                 width: 400,
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+  //                   child: SingleChildScrollView(
+  //                     child: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                           children: [
+  //                             id1Front == ''
+  //                                 ? Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #1 (Front)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id1Front = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: const BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                           ),
+  //                                           child: const Icon(
+  //                                             Icons.add,
+  //                                             color: Colors.white,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   )
+  //                                 : Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #1 (Front)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id1Front = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                             image: DecorationImage(
+  //                                                 image: NetworkImage(id1Front),
+  //                                                 fit: BoxFit.cover),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                             id1Back == ''
+  //                                 ? Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #1 (Back)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id1Back = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: const BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                           ),
+  //                                           child: const Icon(
+  //                                             Icons.add,
+  //                                             color: Colors.white,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   )
+  //                                 : Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #1 (Back)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id1Back = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                             image: DecorationImage(
+  //                                                 image: NetworkImage(id1Front),
+  //                                                 fit: BoxFit.cover),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                           ],
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.center,
+  //                           children: [
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 35),
+  //                               child: Align(
+  //                                 alignment: Alignment.topLeft,
+  //                                 child: TextRegular(
+  //                                   text: 'Uploaded ID Type: ',
+  //                                   fontSize: 14,
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             const SizedBox(
+  //                               height: 5,
+  //                             ),
+  //                             Container(
+  //                               decoration: BoxDecoration(
+  //                                   border: Border.all(
+  //                                     color: Colors.black,
+  //                                   ),
+  //                                   borderRadius: BorderRadius.circular(5)),
+  //                               child: Padding(
+  //                                 padding: const EdgeInsets.only(
+  //                                     left: 10, right: 10),
+  //                                 child: SizedBox(
+  //                                   height: 40,
+  //                                   width: 275,
+  //                                   child: DropdownButton(
+  //                                     underline: const SizedBox(),
+  //                                     value: dropValue,
+  //                                     items: [
+  //                                       for (int i = 0; i < ids.length; i++)
+  //                                         DropdownMenuItem(
+  //                                           onTap: () {
+  //                                             setState(() {
+  //                                               id1 = ids[i];
+  //                                             });
+  //                                           },
+  //                                           value: i,
+  //                                           child: TextRegular(
+  //                                             text: ids[i],
+  //                                             fontSize: 14,
+  //                                             color: Colors.black,
+  //                                           ),
+  //                                         ),
+  //                                     ],
+  //                                     onChanged: (value) {
+  //                                       setState(() {
+  //                                         dropValue =
+  //                                             int.parse(value.toString());
+  //                                       });
+  //                                     },
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                           children: [
+  //                             id1Front == ''
+  //                                 ? Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #2 (Front)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id2Front = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: const BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                           ),
+  //                                           child: const Icon(
+  //                                             Icons.add,
+  //                                             color: Colors.white,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   )
+  //                                 : Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #2 (Front)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id2Front = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                             image: DecorationImage(
+  //                                                 image: NetworkImage(id1Front),
+  //                                                 fit: BoxFit.cover),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                             id1Back == ''
+  //                                 ? Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #2 (Back)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id2Back = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: const BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                           ),
+  //                                           child: const Icon(
+  //                                             Icons.add,
+  //                                             color: Colors.white,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   )
+  //                                 : Column(
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       TextRegular(
+  //                                           text: 'ID #2 (Back)',
+  //                                           fontSize: 14,
+  //                                           color: Colors.grey),
+  //                                       const SizedBox(
+  //                                         height: 5,
+  //                                       ),
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           InputElement input =
+  //                                               FileUploadInputElement()
+  //                                                   as InputElement
+  //                                                 ..accept = 'image/*';
+  //                                           FirebaseStorage fs =
+  //                                               FirebaseStorage.instance;
+  //                                           input.click();
+  //                                           input.onChange.listen((event) {
+  //                                             final file = input.files!.first;
+  //                                             final reader = FileReader();
+  //                                             reader.readAsDataUrl(file);
+  //                                             reader.onLoadEnd
+  //                                                 .listen((event) async {
+  //                                               var snapshot = await fs
+  //                                                   .ref()
+  //                                                   .child('newfile')
+  //                                                   .putBlob(file);
+  //                                               String downloadUrl =
+  //                                                   await snapshot.ref
+  //                                                       .getDownloadURL();
+  //                                               ScaffoldMessenger.of(context)
+  //                                                   .showSnackBar(SnackBar(
+  //                                                       content: TextRegular(
+  //                                                           text:
+  //                                                               'Uploaded Succesfully! Click update to see changes',
+  //                                                           fontSize: 14,
+  //                                                           color:
+  //                                                               Colors.white)));
+
+  //                                               setState(() {
+  //                                                 id2Back = downloadUrl;
+  //                                               });
+  //                                             });
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           height: 150,
+  //                                           width: 150,
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.grey,
+  //                                             image: DecorationImage(
+  //                                                 image: NetworkImage(id1Front),
+  //                                                 fit: BoxFit.cover),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                           ],
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.center,
+  //                           children: [
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 35),
+  //                               child: Align(
+  //                                 alignment: Alignment.topLeft,
+  //                                 child: TextRegular(
+  //                                   text: 'Uploaded ID Type: ',
+  //                                   fontSize: 14,
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             const SizedBox(
+  //                               height: 5,
+  //                             ),
+  //                             Container(
+  //                               decoration: BoxDecoration(
+  //                                   border: Border.all(
+  //                                     color: Colors.black,
+  //                                   ),
+  //                                   borderRadius: BorderRadius.circular(5)),
+  //                               child: Padding(
+  //                                 padding: const EdgeInsets.only(
+  //                                     left: 10, right: 10),
+  //                                 child: SizedBox(
+  //                                   height: 40,
+  //                                   width: 275,
+  //                                   child: DropdownButton(
+  //                                     underline: const SizedBox(),
+  //                                     value: dropValue1,
+  //                                     items: [
+  //                                       for (int i = 0; i < ids.length; i++)
+  //                                         DropdownMenuItem(
+  //                                           onTap: () {
+  //                                             setState(() {
+  //                                               id2 = ids[i];
+  //                                             });
+  //                                           },
+  //                                           value: i,
+  //                                           child: TextRegular(
+  //                                             text: ids[i],
+  //                                             fontSize: 14,
+  //                                             color: Colors.black,
+  //                                           ),
+  //                                         ),
+  //                                     ],
+  //                                     onChanged: (value) {
+  //                                       setState(() {
+  //                                         dropValue1 =
+  //                                             int.parse(value.toString());
+  //                                       });
+  //                                     },
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             label: 'Full Name',
+  //                             controller: newNameController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             label: 'Contact Number',
+  //                             controller: newNumberController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             label: 'Address',
+  //                             controller: newAddressController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             isEmail: true,
+  //                             label: 'Email',
+  //                             controller: newEmailController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             isObscure: true,
+  //                             isPassword: true,
+  //                             label: 'Password',
+  //                             controller: newPassController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         TextFieldWidget(
+  //                             isObscure: true,
+  //                             isPassword: true,
+  //                             label: 'Confirm Password',
+  //                             controller: newConfirmPassController),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Padding(
+  //                           padding: const EdgeInsets.only(left: 20, right: 20),
+  //                           child: CheckboxListTile(
+  //                             title: GestureDetector(
+  //                               onTap: () {
+  //                                 showDialog(
+  //                                   context: context,
+  //                                   builder: (context) {
+  //                                     return AlertDialog(
+  //                                       title: TextBold(
+  //                                         text: 'Macpenas Policy',
+  //                                         fontSize: 18,
+  //                                         color: Colors.black,
+  //                                       ),
+  //                                       content: SizedBox(
+  //                                         width: 500,
+  //                                         height: 300,
+  //                                         child: TextRegular(
+  //                                             text:
+  //                                                 'MACPENAS App Policy\n\nBy using the MACPENAS App, you agree to the following policy:\n\nFalse Reporting: You understand and agree that providing false information through the MACPENAS App may result in false reporting of crimes, which is a punishable offense.\n\nAccuracy of Information: You are responsible for ensuring the accuracy and truthfulness of the information you provide when using the App.\n\nPlease read and understand this policy before using the MACPENAS App. Your use of the App indicates your acceptance of these terms.',
+  //                                             fontSize: 14,
+  //                                             color: Colors.grey),
+  //                                       ),
+  //                                       actions: [
+  //                                         TextButton(
+  //                                           onPressed: () {
+  //                                             Navigator.pop(context);
+  //                                           },
+  //                                           child: TextRegular(
+  //                                             text: 'Close',
+  //                                             fontSize: 14,
+  //                                             color: Colors.black,
+  //                                           ),
+  //                                         ),
+  //                                       ],
+  //                                     );
+  //                                   },
+  //                                 );
+  //                               },
+  //                               child: const Text('I agree to the policies'),
+  //                             ),
+  //                             value: _isChecked,
+  //                             onChanged: (value) {
+  //                               setState(() {
+  //                                 _isChecked = value!;
+  //                               });
+  //                             },
+  //                           ),
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         _isChecked
+  //                             ? ButtonWidget(
+  //                                 label: 'Register',
+  //                                 onPressed: (() async {
+  //                                   if (newNameController.text == '' ||
+  //                                       newNumberController.text == '' ||
+  //                                       newAddressController.text == '' ||
+  //                                       newEmailController.text == '' ||
+  //                                       newPassController.text == '' ||
+  //                                       newConfirmPassController.text == '' ||
+  //                                       id1Front == '' ||
+  //                                       id1Back == '' ||
+  //                                       id2Front == '' ||
+  //                                       id2Back == '') {
+  //                                     Navigator.pop(context);
+  //                                     ScaffoldMessenger.of(context)
+  //                                         .showSnackBar(
+  //                                       SnackBar(
+  //                                         content: TextRegular(
+  //                                             text:
+  //                                                 'Please supply all the missing fields',
+  //                                             fontSize: 14,
+  //                                             color: Colors.white),
+  //                                       ),
+  //                                     );
+  //                                   } else {
+  //                                     if (newConfirmPassController.text !=
+  //                                         newPassController.text) {
+  //                                       Navigator.pop(context);
+  //                                       ScaffoldMessenger.of(context)
+  //                                           .showSnackBar(
+  //                                         SnackBar(
+  //                                           content: TextRegular(
+  //                                               text: 'Password do not match!',
+  //                                               fontSize: 14,
+  //                                               color: Colors.white),
+  //                                         ),
+  //                                       );
+  //                                     } else {
+  //                                       if (id1Front == '') {
+  //                                         ScaffoldMessenger.of(context)
+  //                                             .showSnackBar(
+  //                                           SnackBar(
+  //                                             content: TextRegular(
+  //                                                 text:
+  //                                                     'Please upload your ID for verification',
+  //                                                 fontSize: 14,
+  //                                                 color: Colors.white),
+  //                                           ),
+  //                                         );
+  //                                       } else {
+  //                                         try {
+  //                                           await FirebaseAuth.instance
+  //                                               .createUserWithEmailAndPassword(
+  //                                                   email:
+  //                                                       newEmailController.text,
+  //                                                   password:
+  //                                                       newPassController.text);
+  //                                           addUser(
+  //                                               newNameController.text,
+  //                                               newEmailController.text,
+  //                                               newNumberController.text,
+  //                                               newAddressController.text,
+  //                                               id1Front,
+  //                                               id1Back,
+  //                                               id1,
+  //                                               id2Front,
+  //                                               id2Back,
+  //                                               id2);
+  //                                           Navigator.pop(context);
+  //                                           ScaffoldMessenger.of(context)
+  //                                               .showSnackBar(
+  //                                             SnackBar(
+  //                                               content: TextRegular(
+  //                                                   text:
+  //                                                       'Account created succesfully! Please wait for admin to approve your registration',
+  //                                                   fontSize: 14,
+  //                                                   color: Colors.white),
+  //                                             ),
+  //                                           );
+  //                                         } catch (e) {
+  //                                           ScaffoldMessenger.of(context)
+  //                                               .showSnackBar(
+  //                                             SnackBar(
+  //                                               content: TextRegular(
+  //                                                   text: e.toString(),
+  //                                                   fontSize: 14,
+  //                                                   color: Colors.white),
+  //                                             ),
+  //                                           );
+  //                                         }
+  //                                       }
+  //                                     }
+  //                                   }
+  //                                 }))
+  //                             : const SizedBox()
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             }));
+  //       });
+  // }
 }
