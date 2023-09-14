@@ -1,7 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
 import 'package:macpenas/screens/pages/admin_dashboard_page.dart';
+import 'package:macpenas/screens/pages/analytics_page.dart';
+import 'package:macpenas/screens/pages/history_page.dart';
 import 'package:macpenas/screens/pages/profile_page.dart';
 import 'package:macpenas/screens/pages/role_management_page.dart';
 import 'package:macpenas/screens/pages/user_home_page.dart';
@@ -29,6 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isProfile = false;
   bool isRole = false;
   bool isUser = false;
+
+  bool isAnalytics = false;
+
+  bool isHistory = false;
 
   bool isExpanded = false;
 
@@ -104,6 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isProfile = false;
                                         isRole = false;
                                         isUser = false;
+                                        isAnalytics = false;
+                                        isHistory = false;
                                       });
                                     },
                                     leading: Icon(
@@ -128,6 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           isProfile = false;
                                           isRole = false;
                                           isUser = false;
+                                          isAnalytics = false;
+                                          isHistory = false;
                                         });
                                       },
                                       child: Icon(
@@ -149,6 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isProfile = false;
                                         isRole = false;
                                         isUser = false;
+                                        isAnalytics = false;
+                                        isHistory = false;
                                       });
                                     },
                                     leading: Icon(
@@ -177,6 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           isProfile = false;
                                           isRole = false;
                                           isUser = false;
+                                          isAnalytics = false;
+                                          isHistory = false;
                                         });
                                       },
                                       child: Icon(
@@ -199,6 +215,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isProfile = false;
                                         isRole = false;
                                         isUser = true;
+                                        isAnalytics = false;
+                                        isHistory = false;
                                       });
                                     },
                                     leading: Icon(
@@ -223,6 +241,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           isProfile = false;
                                           isRole = false;
                                           isUser = true;
+                                          isAnalytics = false;
+                                          isHistory = false;
                                         });
                                       },
                                       child: Icon(
@@ -244,6 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isProfile = false;
                                         isRole = true;
                                         isUser = false;
+                                        isAnalytics = false;
+                                        isHistory = false;
                                       });
                                     },
                                     leading: Icon(
@@ -268,6 +290,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           isProfile = false;
                                           isRole = true;
                                           isUser = false;
+                                          isAnalytics = false;
+                                          isHistory = false;
                                         });
                                       },
                                       child: Icon(
@@ -288,6 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isProfile = false;
                                     isRole = false;
                                     isUser = false;
+                                    isAnalytics = false;
+                                    isHistory = false;
                                   });
                                 },
                                 leading: Icon(
@@ -312,6 +338,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       isProfile = false;
                                       isRole = false;
                                       isUser = false;
+                                      isAnalytics = false;
+                                      isHistory = false;
                                     });
                                   },
                                   child: Icon(
@@ -342,6 +370,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 isProfile = true;
                                 isRole = false;
                                 isUser = false;
+                                isAnalytics = false;
+                                isHistory = false;
                               });
                             },
                             leading: Icon(
@@ -368,6 +398,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   isProfile = true;
                                   isRole = false;
                                   isUser = false;
+                                  isAnalytics = false;
+                                  isHistory = false;
                                 });
                               },
                               child: Icon(
@@ -497,6 +529,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             isProfile = false;
                                             isRole = false;
                                             isUser = false;
+                                            isAnalytics = false;
+                                            isHistory = false;
                                           });
                                         },
                                         leading: Icon(
@@ -524,6 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               isInfo = false;
                                               isProfile = false;
                                               isRole = false;
+                                              isAnalytics = false;
+                                              isHistory = false;
                                               isUser = false;
                                             });
                                           },
@@ -547,6 +583,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             isProfile = false;
                                             isRole = false;
                                             isUser = false;
+                                            isAnalytics = false;
+                                            isHistory = false;
                                           });
                                         },
                                         leading: Icon(
@@ -575,6 +613,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               isProfile = false;
                                               isRole = false;
                                               isUser = false;
+                                              isAnalytics = false;
+                                              isHistory = false;
                                             });
                                           },
                                           child: Icon(
@@ -597,6 +637,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             isProfile = false;
                                             isRole = false;
                                             isUser = true;
+                                            isAnalytics = false;
+                                            isHistory = false;
                                           });
                                         },
                                         leading: Icon(
@@ -625,6 +667,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               isProfile = false;
                                               isRole = false;
                                               isUser = true;
+                                              isAnalytics = false;
+                                              isHistory = false;
                                             });
                                           },
                                           child: Icon(
@@ -646,6 +690,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             isInfo = false;
                                             isProfile = false;
                                             isRole = true;
+                                            isAnalytics = false;
+                                            isHistory = false;
                                             isUser = false;
                                           });
                                         },
@@ -674,6 +720,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               isInfo = false;
                                               isProfile = false;
                                               isRole = true;
+                                              isAnalytics = false;
+                                              isHistory = false;
                                               isUser = false;
                                             });
                                           },
@@ -686,10 +734,120 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
+                            box.read('user') == 'admin'
+                                ? isLargeScreen
+                                    ? ListTile(
+                                        onTap: () {
+                                          setState(() {
+                                            isHome = false;
+                                            isDashboard = false;
+                                            isInfo = false;
+                                            isProfile = false;
+                                            isRole = false;
+                                            isAnalytics = true;
+                                            isHistory = false;
+                                            isUser = false;
+                                          });
+                                        },
+                                        leading: Icon(
+                                          Icons.analytics,
+                                          color: isAnalytics
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                        title: TextRegular(
+                                          text: 'Analytics',
+                                          fontSize: 16,
+                                          color: isAnalytics
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isHome = false;
+                                              isDashboard = false;
+                                              isInfo = false;
+                                              isProfile = false;
+                                              isRole = false;
+                                              isAnalytics = true;
+                                              isHistory = false;
+                                              isUser = false;
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.analytics,
+                                            color: isAnalytics
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      )
+                                : const SizedBox(),
+                            box.read('user') == 'admin'
+                                ? isLargeScreen
+                                    ? ListTile(
+                                        onTap: () {
+                                          setState(() {
+                                            isHome = false;
+                                            isDashboard = false;
+                                            isInfo = false;
+                                            isProfile = false;
+                                            isRole = false;
+                                            isAnalytics = false;
+                                            isHistory = true;
+                                            isUser = false;
+                                          });
+                                        },
+                                        leading: Icon(
+                                          Icons.history,
+                                          color: isHistory
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                        title: TextRegular(
+                                          text: 'History',
+                                          fontSize: 16,
+                                          color: isHistory
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isHome = false;
+                                              isDashboard = false;
+                                              isInfo = false;
+                                              isProfile = false;
+                                              isRole = false;
+                                              isAnalytics = false;
+                                              isHistory = true;
+                                              isUser = false;
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.history,
+                                            color: isHistory
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      )
+                                : const SizedBox(),
                             isLargeScreen
                                 ? ListTile(
                                     onTap: () {
                                       setState(() {
+                                        isAnalytics = false;
+                                        isHistory = false;
                                         isHome = false;
                                         isDashboard = false;
                                         isInfo = true;
@@ -714,6 +872,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
+                                          isAnalytics = false;
+                                          isHistory = false;
                                           isHome = false;
                                           isDashboard = false;
                                           isInfo = true;
@@ -745,6 +905,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? ListTile(
                                 onTap: () {
                                   setState(() {
+                                    isAnalytics = false;
+                                    isHistory = false;
                                     isHome = false;
                                     isDashboard = false;
                                     isInfo = false;
@@ -771,6 +933,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
+                                      isAnalytics = false;
+                                      isHistory = false;
                                       isHome = false;
                                       isDashboard = false;
                                       isInfo = false;
@@ -854,7 +1018,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? const RoleManagementScreen()
                               : isUser
                                   ? const UserManagementScreen()
-                                  : const SizedBox()
+                                  : isAnalytics
+                                      ? const AnalyticsPage()
+                                      : const HistoryPage()
         ],
       ),
     );

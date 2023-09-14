@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 Future addReport(name, contactNumber, address, lat, long, type, status,
-    String reporterType) async {
+    String reporterType, brgy) async {
   final docUser = FirebaseFirestore.instance
       .collection('Reports')
       .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -18,6 +18,9 @@ Future addReport(name, contactNumber, address, lat, long, type, status,
     'dateTime': DateTime.now(),
     'type': type,
     'reporterType': reporterType,
+    'day': DateTime.now().day,
+    'month': DateTime.now().month,
+    'brgy': brgy
   };
 
   await docUser.set(json);

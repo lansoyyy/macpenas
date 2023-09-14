@@ -1,9 +1,12 @@
 import 'dart:html';
+import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:macpenas/services/add_user.dart';
 import 'package:macpenas/utils/routes.dart';
 import 'package:macpenas/widgets/textfield_widget.dart';
 
@@ -55,6 +58,70 @@ class _LandingScreenState extends State<LandingScreen> {
     'PRC ID',
     'National ID'
   ];
+
+  List<String> regions = [
+    'Region 10',
+  ];
+
+  String region = 'Region 10';
+  List<String> provinces = [
+    'Bukidnon',
+  ];
+
+  String province = 'Bukidnon';
+  List<String> municipalities = [
+    'Malaybalay',
+  ];
+
+  String municipality = 'Malaybalay';
+
+  List<String> brgys = [
+    "Aglayan",
+    "Bangcud",
+    "Barangay 1",
+    "Barangay 2",
+    "Barangay 3",
+    "Barangay 4",
+    "Barangay 5",
+    "Barangay 6",
+    "Barangay 7",
+    "Barangay 8",
+    "Barangay 9",
+    "Busdi",
+    "Cabangahan",
+    "Caburacanan",
+    "Canayan",
+    "Capitan Angel",
+    "Casisang",
+    "Dalwangan",
+    "Imbayao",
+    "Indalaza",
+    "Kabalabag",
+    "Kalasungay",
+    "Kulaman",
+    "Laguitas",
+    "Linabo",
+    "Magsaysay",
+    "Maligaya",
+    "Managok",
+    "Manalog",
+    "Mapayag",
+    "Mapulo",
+    "Miglamin",
+    "Patpat",
+    "Saint Peter",
+    "San Jose",
+    "San Martin",
+    "Santo Ñino",
+    "Silae",
+    "Simaya",
+    "Sinanglanan",
+    "Sumpong",
+    "Violeta",
+    "Zamboanguita",
+  ];
+
+  String brgy = 'Aglayan';
 
   String id1 = 'UMID';
   String id2 = 'UMID';
@@ -239,9 +306,9 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
-                two();
+                three();
               },
               child: TextBold(
                 text: 'Next',
@@ -277,7 +344,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   ),
                   TextRegular(
                     text:
-                        "We send you a verification code. If you verify your email, you can proceed to registration",
+                        "We send you a verification code. If you verify your email, you can proceed to logging in",
                     fontSize: 14,
                     color: Colors.grey,
                   ),
@@ -287,12 +354,11 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
-                three();
               },
               child: TextBold(
-                text: 'Next',
+                text: 'Close',
                 fontSize: 18,
                 color: Colors.black,
               ),
@@ -303,7 +369,9 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  final newname = TextEditingController();
+  final newfirstnamename = TextEditingController();
+  final newmiddlenamename = TextEditingController();
+  final newlastnamename = TextEditingController();
   final newregion = TextEditingController();
   final newprovince = TextEditingController();
   final newmunicipality = TextEditingController();
@@ -316,10 +384,24 @@ class _LandingScreenState extends State<LandingScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: TextBold(
-            text: 'Pre-Registration',
-            fontSize: 18,
-            color: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  one();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+              ),
+              TextBold(
+                text: 'Pre-Registration',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ],
           ),
           content: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -329,7 +411,19 @@ class _LandingScreenState extends State<LandingScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFieldWidget(label: 'Full Name', controller: newname),
+                    TextFieldWidget(
+                        label: 'First Name', controller: newfirstnamename),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        label: 'Middle Name (Leave as blank if n/a)',
+                        controller: newmiddlenamename),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        label: 'Last Name', controller: newlastnamename),
                     const SizedBox(
                       height: 10,
                     ),
@@ -414,20 +508,193 @@ class _LandingScreenState extends State<LandingScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldWidget(label: 'Region', controller: newregion),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextRegular(
+                          text: 'Region', fontSize: 14, color: Colors.black),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: DropdownButton<String>(
+                        underline: const SizedBox(),
+                        value: region,
+                        items: regions.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Center(
+                              child: SizedBox(
+                                width: 273,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'QRegular',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            region = newValue.toString();
+                          });
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldWidget(label: 'Province', controller: newprovince),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextRegular(
+                          text: 'Province', fontSize: 14, color: Colors.black),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: DropdownButton<String>(
+                        underline: const SizedBox(),
+                        value: province,
+                        items: provinces.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Center(
+                              child: SizedBox(
+                                width: 273,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'QRegular',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            province = newValue.toString();
+                          });
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldWidget(
-                        label: 'Municipality', controller: newmunicipality),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextRegular(
+                          text: 'Municipality',
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: DropdownButton<String>(
+                        underline: const SizedBox(),
+                        value: municipality,
+                        items: municipalities.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Center(
+                              child: SizedBox(
+                                width: 273,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'QRegular',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            municipality = newValue.toString();
+                          });
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldWidget(label: 'Baranggay', controller: newbrgy),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextRegular(
+                          text: 'Baranggay', fontSize: 14, color: Colors.black),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: DropdownButton<String>(
+                        underline: const SizedBox(),
+                        value: brgy,
+                        items: brgys.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Center(
+                              child: SizedBox(
+                                width: 273,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'QRegular',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            brgy = newValue.toString();
+                          });
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -483,24 +750,45 @@ class _LandingScreenState extends State<LandingScreen> {
                       height: 20,
                     ),
                     TextRegular(
-                        text: 'Name: ', fontSize: 12, color: Colors.black),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextRegular(
-                        text: 'Contact Number: ',
+                        text: 'First Name: ${newfirstnamename.text}',
                         fontSize: 12,
                         color: Colors.black),
                     const SizedBox(
                       height: 10,
                     ),
                     TextRegular(
-                        text: 'Birthday: ', fontSize: 12, color: Colors.black),
+                        text: 'Middle Name: ${newmiddlenamename.text}',
+                        fontSize: 12,
+                        color: Colors.black),
                     const SizedBox(
                       height: 10,
                     ),
                     TextRegular(
-                        text: 'Address: ', fontSize: 12, color: Colors.black),
+                        text: 'Last Name: ${newlastnamename.text}',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text: 'Contact Number: ${newNumberController.text}',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text: 'Birthday: ${bdayController.text}',
+                        fontSize: 12,
+                        color: Colors.black),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextRegular(
+                        text:
+                            'Address: $region, $province, $municipality, $brgy, ${newstreet.text}',
+                        fontSize: 12,
+                        color: Colors.black),
                     const SizedBox(
                       height: 10,
                     ),
@@ -569,12 +857,18 @@ class _LandingScreenState extends State<LandingScreen> {
                       height: 20,
                     ),
                     TextFieldWidget(
-                        label: 'Enter your MPIN: ', controller: newmpin),
+                        isObscure: true,
+                        isPassword: true,
+                        label: 'Enter your MPIN: ',
+                        controller: newmpin),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFieldWidget(
-                        label: 'Confirm MPIN: ', controller: newconfirmpin),
+                        isObscure: true,
+                        isPassword: true,
+                        label: 'Confirm MPIN: ',
+                        controller: newconfirmpin),
                   ],
                 ),
               ),
@@ -583,8 +877,19 @@ class _LandingScreenState extends State<LandingScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                six();
+                if (newmpin.text != newconfirmpin.text) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: TextRegular(
+                          text: 'Your MPIN do not match!',
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  );
+                } else {
+                  Navigator.pop(context);
+                  six();
+                }
               },
               child: TextBold(
                 text: 'Next',
@@ -1238,9 +1543,44 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                seven();
+              onPressed: () async {
+                Random random = Random();
+
+                // Generate a random integer between 0 (inclusive) and 100 (exclusive).
+                int randomNumber = random.nextInt(1000000);
+                try {
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: newEmailController.text, password: newmpin.text);
+
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: newEmailController.text, password: newmpin.text);
+
+                  addUser(
+                      '${newfirstnamename.text} ${newmiddlenamename.text} ${newlastnamename.text}',
+                      newEmailController.text,
+                      newnumber.text,
+                      '$region, $province, $municipality, $brgy, ${newstreet.text}',
+                      id1Front,
+                      id1Back,
+                      id1,
+                      id2Front,
+                      id2Back,
+                      id2,
+                      randomNumber,
+                      brgy);
+
+                  Navigator.pop(context);
+                  seven(randomNumber);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: TextRegular(
+                          text: e.toString(),
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  );
+                }
               },
               child: TextBold(
                 text: 'Next',
@@ -1254,7 +1594,7 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  seven() {
+  seven(int refno) {
     showDialog(
       context: context,
       builder: (context) {
@@ -1275,7 +1615,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   children: [
                     TextRegular(
                         text:
-                            'You are now Pre-registered to MACPENAS, kindly present this code to the Police Station to fully register your account.\n Ref. No.\n09090104355\n\nNote: Bring your 2 Valid IDs during physical registration',
+                            'You are now Pre-registered to MACPENAS, kindly present this code to the Police Station to fully register your account.\n Ref. No.\n$refno\n\nNote: Bring your 2 Valid IDs during physical registration',
                         fontSize: 12,
                         color: Colors.black),
                     const SizedBox(
@@ -1288,8 +1628,19 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                User? user = FirebaseAuth.instance.currentUser;
+
+                if (user != null) {
+                  await user.sendEmailVerification();
+
+                  // You can show a success message or redirect the user to a verification screen.
+                  // For example, you can use a SnackBar or Navigator.
+                } else {
+                  // Handle the case where the user is not logged in.
+                }
                 Navigator.pop(context);
+                two();
               },
               child: TextBold(
                 text: 'Next',

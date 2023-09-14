@@ -52,6 +52,7 @@ dependencies:
   http:
   flutter_google_places: ^0.3.0
   badges:
+  printing: ^5.9.3
 
 dev_dependencies:
   flutter_test:

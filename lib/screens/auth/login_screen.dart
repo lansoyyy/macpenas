@@ -142,6 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           email: emailController.text,
                                           password: passController.text)
                                       .then((value) {
+                                    User? user =
+                                        FirebaseAuth.instance.currentUser;
                                     FirebaseFirestore.instance
                                         .collection('Users')
                                         .where('id',
@@ -158,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         });
                                       }
                                     }).then((value) {
-                                      if (isVerified) {
+                                      if (isVerified && user!.emailVerified) {
                                         Navigator.of(context)
                                             .pushReplacementNamed(
                                                 Routes().homescreen);
@@ -168,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           SnackBar(
                                             content: TextRegular(
                                                 text:
-                                                    'Your account has not been verified! Wait for the admins response',
+                                                    'Your account has not been verified! Verify your email and wait for the admins response',
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),

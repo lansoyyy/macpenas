@@ -33,6 +33,7 @@ class _UserHomePageState extends State<UserHomePage> {
   String myName = '';
   String myNumber = '';
   String myAddress = '';
+  String brgy = '';
   bool hasLoaded = false;
 
   getMyData() {
@@ -46,6 +47,7 @@ class _UserHomePageState extends State<UserHomePage> {
           myName = doc['name'];
           myNumber = doc['contactNumber'];
           myAddress = doc['address'];
+          brgy = doc['brgy'];
           hasLoaded = true;
         });
       }
@@ -191,7 +193,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Attemp Homicide',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -287,7 +290,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Kidnapping',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -383,7 +387,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Theft',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -479,7 +484,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Carnapping',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -575,7 +581,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Act of Lasciviousness',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -671,7 +678,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Attempt Murder',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -767,7 +775,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               long,
                                                               'Others',
                                                               'Pending',
-                                                              _selectedOption);
+                                                              _selectedOption,
+                                                              brgy);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
