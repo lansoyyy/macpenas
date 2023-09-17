@@ -38,6 +38,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Container(
       width: isLargeScreen ? 1025 : 500,
       decoration: const BoxDecoration(
+        color: Colors.white,
         image: DecorationImage(
             opacity: 150.0,
             image: AssetImage(
@@ -255,28 +256,28 @@ class _HistoryPageState extends State<HistoryPage> {
                                 TextRegular(
                                   text: data.docs[i]['brgy'],
                                   fontSize: 14,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                               DataCell(
                                 TextRegular(
                                   text: data.docs[i]['address'],
                                   fontSize: 14,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                               DataCell(
                                 TextRegular(
                                   text: data.docs[i]['type'],
                                   fontSize: 14,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                               DataCell(
                                 TextRegular(
                                   text: data.docs[i]['name'],
                                   fontSize: 14,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                               DataCell(
@@ -284,7 +285,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                   text: DateFormat.yMMMd().add_jm().format(
                                       data.docs[i]['dateTime'].toDate()),
                                   fontSize: 14,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                             ])

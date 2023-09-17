@@ -61,6 +61,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   String type = 'Aglayan';
 
+  List<String> risks = [];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -69,6 +71,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     return Container(
       width: isLargeScreen ? 1025 : 500,
       decoration: const BoxDecoration(
+        color: Colors.white,
         image: DecorationImage(
             opacity: 150.0,
             image: AssetImage(
@@ -166,6 +169,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     }
 
                     final data = snapshot.requireData;
+
+                    for (int i = 0; i < data.docs.length; i++) {
+                      risks.add(data.docs[i]['brgy']);
+                    }
 
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.start,
