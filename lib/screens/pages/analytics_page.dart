@@ -63,6 +63,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   List<String> risks = [];
 
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -148,179 +150,102 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               const SizedBox(
                 height: 10,
               ),
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Reports')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      print(snapshot.error);
-                      return const Center(child: Text('Error'));
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Center(
-                            child: CircularProgressIndicator(
-                          color: Colors.black,
-                        )),
-                      );
-                    }
+              Scrollbar(
+                controller: scrollController,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < types.length; i++)
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Reports')
+                                .where('brgy', isEqualTo: types[i])
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+                                return const Center(child: Text('Error'));
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 50),
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  )),
+                                );
+                              }
 
-                    final data = snapshot.requireData;
+                              final data = snapshot.requireData;
 
-                    for (int i = 0; i < data.docs.length; i++) {
-                      risks.add(data.docs[i]['brgy']);
-                    }
-
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'High Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'Medium Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'Low Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }),
+                              return data.docs.isNotEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Container(
+                                              width: 200,
+                                              height: 150,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextBold(
+                                                      text: data.docs.length
+                                                          .toString(),
+                                                      fontSize: 24,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextBold(
+                                                        text: data.docs.length <
+                                                                5
+                                                            ? 'Low Risk'
+                                                            : data.docs.length >
+                                                                        5 &&
+                                                                    data.docs
+                                                                            .length <
+                                                                        10
+                                                                ? 'Medium Risk'
+                                                                : 'High Risk',
+                                                        fontSize: 16,
+                                                        color: Colors.black),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    TextBold(
+                                                      text: types[i],
+                                                      fontSize: 14,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox();
+                            }),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
