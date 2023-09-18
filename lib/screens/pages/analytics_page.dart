@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macpenas/widgets/text_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({
@@ -64,6 +65,16 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   List<String> risks = [];
 
   final scrollController = ScrollController();
+
+  List<String> crimeTypes = [
+    "Attempt Homicide",
+    "Kidnapping",
+    "Theft",
+    "Carnapping",
+    "Act of Lasciviousness",
+    "Attempt Murder",
+    "Others"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -133,15 +144,60 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                width: double.infinity,
-                height: 350,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Reports')
+                      .where('brgy', isEqualTo: type)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return const Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.black,
+                        )),
+                      );
+                    }
+
+                    final data = snapshot.requireData;
+                    return Card(
+                      child: SizedBox(
+                          width: double.infinity,
+                          height: 350,
+                          child: SfCartesianChart(
+                            // Initialize category axis
+                            primaryXAxis: CategoryAxis(),
+                            series: <BarSeries<SalesData, String>>[
+                              // Use BarSeries instead of LineSeries
+                              BarSeries<SalesData, String>(
+                                // Bind data source
+                                dataSource: <SalesData>[
+                                  for (int i = 0; i < crimeTypes.length; i++)
+                                    SalesData(
+                                      crimeTypes[i],
+                                      data.docs
+                                          .where((number) =>
+                                              number['type'] == crimeTypes[i])
+                                          .toList()
+                                          .length
+                                          .toDouble(),
+                                    ),
+                                ],
+                                xValueMapper: (SalesData sales, _) =>
+                                    sales.year,
+                                yValueMapper: (SalesData sales, _) =>
+                                    sales.sales,
+                              ),
+                            ],
+                          )),
+                    );
+                  }),
               const SizedBox(
                 height: 20,
               ),
@@ -283,4 +339,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       return null;
     }
   }
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+  final String year;
+  final double sales;
 }
