@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macpenas/widgets/text_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({
@@ -61,6 +62,20 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   String type = 'Aglayan';
 
+  List<String> risks = [];
+
+  final scrollController = ScrollController();
+
+  List<String> crimeTypes = [
+    "Attempt Homicide",
+    "Kidnapping",
+    "Theft",
+    "Carnapping",
+    "Act of Lasciviousness",
+    "Attempt Murder",
+    "Others"
+  ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -69,6 +84,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     return Container(
       width: isLargeScreen ? 1025 : 500,
       decoration: const BoxDecoration(
+        color: Colors.white,
         image: DecorationImage(
             opacity: 150.0,
             image: AssetImage(
@@ -128,26 +144,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                width: double.infinity,
-                height: 350,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextBold(
-                  text: 'Level of Risk', fontSize: 18, color: Colors.black),
-              const SizedBox(
-                height: 10,
-              ),
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Reports')
+                      .where('brgy', isEqualTo: type)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -166,154 +166,142 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     }
 
                     final data = snapshot.requireData;
-
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'High Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
+                    return Card(
+                      child: SizedBox(
+                          width: double.infinity,
+                          height: 350,
+                          child: SfCartesianChart(
+                            // Initialize category axis
+                            primaryXAxis: CategoryAxis(),
+                            series: <BarSeries<SalesData, String>>[
+                              // Use BarSeries instead of LineSeries
+                              BarSeries<SalesData, String>(
+                                // Bind data source
+                                dataSource: <SalesData>[
+                                  for (int i = 0; i < crimeTypes.length; i++)
+                                    SalesData(
+                                      crimeTypes[i],
+                                      data.docs
+                                          .where((number) =>
+                                              number['type'] == crimeTypes[i])
+                                          .toList()
+                                          .length
+                                          .toDouble(),
+                                    ),
+                                ],
+                                xValueMapper: (SalesData sales, _) =>
+                                    sales.year,
+                                yValueMapper: (SalesData sales, _) =>
+                                    sales.sales,
                               ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'Medium Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            TextBold(
-                                text: 'Low Risk',
-                                fontSize: 16,
-                                color: Colors.black),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextBold(
-                                      text: 'Name of Brgy',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextRegular(
-                                      text: 'Robbery: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    TextRegular(
-                                      text: 'Theft: 1',
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          )),
                     );
                   }),
+              const SizedBox(
+                height: 20,
+              ),
+              TextBold(
+                  text: 'Level of Risk', fontSize: 18, color: Colors.black),
+              const SizedBox(
+                height: 10,
+              ),
+              Scrollbar(
+                controller: scrollController,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < types.length; i++)
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Reports')
+                                .where('brgy', isEqualTo: types[i])
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+                                return const Center(child: Text('Error'));
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 50),
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  )),
+                                );
+                              }
+
+                              final data = snapshot.requireData;
+
+                              return data.docs.isNotEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Container(
+                                              width: 200,
+                                              height: 150,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextBold(
+                                                      text: data.docs.length
+                                                          .toString(),
+                                                      fontSize: 24,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    TextBold(
+                                                        text: data.docs.length <
+                                                                5
+                                                            ? 'Low Risk'
+                                                            : data.docs.length >
+                                                                        5 &&
+                                                                    data.docs
+                                                                            .length <
+                                                                        10
+                                                                ? 'Medium Risk'
+                                                                : 'High Risk',
+                                                        fontSize: 16,
+                                                        color: Colors.black),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    TextBold(
+                                                      text: types[i],
+                                                      fontSize: 14,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox();
+                            }),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -351,4 +339,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       return null;
     }
   }
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+  final String year;
+  final double sales;
 }
