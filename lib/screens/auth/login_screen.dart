@@ -153,7 +153,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .then((QuerySnapshot
                                             querySnapshot) async {
                                       for (var doc in querySnapshot.docs) {
-                                        box.write('user', doc['role']);
+                                        box.write('user', doc['type']);
+
+                                        print(doc['type']);
 
                                         setState(() {
                                           isVerified = doc['isVerified'];
