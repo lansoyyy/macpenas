@@ -52,7 +52,7 @@ dependencies:
   http:
   flutter_google_places: ^0.3.0
   badges:
-  printing: ^5.9.3
+  printing: ^5.0.0
   syncfusion_flutter_charts: ^19.1.54
   geolocator_web: ^2.1.6
   google_maps_flutter: ^2.1.8
