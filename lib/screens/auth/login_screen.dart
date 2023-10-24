@@ -144,6 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .then((value) {
                                     User? user =
                                         FirebaseAuth.instance.currentUser;
+
+                                    print(user);
                                     FirebaseFirestore.instance
                                         .collection('Users')
                                         .where('id',
@@ -153,9 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .then((QuerySnapshot
                                             querySnapshot) async {
                                       for (var doc in querySnapshot.docs) {
-                                        box.write('user', doc['type']);
-
-                                        print(doc['type']);
+                                        box.write('user', doc['role']);
 
                                         setState(() {
                                           isVerified = doc['isVerified'];
