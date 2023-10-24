@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import '../../widgets/text_widget.dart';
@@ -21,6 +22,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   bool hasLoaded = false;
   final mapController = MapController();
+
+  final box = GetStorage();
 
   @override
   void initState() {
@@ -135,7 +138,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             child: StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('Reports')
-                                    .where('status', isEqualTo: 'Pending')
+                                    .where('status', isNotEqualTo: 'Completed')
                                     .snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -243,10 +246,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Reports')
-                        .where('status', isEqualTo: 'Pending')
-                        .snapshots(),
+                    stream: box.read('user') == 'main admin'
+                        ? FirebaseFirestore.instance
+                            .collection('Reports')
+                            .where('status', isNotEqualTo: 'Completed')
+                            .snapshots()
+                        : FirebaseFirestore.instance
+                            .collection('Reports')
+                            .where('status', isEqualTo: 'Pending')
+                            .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError) {
@@ -317,11 +325,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        TextBold(
-                                                          text: data.docs[i]
-                                                              ['name'],
-                                                          fontSize: 16,
-                                                          color: Colors.black,
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            TextBold(
+                                                              text: data.docs[i]
+                                                                  ['name'],
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ],
                                                         ),
                                                         const SizedBox(
                                                           height: 5,
@@ -535,7 +551,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   StreamBuilder<QuerySnapshot>(
                                       stream: FirebaseFirestore.instance
                                           .collection('Reports')
-                                          .where('status', isEqualTo: 'Pending')
+                                          .where('status',
+                                              isNotEqualTo: 'Completed')
                                           .snapshots(),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<QuerySnapshot>
@@ -597,20 +614,85 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                           ? 12
                                                           : 10,
                                                       color: Colors.grey),
-                                                  trailing: IconButton(
-                                                      onPressed: () async {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'Reports')
-                                                            .doc(data
-                                                                .docs[index].id)
-                                                            .update({
-                                                          'status': 'Completed'
-                                                        });
-                                                      },
-                                                      icon: const Icon(Icons
-                                                          .check_box_outline_blank_outlined)),
+                                                  trailing: SizedBox(
+                                                    width: 150,
+                                                    child: Row(
+                                                      children: [
+                                                        IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'Reports')
+                                                                  .doc(data
+                                                                      .docs[
+                                                                          index]
+                                                                      .id)
+                                                                  .update({
+                                                                'status':
+                                                                    'Completed'
+                                                              });
+                                                            },
+                                                            icon: const Icon(Icons
+                                                                .check_box_outline_blank_outlined)),
+                                                        box.read('user') ==
+                                                                'main admin'
+                                                            ? data.docs[index][
+                                                                        'status'] !=
+                                                                    'Forwarded'
+                                                                ? IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      showDialog(
+                                                                          context:
+                                                                              context,
+                                                                          builder: (context) =>
+                                                                              AlertDialog(
+                                                                                title: const Text(
+                                                                                  'Confirmation',
+                                                                                  style: TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
+                                                                                ),
+                                                                                content: const Text(
+                                                                                  'Are you sure you want to forward this report to intelligence?',
+                                                                                  style: TextStyle(fontFamily: 'QRegular'),
+                                                                                ),
+                                                                                actions: <Widget>[
+                                                                                  MaterialButton(
+                                                                                    onPressed: () => Navigator.of(context).pop(true),
+                                                                                    child: const Text(
+                                                                                      'Close',
+                                                                                      style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                                                    ),
+                                                                                  ),
+                                                                                  MaterialButton(
+                                                                                    onPressed: () async {
+                                                                                      await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
+                                                                                        'status': 'Forwarded'
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    child: const Text(
+                                                                                      'Continue',
+                                                                                      style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ));
+                                                                    },
+                                                                    icon:
+                                                                        const Icon(
+                                                                      Icons
+                                                                          .forward,
+                                                                      color: Colors
+                                                                          .blue,
+                                                                    ),
+                                                                  )
+                                                                : const SizedBox()
+                                                            : const SizedBox()
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
                                               );
                                             },

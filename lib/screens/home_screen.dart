@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
@@ -24,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isHome = box.read('user') == 'admin' ? false : true;
+  bool isHome = box.read('user') == 'main admin' ? false : true;
 
   bool isDashboard = box.read('user') == 'user' ? false : true;
 
@@ -101,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.grey,
                       ),
                       children: [
-                        box.read('user') != 'admin'
+                        box.read('user') != 'main admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -150,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                             : const SizedBox(),
-                        box.read('user') == 'admin'
+                        box.read('user') == 'main admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -204,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                             : const SizedBox(),
-                        box.read('user') == 'admin'
+                        box.read('user') == 'main admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -253,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                             : const SizedBox(),
-                        box.read('user') == 'admin'
+                        box.read('user') == 'main admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -518,7 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.grey,
                           ),
                           children: [
-                            box.read('user') != 'admin'
+                            box.read('user') != 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -572,7 +570,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'admin'
+                            box.read('user') == 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -626,7 +624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'admin'
+                            box.read('user') == 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -680,7 +678,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'admin'
+                            box.read('user') == 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -734,7 +732,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'admin'
+                            box.read('user') == 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -788,7 +786,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'admin'
+                            box.read('user') == 'main admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
