@@ -523,7 +523,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             // Here 2
                             box.read('user') != 'main admin' &&
-                                    box.read('user') != 'admin'
+                                    box.read('user') != 'admin' &&
+                                    box.read('user') != 'intelligence'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -578,7 +579,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       )
                                 : const SizedBox(),
                             box.read('user') == 'main admin' ||
-                                    box.read('user') == 'admin'
+                                    box.read('user') == 'admin' ||
+                                    box.read('user') == 'intelligence'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -795,7 +797,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       )
                                 : const SizedBox(),
                             box.read('user') == 'main admin' ||
-                                    box.read('user') == 'admin'
+                                    box.read('user') == 'admin' ||
+                                    box.read('user') == 'intelligence'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -850,7 +853,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       )
                                 : const SizedBox(),
                             box.read('user') != 'main admin' &&
-                                    box.read('user') != 'admin'
+                                    box.read('user') != 'admin' &&
+                                    box.read('user') != 'intelligence'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {

@@ -246,14 +246,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
-                    stream: box.read('user') == 'main admin'
-                        ? FirebaseFirestore.instance
-                            .collection('Reports')
-                            .where('status', isNotEqualTo: 'Completed')
-                            .snapshots()
+                    stream: box.read('user') != 'intelligence'
+                        ? box.read('user') == 'main admin'
+                            ? FirebaseFirestore.instance
+                                .collection('Reports')
+                                .where('status', isNotEqualTo: 'Completed')
+                                .snapshots()
+                            : FirebaseFirestore.instance
+                                .collection('Reports')
+                                .where('status', isEqualTo: 'Pending')
+                                .snapshots()
                         : FirebaseFirestore.instance
                             .collection('Reports')
-                            .where('status', isEqualTo: 'Pending')
+                            .where('status', isEqualTo: 'Forwarded')
                             .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
