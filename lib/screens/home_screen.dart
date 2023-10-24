@@ -22,7 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isHome = box.read('user') == 'main admin' ? false : true;
+  bool isHome = box.read('user') == 'main admin' || box.read('user') == 'admin'
+      ? false
+      : true;
 
   bool isDashboard = box.read('user') == 'user' ? false : true;
 
@@ -99,7 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.grey,
                       ),
                       children: [
-                        box.read('user') != 'main admin'
+                        // Here 1
+                        box.read('user') != 'main admin' &&
+                                box.read('user') != 'admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -148,7 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                             : const SizedBox(),
-                        box.read('user') == 'main admin'
+                        box.read('user') == 'main admin' ||
+                                box.read('user') == 'admin'
                             ? isLargeScreen
                                 ? ListTile(
                                     onTap: () {
@@ -516,7 +521,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.grey,
                           ),
                           children: [
-                            box.read('user') != 'main admin'
+                            // Here 2
+                            box.read('user') != 'main admin' &&
+                                    box.read('user') != 'admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -570,7 +577,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'main admin'
+                            box.read('user') == 'main admin' ||
+                                    box.read('user') == 'admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -786,7 +794,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            box.read('user') == 'main admin'
+                            box.read('user') == 'main admin' ||
+                                    box.read('user') == 'admin'
                                 ? isLargeScreen
                                     ? ListTile(
                                         onTap: () {
@@ -840,53 +849,61 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       )
                                 : const SizedBox(),
-                            isLargeScreen
-                                ? ListTile(
-                                    onTap: () {
-                                      setState(() {
-                                        isAnalytics = false;
-                                        isHistory = false;
-                                        isHome = false;
-                                        isDashboard = false;
-                                        isInfo = true;
-                                        isProfile = false;
-                                        isRole = false;
-                                        isUser = false;
-                                      });
-                                    },
-                                    leading: Icon(
-                                      Icons.info,
-                                      color: isInfo ? Colors.blue : Colors.grey,
-                                    ),
-                                    title: TextRegular(
-                                      text: 'Info',
-                                      fontSize: 16,
-                                      color: isInfo ? Colors.blue : Colors.grey,
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isAnalytics = false;
-                                          isHistory = false;
-                                          isHome = false;
-                                          isDashboard = false;
-                                          isInfo = true;
-                                          isProfile = false;
-                                          isRole = false;
-                                          isUser = false;
-                                        });
-                                      },
-                                      child: Icon(
-                                        Icons.info,
-                                        color:
-                                            isInfo ? Colors.blue : Colors.grey,
-                                      ),
-                                    ),
-                                  )
+                            box.read('user') != 'main admin' &&
+                                    box.read('user') != 'admin'
+                                ? isLargeScreen
+                                    ? ListTile(
+                                        onTap: () {
+                                          setState(() {
+                                            isAnalytics = false;
+                                            isHistory = false;
+                                            isHome = false;
+                                            isDashboard = false;
+                                            isInfo = true;
+                                            isProfile = false;
+                                            isRole = false;
+                                            isUser = false;
+                                          });
+                                        },
+                                        leading: Icon(
+                                          Icons.info,
+                                          color: isInfo
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                        title: TextRegular(
+                                          text: 'Info',
+                                          fontSize: 16,
+                                          color: isInfo
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isAnalytics = false;
+                                              isHistory = false;
+                                              isHome = false;
+                                              isDashboard = false;
+                                              isInfo = true;
+                                              isProfile = false;
+                                              isRole = false;
+                                              isUser = false;
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.info,
+                                            color: isInfo
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      )
+                                : const SizedBox()
                           ],
                         ),
                         isLargeScreen
