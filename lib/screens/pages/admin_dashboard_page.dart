@@ -38,6 +38,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         lat = position.latitude;
         long = position.longitude;
         hasLoaded = true;
+
+
+         _markers.add(Marker(
+          
+                            markerId: const MarkerId('SomeId'),
+                            position: LatLng(position.latitude,
+                                position.longitude),
+                                infoWindow: InfoWindow(
+                                  title: 'Your location'
+                                )
+                          ));
         // myCircles.add(
         //   CircleMarker(
         //       point: LatLng(position.latitude, position.longitude),
@@ -113,6 +124,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       });
     });
   }
+
+    final List<Marker> _markers = <Marker>[];
 
   @override
   Widget build(BuildContext context) {
@@ -306,6 +319,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           height: 425,
                           
                           child: GoogleMap(
+                               markers: Set<Marker>.of(_markers),
                             myLocationEnabled: true,
                     zoomControlsEnabled: false,
                     mapType: MapType.normal,
