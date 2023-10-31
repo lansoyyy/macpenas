@@ -88,6 +88,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   update() async {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       Geolocator.getCurrentPosition().then((position) {
+
+
+        _markers.clear();
+
+
+           _markers.add(Marker(
+          
+                            markerId: const MarkerId('SomeId'),
+                            position: LatLng(position.latitude,
+                                position.longitude),
+                                infoWindow: InfoWindow(
+                                  title: 'Your location'
+                                )
+                          ));
         // setState(() {
         //   myPoly.clear();
         //   myCircles.clear();
@@ -104,21 +118,28 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
         //   // mapController.move(LatLng(position.latitude, position.longitude), 18);
 
-        //   lat = position.latitude;
-        //   long = position.longitude;
+          lat = position.latitude;
+          long = position.longitude;
         // });
-        // FirebaseFirestore.instance
-        //     .collection('Reports')
-        //     .where('status', isEqualTo: 'Pending')
-        //     .get()
-        //     .then((QuerySnapshot querySnapshot) async {
-        //   for (var doc in querySnapshot.docs) {
-        //     myPoly.add(Polyline(points: [
-        //       LatLng(position.latitude, position.longitude),
-        //       LatLng(doc['lat'], doc['long']),
-        //     ]));
-        //   }
-        // });
+        FirebaseFirestore.instance
+            .collection('Reports')
+            .where('status', isEqualTo: 'Pending')
+            .get()
+            .then((QuerySnapshot querySnapshot) async {
+          for (var doc in querySnapshot.docs) {
+            _markers.add(Marker(
+          
+                            markerId: const MarkerId('SomeId'),
+                            position: LatLng(doc['lat'],
+                                doc['long']),
+                                infoWindow: InfoWindow(
+                                  title: doc['name'],
+                                  snippet: doc['type']
+                                
+                                )
+                          ));
+          }
+        });
       }).catchError((error) {
         print('Error getting location: $error');
       });
