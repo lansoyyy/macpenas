@@ -78,6 +78,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   final List<Polyline> _poly = [];
 
+  final scrollController = ScrollController();
+
   String newUrl = '';
   Set<Polygon> polygon = HashSet<Polygon>();
   update() async {
@@ -368,7 +370,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                       return Expanded(
                         child: SizedBox(
-                          height: 425,
+                          height: 400,
                           child: GoogleMap(
                             polylines: Set<Polyline>.of(_poly),
                             markers: Set<Marker>.of(_markers),
@@ -384,7 +386,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     }),
                 Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 275,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     border: Border(
@@ -405,242 +407,260 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             color: Colors.black,
                           ),
                           const Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          Scrollbar(
+                            controller: scrollController,
+                            child: SingleChildScrollView(
+                              controller: scrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  TextBold(
-                                    text: 'Rescued',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('Reports')
-                                          .where('status',
-                                              isEqualTo: 'Completed')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error);
-                                          return const Center(
-                                              child: Text('Error'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Padding(
-                                            padding: EdgeInsets.only(top: 50),
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                              color: Colors.black,
-                                            )),
-                                          );
-                                        }
-
-                                        final data = snapshot.requireData;
-                                        return SizedBox(
-                                          width: isLargeScreen ? 250 : 200,
-                                          height: isLargeScreen ? 150 : 100,
-                                          child: ListView.builder(
-                                            itemCount: data.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  leading: isLargeScreen
-                                                      ? Image.asset(
-                                                          'assets/images/profile.png',
-                                                          height: isLargeScreen
-                                                              ? 50
-                                                              : 25,
-                                                        )
-                                                      : null,
-                                                  title: TextBold(
-                                                      text: data.docs[index]
-                                                          ['type'],
-                                                      fontSize: isLargeScreen
-                                                          ? 14
-                                                          : 12,
-                                                      color: Colors.black),
-                                                  subtitle: TextRegular(
-                                                      text: data.docs[index]
-                                                          ['name'],
-                                                      fontSize: isLargeScreen
-                                                          ? 12
-                                                          : 10,
-                                                      color: Colors.grey),
-                                                  trailing: IconButton(
-                                                      onPressed: () async {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'Reports')
-                                                            .doc(data
-                                                                .docs[index].id)
-                                                            .update({
-                                                          'status': 'Pending'
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                          Icons.check_box)),
-                                                ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextBold(
+                                        text: 'Rescued',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('Reports')
+                                              .where('status',
+                                                  isEqualTo: 'Completed')
+                                              .snapshots(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error);
+                                              return const Center(
+                                                  child: Text('Error'));
+                                            }
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50),
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                )),
                                               );
-                                            },
-                                          ),
-                                        );
-                                      }),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextBold(
-                                    text: 'On the way',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('Reports')
-                                          .where('status',
-                                              isEqualTo: 'Completed')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error);
-                                          return const Center(
-                                              child: Text('Error'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Padding(
-                                            padding: EdgeInsets.only(top: 50),
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                              color: Colors.black,
-                                            )),
-                                          );
-                                        }
+                                            }
 
-                                        final data = snapshot.requireData;
-                                        return SizedBox(
-                                          width: isLargeScreen ? 250 : 200,
-                                          height: isLargeScreen ? 150 : 100,
-                                          child: ListView.builder(
-                                            itemCount: data.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  leading: isLargeScreen
-                                                      ? Image.asset(
-                                                          'assets/images/profile.png',
-                                                          height: isLargeScreen
-                                                              ? 50
-                                                              : 25,
-                                                        )
-                                                      : null,
-                                                  title: TextBold(
-                                                      text: data.docs[index]
-                                                          ['type'],
-                                                      fontSize: isLargeScreen
-                                                          ? 14
-                                                          : 12,
-                                                      color: Colors.black),
-                                                  subtitle: TextRegular(
-                                                      text: data.docs[index]
-                                                          ['name'],
-                                                      fontSize: isLargeScreen
-                                                          ? 12
-                                                          : 10,
-                                                      color: Colors.grey),
-                                                  // trailing: IconButton(
-                                                  //     onPressed: () async {
-                                                  //       await FirebaseFirestore
-                                                  //           .instance
-                                                  //           .collection(
-                                                  //               'Reports')
-                                                  //           .doc(data
-                                                  //               .docs[index].id)
-                                                  //           .update({
-                                                  //         'status': 'Pending'
-                                                  //       });
-                                                  //     },
-                                                  //     icon: const Icon(
-                                                  //         Icons.check_box)),
-                                                ),
+                                            final data = snapshot.requireData;
+                                            return SizedBox(
+                                              width: isLargeScreen ? 300 : 200,
+                                              height: 100,
+                                              child: ListView.builder(
+                                                itemCount: data.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      leading: isLargeScreen
+                                                          ? Image.asset(
+                                                              'assets/images/profile.png',
+                                                              height:
+                                                                  isLargeScreen
+                                                                      ? 50
+                                                                      : 25,
+                                                            )
+                                                          : null,
+                                                      title: TextBold(
+                                                          text: data.docs[index]
+                                                              ['type'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 14
+                                                                  : 12,
+                                                          color: Colors.black),
+                                                      subtitle: TextRegular(
+                                                          text: data.docs[index]
+                                                              ['name'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 12
+                                                                  : 10,
+                                                          color: Colors.grey),
+                                                      trailing: IconButton(
+                                                          onPressed: () async {
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'Reports')
+                                                                .doc(data
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .update({
+                                                              'status':
+                                                                  'Pending'
+                                                            });
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.check_box)),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextBold(
+                                        text: 'On the way',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('Reports')
+                                              .where('status',
+                                                  isEqualTo: 'Completed')
+                                              .snapshots(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error);
+                                              return const Center(
+                                                  child: Text('Error'));
+                                            }
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50),
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                )),
                                               );
-                                            },
-                                          ),
-                                        );
-                                      }),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextBold(
-                                    text: 'To Rescue',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('Reports')
-                                          .where('status',
-                                              isNotEqualTo: 'Completed')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error);
-                                          return const Center(
-                                              child: Text('Error'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Padding(
-                                            padding: EdgeInsets.only(top: 50),
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                              color: Colors.black,
-                                            )),
-                                          );
-                                        }
+                                            }
 
-                                        final data = snapshot.requireData;
-                                        return SizedBox(
-                                          width: isLargeScreen ? 250 : 200,
-                                          height: isLargeScreen ? 150 : 100,
-                                          child: ListView.builder(
-                                            itemCount: data.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  onTap: () {
-                                                    mapController!.animateCamera(
-                                                        CameraUpdate.newCameraPosition(
-                                                            CameraPosition(
+                                            final data = snapshot.requireData;
+                                            return SizedBox(
+                                              width: isLargeScreen ? 300 : 200,
+                                              height: 100,
+                                              child: ListView.builder(
+                                                itemCount: data.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      leading: isLargeScreen
+                                                          ? Image.asset(
+                                                              'assets/images/profile.png',
+                                                              height:
+                                                                  isLargeScreen
+                                                                      ? 50
+                                                                      : 25,
+                                                            )
+                                                          : null,
+                                                      title: TextBold(
+                                                          text: data.docs[index]
+                                                              ['type'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 14
+                                                                  : 12,
+                                                          color: Colors.black),
+                                                      subtitle: TextRegular(
+                                                          text: data.docs[index]
+                                                              ['name'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 12
+                                                                  : 10,
+                                                          color: Colors.grey),
+                                                      // trailing: IconButton(
+                                                      //     onPressed: () async {
+                                                      //       await FirebaseFirestore
+                                                      //           .instance
+                                                      //           .collection(
+                                                      //               'Reports')
+                                                      //           .doc(data
+                                                      //               .docs[index].id)
+                                                      //           .update({
+                                                      //         'status': 'Pending'
+                                                      //       });
+                                                      //     },
+                                                      //     icon: const Icon(
+                                                      //         Icons.check_box)),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextBold(
+                                        text: 'To Rescue',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('Reports')
+                                              .where('status',
+                                                  isNotEqualTo: 'Completed')
+                                              .snapshots(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error);
+                                              return const Center(
+                                                  child: Text('Error'));
+                                            }
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50),
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                )),
+                                              );
+                                            }
+
+                                            final data = snapshot.requireData;
+                                            return SizedBox(
+                                              width: isLargeScreen ? 300 : 200,
+                                              height: 100,
+                                              child: ListView.builder(
+                                                itemCount: data.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      onTap: () {
+                                                        mapController!.animateCamera(
+                                                            CameraUpdate.newCameraPosition(CameraPosition(
                                                                 zoom: 14,
                                                                 target: LatLng(
                                                                     data.docs[
@@ -650,208 +670,218 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                             index]
                                                                         [
                                                                         'long']))));
-                                                  },
-                                                  leading: isLargeScreen
-                                                      ? Image.asset(
-                                                          'assets/images/profile.png',
-                                                          height: isLargeScreen
-                                                              ? 50
-                                                              : 25,
-                                                        )
-                                                      : null,
-                                                  title: TextBold(
-                                                      text: data.docs[index]
-                                                          ['type'],
-                                                      fontSize: isLargeScreen
-                                                          ? 14
-                                                          : 12,
-                                                      color: Colors.black),
-                                                  subtitle: TextRegular(
-                                                      text: data.docs[index]
-                                                          ['name'],
-                                                      fontSize: isLargeScreen
-                                                          ? 12
-                                                          : 10,
-                                                      color: Colors.grey),
-                                                  trailing: SizedBox(
-                                                    width: 150,
-                                                    child: Row(
-                                                      children: [
-                                                        IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'Reports')
-                                                                  .doc(data
-                                                                      .docs[
-                                                                          index]
-                                                                      .id)
-                                                                  .update({
-                                                                'status':
-                                                                    'Completed'
-                                                              });
-                                                            },
-                                                            icon: const Icon(Icons
-                                                                .check_box_outline_blank_outlined)),
-                                                        box.read('user') ==
-                                                                'main admin'
-                                                            ? data.docs[index][
-                                                                        'status'] !=
-                                                                    'Forwarded'
-                                                                ? IconButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder: (context) =>
-                                                                              AlertDialog(
-                                                                                title: const Text(
-                                                                                  'Confirmation',
-                                                                                  style: TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
-                                                                                ),
-                                                                                content: const Text(
-                                                                                  'Are you sure you want to forward this report to intelligence?',
-                                                                                  style: TextStyle(fontFamily: 'QRegular'),
-                                                                                ),
-                                                                                actions: <Widget>[
-                                                                                  MaterialButton(
-                                                                                    onPressed: () => Navigator.of(context).pop(true),
-                                                                                    child: const Text(
-                                                                                      'Close',
-                                                                                      style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                      },
+                                                      leading: isLargeScreen
+                                                          ? Image.asset(
+                                                              'assets/images/profile.png',
+                                                              height:
+                                                                  isLargeScreen
+                                                                      ? 50
+                                                                      : 25,
+                                                            )
+                                                          : null,
+                                                      title: TextBold(
+                                                          text: data.docs[index]
+                                                              ['type'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 14
+                                                                  : 12,
+                                                          color: Colors.black),
+                                                      subtitle: TextRegular(
+                                                          text: data.docs[index]
+                                                              ['name'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 12
+                                                                  : 10,
+                                                          color: Colors.grey),
+                                                      trailing: SizedBox(
+                                                        width: 150,
+                                                        child: Row(
+                                                          children: [
+                                                            IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'Reports')
+                                                                      .doc(data
+                                                                          .docs[
+                                                                              index]
+                                                                          .id)
+                                                                      .update({
+                                                                    'status':
+                                                                        'Completed'
+                                                                  });
+                                                                },
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .check_box_outline_blank_outlined)),
+                                                            box.read('user') ==
+                                                                    'main admin'
+                                                                ? data.docs[index]
+                                                                            [
+                                                                            'status'] !=
+                                                                        'Forwarded'
+                                                                    ? IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          showDialog(
+                                                                              context: context,
+                                                                              builder: (context) => AlertDialog(
+                                                                                    title: const Text(
+                                                                                      'Confirmation',
+                                                                                      style: TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
                                                                                     ),
-                                                                                  ),
-                                                                                  MaterialButton(
-                                                                                    onPressed: () async {
-                                                                                      await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
-                                                                                        'status': 'Forwarded'
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    child: const Text(
-                                                                                      'Continue',
-                                                                                      style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                                                    content: const Text(
+                                                                                      'Are you sure you want to forward this report to intelligence?',
+                                                                                      style: TextStyle(fontFamily: 'QRegular'),
                                                                                     ),
-                                                                                  ),
-                                                                                ],
-                                                                              ));
-                                                                    },
-                                                                    icon:
-                                                                        const Icon(
-                                                                      Icons
-                                                                          .forward,
-                                                                      color: Colors
-                                                                          .blue,
-                                                                    ),
-                                                                  )
+                                                                                    actions: <Widget>[
+                                                                                      MaterialButton(
+                                                                                        onPressed: () => Navigator.of(context).pop(true),
+                                                                                        child: const Text(
+                                                                                          'Close',
+                                                                                          style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                                                        ),
+                                                                                      ),
+                                                                                      MaterialButton(
+                                                                                        onPressed: () async {
+                                                                                          await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
+                                                                                            'status': 'Forwarded'
+                                                                                          });
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        child: const Text(
+                                                                                          'Continue',
+                                                                                          style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ));
+                                                                        },
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .forward,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                        ),
+                                                                      )
+                                                                    : const SizedBox()
                                                                 : const SizedBox()
-                                                            : const SizedBox()
-                                                      ],
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextBold(
+                                        text: 'Forwarded to\nIntelligence',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('Reports')
+                                              .where('status',
+                                                  isEqualTo: 'Forwarded')
+                                              .snapshots(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error);
+                                              return const Center(
+                                                  child: Text('Error'));
+                                            }
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50),
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                )),
                                               );
-                                            },
-                                          ),
-                                        );
-                                      }),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextBold(
-                                    text: 'Forwarded to\nIntelligence',
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('Reports')
-                                          .where('status',
-                                              isEqualTo: 'Forwarded')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error);
-                                          return const Center(
-                                              child: Text('Error'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Padding(
-                                            padding: EdgeInsets.only(top: 50),
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                              color: Colors.black,
-                                            )),
-                                          );
-                                        }
+                                            }
 
-                                        final data = snapshot.requireData;
-                                        return SizedBox(
-                                          width: isLargeScreen ? 250 : 200,
-                                          height: isLargeScreen ? 150 : 100,
-                                          child: ListView.builder(
-                                            itemCount: data.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  leading: isLargeScreen
-                                                      ? Image.asset(
-                                                          'assets/images/profile.png',
-                                                          height: isLargeScreen
-                                                              ? 50
-                                                              : 25,
-                                                        )
-                                                      : null,
-                                                  title: TextBold(
-                                                      text: data.docs[index]
-                                                          ['type'],
-                                                      fontSize: isLargeScreen
-                                                          ? 14
-                                                          : 12,
-                                                      color: Colors.black),
-                                                  subtitle: TextRegular(
-                                                      text: data.docs[index]
-                                                          ['name'],
-                                                      fontSize: isLargeScreen
-                                                          ? 12
-                                                          : 10,
-                                                      color: Colors.grey),
-                                                  // trailing: IconButton(
-                                                  //     onPressed: () async {
-                                                  //       await FirebaseFirestore
-                                                  //           .instance
-                                                  //           .collection(
-                                                  //               'Reports')
-                                                  //           .doc(data
-                                                  //               .docs[index].id)
-                                                  //           .update({
-                                                  //         'status': 'Pending'
-                                                  //       });
-                                                  //     },
-                                                  //     icon: const Icon(
-                                                  //         Icons.check_box)),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      }),
+                                            final data = snapshot.requireData;
+                                            return SizedBox(
+                                              width: isLargeScreen ? 300 : 200,
+                                              height: 100,
+                                              child: ListView.builder(
+                                                itemCount: data.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      leading: isLargeScreen
+                                                          ? Image.asset(
+                                                              'assets/images/profile.png',
+                                                              height:
+                                                                  isLargeScreen
+                                                                      ? 50
+                                                                      : 25,
+                                                            )
+                                                          : null,
+                                                      title: TextBold(
+                                                          text: data.docs[index]
+                                                              ['type'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 14
+                                                                  : 12,
+                                                          color: Colors.black),
+                                                      subtitle: TextRegular(
+                                                          text: data.docs[index]
+                                                              ['name'],
+                                                          fontSize:
+                                                              isLargeScreen
+                                                                  ? 12
+                                                                  : 10,
+                                                          color: Colors.grey),
+                                                      // trailing: IconButton(
+                                                      //     onPressed: () async {
+                                                      //       await FirebaseFirestore
+                                                      //           .instance
+                                                      //           .collection(
+                                                      //               'Reports')
+                                                      //           .doc(data
+                                                      //               .docs[index].id)
+                                                      //           .update({
+                                                      //         'status': 'Pending'
+                                                      //       });
+                                                      //     },
+                                                      //     icon: const Icon(
+                                                      //         Icons.check_box)),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ],
                       )),
