@@ -336,22 +336,113 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                                               ),
                                               GestureDetector(
                                                 onTap: () async {
-                                                  if (data.docs[i]['role'] ==
-                                                      'user') {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Users')
-                                                        .doc(data.docs[i].id)
-                                                        .update(
-                                                            {'role': 'admin'});
-                                                  } else {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Users')
-                                                        .doc(data.docs[i].id)
-                                                        .update(
-                                                            {'role': 'user'});
-                                                  }
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: TextRegular(
+                                                            text: 'Select Role',
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black),
+                                                        content: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            ListTile(
+                                                              title: TextRegular(
+                                                                  text: 'User',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black),
+                                                              onTap: () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Users')
+                                                                    .doc(data
+                                                                        .docs[i]
+                                                                        .id)
+                                                                    .update({
+                                                                  'role': 'user'
+                                                                });
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            ListTile(
+                                                              title: TextRegular(
+                                                                  text:
+                                                                      'Main Admin',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black),
+                                                              onTap: () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Users')
+                                                                    .doc(data
+                                                                        .docs[i]
+                                                                        .id)
+                                                                    .update({
+                                                                  'role':
+                                                                      'main admin'
+                                                                });
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            ListTile(
+                                                              title: TextRegular(
+                                                                  text: 'Admin',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black),
+                                                              onTap: () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Users')
+                                                                    .doc(data
+                                                                        .docs[i]
+                                                                        .id)
+                                                                    .update({
+                                                                  'role':
+                                                                      'admin'
+                                                                });
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            ListTile(
+                                                              title: TextRegular(
+                                                                  text:
+                                                                      'Intelligence',
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black),
+                                                              onTap: () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Users')
+                                                                    .doc(data
+                                                                        .docs[i]
+                                                                        .id)
+                                                                    .update({
+                                                                  'role':
+                                                                      'intelligence'
+                                                                });
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
                                                 },
                                                 child: const Icon(
                                                   Icons.refresh_rounded,

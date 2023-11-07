@@ -3,14 +3,13 @@ import 'dart:collection';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-import 'package:intl/intl.dart';
-
+import '../../utils/const.dart';
 import '../../widgets/text_widget.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -25,9 +24,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   double long = 0;
 
   bool hasLoaded = false;
- 
 
   final box = GetStorage();
+
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+  String googleAPIKey = kGoogleApiKey;
 
   @override
   void initState() {
@@ -39,16 +41,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         long = position.longitude;
         hasLoaded = true;
 
-
-         _markers.add(Marker(
-          
-                            markerId: const MarkerId('SomeId'),
-                            position: LatLng(position.latitude,
-                                position.longitude),
-                                infoWindow: InfoWindow(
-                                  title: 'Your location'
-                                )
-                          ));
+        _markers.add(Marker(
+            markerId: const MarkerId('myId'),
+            position: LatLng(position.latitude, position.longitude),
+            infoWindow: const InfoWindow(title: 'Your location')));
         // myCircles.add(
         //   CircleMarker(
         //       point: LatLng(position.latitude, position.longitude),
@@ -69,10 +65,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   // late List<CircleMarker> myCircles = [];
- 
 
-
- GoogleMapController? mapController;
+  GoogleMapController? mapController;
 
   final latController = TextEditingController();
   final longController = TextEditingController();
@@ -81,27 +75,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     mapController = controller;
   }
 
-  
+  final _poly = const Polyline(polylineId: PolylineId('asd'));
 
   String newUrl = '';
   Set<Polygon> polygon = HashSet<Polygon>();
   update() async {
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      Geolocator.getCurrentPosition().then((position) {
-
-
+      Geolocator.getCurrentPosition().then((position) async {
         _markers.clear();
 
+        _markers.add(Marker(
+            markerId: const MarkerId('myId'),
+            position: LatLng(position.latitude, position.longitude),
+            infoWindow: const InfoWindow(title: 'Your location')));
 
-           _markers.add(Marker(
-          
-                            markerId: const MarkerId('SomeId'),
-                            position: LatLng(position.latitude,
-                                position.longitude),
-                                infoWindow: InfoWindow(
-                                  title: 'Your location'
-                                )
-                          ));
         // setState(() {
         //   myPoly.clear();
         //   myCircles.clear();
@@ -118,8 +105,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
         //   // mapController.move(LatLng(position.latitude, position.longitude), 18);
 
-          lat = position.latitude;
-          long = position.longitude;
+        lat = position.latitude;
+        long = position.longitude;
         // });
         FirebaseFirestore.instance
             .collection('Reports')
@@ -127,17 +114,34 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             .get()
             .then((QuerySnapshot querySnapshot) async {
           for (var doc in querySnapshot.docs) {
-            _markers.add(Marker(
-          
-                            markerId: const MarkerId('SomeId'),
-                            position: LatLng(doc['lat'],
-                                doc['long']),
-                                infoWindow: InfoWindow(
-                                  title: doc['name'],
-                                  snippet: doc['type']
-                                
-                                )
-                          ));
+            try {
+              PolylineResult result =
+                  await polylinePoints.getRouteBetweenCoordinates(
+                      'AIzaSyDdXaMN5htLGHo8BkCfefPpuTauwHGXItU',
+                      PointLatLng(position.latitude, position.longitude),
+                      PointLatLng(doc['lat'], doc['long']));
+
+              if (result.points.isNotEmpty) {
+                polylineCoordinates = result.points
+                    .map((point) => LatLng(point.latitude, point.longitude))
+                    .toList();
+              }
+            } catch (e) {
+              print('error $e');
+            }
+
+            // _poly = Polyline(
+            //     color: Colors.red,
+            //     polylineId: PolylineId(doc['name']),
+            //     points: polylineCoordinates,
+            //     width: 4);
+            setState(() {
+              _markers.add(Marker(
+                  markerId: MarkerId(doc['name']),
+                  position: LatLng(doc['lat'], doc['long']),
+                  infoWindow:
+                      InfoWindow(title: doc['name'], snippet: doc['type'])));
+            });
           }
         });
       }).catchError((error) {
@@ -146,7 +150,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     });
   }
 
-    final List<Marker> _markers = <Marker>[];
+  final List<Marker> _markers = <Marker>[];
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +158,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     bool isLargeScreen = screenWidth >= 600;
 
-
-       CameraPosition initialCameraPosition =  CameraPosition(
+    CameraPosition initialCameraPosition = const CameraPosition(
       target: LatLng(8.1479, 125.1321),
       zoom: 14,
     );
@@ -338,16 +341,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       return Expanded(
                         child: SizedBox(
                           height: 425,
-                          
                           child: GoogleMap(
-                               markers: Set<Marker>.of(_markers),
+                            polylines: {_poly},
+                            markers: Set<Marker>.of(_markers),
                             myLocationEnabled: true,
-                    zoomControlsEnabled: false,
-                    mapType: MapType.normal,
-                    polygons: polygon,
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: initialCameraPosition,
-                  ),
+                            zoomControlsEnabled: false,
+                            mapType: MapType.normal,
+                            polygons: polygon,
+                            onMapCreated: _onMapCreated,
+                            initialCameraPosition: initialCameraPosition,
+                          ),
                         ),
                       );
                     }),
@@ -523,14 +526,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                               return Card(
                                                 child: ListTile(
                                                   onTap: () {
-                                                   mapController!.animateCamera(
-                                                    
-                                                    CameraUpdate.newCameraPosition(CameraPosition(
-                                                      
-                                                      zoom: 14,
-                                                      target: LatLng(data.docs[index]
-                                                          ['lat'], data.docs[index]
-                                                          ['long']))));
+                                                    mapController!.animateCamera(
+                                                        CameraUpdate.newCameraPosition(
+                                                            CameraPosition(
+                                                                zoom: 14,
+                                                                target: LatLng(
+                                                                    data.docs[
+                                                                            index]
+                                                                        ['lat'],
+                                                                    data.docs[
+                                                                            index]
+                                                                        [
+                                                                        'long']))));
                                                   },
                                                   leading: isLargeScreen
                                                       ? Image.asset(
