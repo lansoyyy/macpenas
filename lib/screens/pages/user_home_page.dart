@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:macpenas/services/add_report.dart';
@@ -35,7 +38,7 @@ class _UserHomePageState extends State<UserHomePage> {
   String myAddress = '';
   String brgy = '';
   bool hasLoaded = false;
-
+  bool isUploaded = false;
   getMyData() {
     FirebaseFirestore.instance
         .collection('Users')
@@ -55,6 +58,8 @@ class _UserHomePageState extends State<UserHomePage> {
   }
 
   String _selectedOption = '';
+
+  String imgUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +158,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -186,15 +273,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Attemp Homicide',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Attemp Homicide',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -250,6 +339,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -283,15 +454,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Kidnapping',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Kidnapping',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -347,6 +520,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -380,15 +635,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Theft',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Theft',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -444,6 +701,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -477,15 +816,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Carnapping',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Carnapping',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -541,6 +882,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -574,15 +997,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Act of Lasciviousness',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Act of Lasciviousness',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -638,6 +1063,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -671,15 +1178,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Attempt Murder',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Attempt Murder',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -735,6 +1244,88 @@ class _UserHomePageState extends State<UserHomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Center(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                InputElement
+                                                                    input =
+                                                                    FileUploadInputElement()
+                                                                        as InputElement
+                                                                      ..accept =
+                                                                          'image/*';
+                                                                FirebaseStorage
+                                                                    fs =
+                                                                    FirebaseStorage
+                                                                        .instance;
+                                                                input.click();
+                                                                input.onChange
+                                                                    .listen(
+                                                                        (event) {
+                                                                  final file =
+                                                                      input
+                                                                          .files!
+                                                                          .first;
+                                                                  final reader =
+                                                                      FileReader();
+                                                                  reader
+                                                                      .readAsDataUrl(
+                                                                          file);
+                                                                  reader
+                                                                      .onLoadEnd
+                                                                      .listen(
+                                                                          (event) async {
+                                                                    var snapshot = await fs
+                                                                        .ref()
+                                                                        .child(DateTime.now()
+                                                                            .toString())
+                                                                        .putBlob(
+                                                                            file);
+                                                                    String
+                                                                        downloadUrl =
+                                                                        await snapshot
+                                                                            .ref
+                                                                            .getDownloadURL();
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                        content: TextRegular(
+                                                                            text:
+                                                                                'Photo Uploaded Succesfully!',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.white)));
+
+                                                                    setState(
+                                                                        () {
+                                                                      imgUrl =
+                                                                          downloadUrl;
+
+                                                                      isUploaded =
+                                                                          true;
+                                                                    });
+                                                                  });
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 100,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Icon(
+                                                                    Icons.image,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
                                                           RadioListTile(
                                                             title: const Text(
                                                                 'Witness'),
@@ -768,15 +1359,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                              myName,
-                                                              myNumber,
-                                                              myAddress,
-                                                              lat,
-                                                              long,
-                                                              'Others',
-                                                              'Pending',
-                                                              _selectedOption,
-                                                              brgy);
+                                                            myName,
+                                                            myNumber,
+                                                            myAddress,
+                                                            lat,
+                                                            long,
+                                                            'Others',
+                                                            'Pending',
+                                                            _selectedOption,
+                                                            brgy,
+                                                            imgUrl,
+                                                          );
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(

@@ -8,6 +8,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../utils/const.dart';
 import '../../widgets/text_widget.dart';
@@ -75,7 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     mapController = controller;
   }
 
-  final _poly = const Polyline(polylineId: PolylineId('asd'));
+  final List<Polyline> _poly = [];
 
   String newUrl = '';
   Set<Polygon> polygon = HashSet<Polygon>();
@@ -83,6 +84,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       Geolocator.getCurrentPosition().then((position) async {
         _markers.clear();
+        _poly.clear();
 
         _markers.add(Marker(
             markerId: const MarkerId('myId'),
@@ -130,24 +132,50 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               print('error $e');
             }
 
-            // _poly = Polyline(
-            //     color: Colors.red,
-            //     polylineId: PolylineId(doc['name']),
-            //     points: polylineCoordinates,
-            //     width: 4);
-            setState(() {
-              _markers.add(Marker(
-                  markerId: MarkerId(doc['name']),
-                  position: LatLng(doc['lat'], doc['long']),
-                  infoWindow:
-                      InfoWindow(title: doc['name'], snippet: doc['type'])));
-            });
+            _poly.add(Polyline(
+                color: Colors.red,
+                polylineId: PolylineId(doc['name']),
+                points: [
+                  LatLng(position.latitude, position.longitude),
+                  const LatLng(8.1479, 125.1321)
+                ],
+                width: 4));
+
+            _markers.add(Marker(
+                markerId: MarkerId(doc['name']),
+                position: LatLng(doc['lat'], doc['long']),
+                infoWindow: InfoWindow(
+                    title: doc['name'],
+                    snippet:
+                        '${doc['type']} - ${doc['contactNumber']} - Reporter is a ${doc['reporterType']} - ${DateFormat.yMMMd().add_jm().format(doc['dateTime'].toDate())}')));
+            setState(() {});
           }
         });
       }).catchError((error) {
         print('Error getting location: $error');
       });
     });
+  }
+
+  LatLng _getAverageLatLng(List<LatLng> points) {
+    final List<double> lats = [];
+    for (var element in points) {
+      lats.add(element.latitude);
+    }
+    final List<double> lons = [];
+    for (var element in points) {
+      lons.add(element.longitude);
+    }
+    return LatLng(lats.reduce((a, b) => a + b) / lats.length,
+        lons.reduce((a, b) => a + b) / lons.length);
+  }
+
+  List<LatLng> convertToLatLng(List<PointLatLng> points) {
+    List<LatLng> result = <LatLng>[];
+    for (int i = 0; i < points.length; i++) {
+      result.add(LatLng(points[i].latitude, points[i].longitude));
+    }
+    return result;
   }
 
   final List<Marker> _markers = <Marker>[];
@@ -342,7 +370,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         child: SizedBox(
                           height: 425,
                           child: GoogleMap(
-                            polylines: {_poly},
+                            polylines: Set<Polyline>.of(_poly),
                             markers: Set<Marker>.of(_markers),
                             myLocationEnabled: true,
                             zoomControlsEnabled: false,
@@ -420,7 +448,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: isLargeScreen ? 300 : 200,
+                                          width: isLargeScreen ? 250 : 200,
                                           height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
@@ -471,12 +499,96 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                       }),
                                 ],
                               ),
-                              SizedBox(
-                                width: isLargeScreen ? 20 : 0,
-                              ),
-                              const VerticalDivider(),
-                              SizedBox(
-                                width: isLargeScreen ? 20 : 0,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextBold(
+                                    text: 'On the way',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Reports')
+                                          .where('status',
+                                              isEqualTo: 'Completed')
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<QuerySnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          print(snapshot.error);
+                                          return const Center(
+                                              child: Text('Error'));
+                                        }
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Padding(
+                                            padding: EdgeInsets.only(top: 50),
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                              color: Colors.black,
+                                            )),
+                                          );
+                                        }
+
+                                        final data = snapshot.requireData;
+                                        return SizedBox(
+                                          width: isLargeScreen ? 250 : 200,
+                                          height: isLargeScreen ? 150 : 100,
+                                          child: ListView.builder(
+                                            itemCount: data.docs.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                child: ListTile(
+                                                  leading: isLargeScreen
+                                                      ? Image.asset(
+                                                          'assets/images/profile.png',
+                                                          height: isLargeScreen
+                                                              ? 50
+                                                              : 25,
+                                                        )
+                                                      : null,
+                                                  title: TextBold(
+                                                      text: data.docs[index]
+                                                          ['type'],
+                                                      fontSize: isLargeScreen
+                                                          ? 14
+                                                          : 12,
+                                                      color: Colors.black),
+                                                  subtitle: TextRegular(
+                                                      text: data.docs[index]
+                                                          ['name'],
+                                                      fontSize: isLargeScreen
+                                                          ? 12
+                                                          : 10,
+                                                      color: Colors.grey),
+                                                  // trailing: IconButton(
+                                                  //     onPressed: () async {
+                                                  //       await FirebaseFirestore
+                                                  //           .instance
+                                                  //           .collection(
+                                                  //               'Reports')
+                                                  //           .doc(data
+                                                  //               .docs[index].id)
+                                                  //           .update({
+                                                  //         'status': 'Pending'
+                                                  //       });
+                                                  //     },
+                                                  //     icon: const Icon(
+                                                  //         Icons.check_box)),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                ],
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -518,7 +630,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
                                         final data = snapshot.requireData;
                                         return SizedBox(
-                                          width: isLargeScreen ? 300 : 200,
+                                          width: isLargeScreen ? 250 : 200,
                                           height: isLargeScreen ? 150 : 100,
                                           child: ListView.builder(
                                             itemCount: data.docs.length,
@@ -640,6 +752,97 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                       ],
                                                     ),
                                                   ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextBold(
+                                    text: 'Forwarded to\nIntelligence',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Reports')
+                                          .where('status',
+                                              isEqualTo: 'Forwarded')
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<QuerySnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          print(snapshot.error);
+                                          return const Center(
+                                              child: Text('Error'));
+                                        }
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Padding(
+                                            padding: EdgeInsets.only(top: 50),
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                              color: Colors.black,
+                                            )),
+                                          );
+                                        }
+
+                                        final data = snapshot.requireData;
+                                        return SizedBox(
+                                          width: isLargeScreen ? 250 : 200,
+                                          height: isLargeScreen ? 150 : 100,
+                                          child: ListView.builder(
+                                            itemCount: data.docs.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                child: ListTile(
+                                                  leading: isLargeScreen
+                                                      ? Image.asset(
+                                                          'assets/images/profile.png',
+                                                          height: isLargeScreen
+                                                              ? 50
+                                                              : 25,
+                                                        )
+                                                      : null,
+                                                  title: TextBold(
+                                                      text: data.docs[index]
+                                                          ['type'],
+                                                      fontSize: isLargeScreen
+                                                          ? 14
+                                                          : 12,
+                                                      color: Colors.black),
+                                                  subtitle: TextRegular(
+                                                      text: data.docs[index]
+                                                          ['name'],
+                                                      fontSize: isLargeScreen
+                                                          ? 12
+                                                          : 10,
+                                                      color: Colors.grey),
+                                                  // trailing: IconButton(
+                                                  //     onPressed: () async {
+                                                  //       await FirebaseFirestore
+                                                  //           .instance
+                                                  //           .collection(
+                                                  //               'Reports')
+                                                  //           .doc(data
+                                                  //               .docs[index].id)
+                                                  //           .update({
+                                                  //         'status': 'Pending'
+                                                  //       });
+                                                  //     },
+                                                  //     icon: const Icon(
+                                                  //         Icons.check_box)),
                                                 ),
                                               );
                                             },
