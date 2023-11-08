@@ -465,12 +465,47 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                   return Card(
                                                     child: ListTile(
                                                       leading: isLargeScreen
-                                                          ? Image.asset(
-                                                              'assets/images/profile.png',
-                                                              height:
-                                                                  isLargeScreen
-                                                                      ? 50
-                                                                      : 25,
+                                                          ? Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/images/profile.png',
+                                                                  height:
+                                                                      isLargeScreen
+                                                                          ? 50
+                                                                          : 25,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) {
+                                                                        return AlertDialog(
+                                                                          content:
+                                                                              Image.network(data.docs[index]['img']),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      TextRegular(
+                                                                    text:
+                                                                        'View proof',
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             )
                                                           : null,
                                                       title: TextBold(
@@ -563,12 +598,47 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                   return Card(
                                                     child: ListTile(
                                                       leading: isLargeScreen
-                                                          ? Image.asset(
-                                                              'assets/images/profile.png',
-                                                              height:
-                                                                  isLargeScreen
-                                                                      ? 50
-                                                                      : 25,
+                                                          ? Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/images/profile.png',
+                                                                  height:
+                                                                      isLargeScreen
+                                                                          ? 50
+                                                                          : 25,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) {
+                                                                        return AlertDialog(
+                                                                          content:
+                                                                              Image.network(data.docs[index]['img']),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      TextRegular(
+                                                                    text:
+                                                                        'View proof',
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             )
                                                           : null,
                                                       title: TextBold(
@@ -672,12 +742,47 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                         'long']))));
                                                       },
                                                       leading: isLargeScreen
-                                                          ? Image.asset(
-                                                              'assets/images/profile.png',
-                                                              height:
-                                                                  isLargeScreen
-                                                                      ? 50
-                                                                      : 25,
+                                                          ? Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/images/profile.png',
+                                                                  height:
+                                                                      isLargeScreen
+                                                                          ? 50
+                                                                          : 25,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) {
+                                                                        return AlertDialog(
+                                                                          content:
+                                                                              Image.network(data.docs[index]['img']),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      TextRegular(
+                                                                    text:
+                                                                        'View proof',
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             )
                                                           : null,
                                                       title: TextBold(
@@ -833,12 +938,47 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                   return Card(
                                                     child: ListTile(
                                                       leading: isLargeScreen
-                                                          ? Image.asset(
-                                                              'assets/images/profile.png',
-                                                              height:
-                                                                  isLargeScreen
-                                                                      ? 50
-                                                                      : 25,
+                                                          ? Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/images/profile.png',
+                                                                  height:
+                                                                      isLargeScreen
+                                                                          ? 50
+                                                                          : 25,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) {
+                                                                        return AlertDialog(
+                                                                          content:
+                                                                              Image.network(data.docs[index]['img']),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      TextRegular(
+                                                                    text:
+                                                                        'View proof',
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             )
                                                           : null,
                                                       title: TextBold(
