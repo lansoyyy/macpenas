@@ -697,7 +697,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                   : 10,
                                                           color: Colors.grey),
                                                       trailing: SizedBox(
-                                                        width: 150,
+                                                        width: 75,
                                                         child: Row(
                                                           children: [
                                                             IconButton(

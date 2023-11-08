@@ -85,12 +85,6 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       width: isLargeScreen ? 1025 : 500,
       decoration: const BoxDecoration(
         color: Colors.white,
-        image: DecorationImage(
-            opacity: 150.0,
-            image: AssetImage(
-              'assets/images/back.jpg',
-            ),
-            fit: BoxFit.cover),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(30, 50, 30, 50),
