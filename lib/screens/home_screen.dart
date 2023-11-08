@@ -175,7 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : Colors.grey,
                                     ),
                                     title: TextRegular(
-                                      text: 'Admin Dashboard',
+                                      text: box.read('user') == 'intelligence'
+                                          ? 'Intelligence Dashboard'
+                                          : 'Admin Dashboard',
                                       fontSize: 16,
                                       color: isDashboard
                                           ? Colors.blue
@@ -602,7 +604,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                               : Colors.grey,
                                         ),
                                         title: TextRegular(
-                                          text: 'Admin Dashboard',
+                                          text:
+                                              box.read('user') == 'intelligence'
+                                                  ? 'Intelligence Dashboard'
+                                                  : 'Admin Dashboard',
                                           fontSize: 16,
                                           color: isDashboard
                                               ? Colors.blue
