@@ -26,8 +26,8 @@ Future addUser(name, email, contactNumber, address, id1Front, id1Back, id1Type,
     'brgy': brgy
   };
 
-  addReport(
-      name, contactNumber, address, 0, 0, 'Others', 'No', 'Witness', brgy, '');
+  addReport(name, contactNumber, address, 0, 0, 'Others', 'No', 'Witness', brgy,
+      '', false);
 
   await docUser.set(json);
 }

@@ -414,6 +414,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection('Reports')
+                                                    .where('trig',
+                                                        isEqualTo: true)
                                                     .where('status',
                                                         isEqualTo: 'Completed')
                                                     .snapshots(),
@@ -565,6 +567,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection('Reports')
+                                                    .where('trig',
+                                                        isEqualTo: true)
                                                     .where('status',
                                                         isEqualTo: 'Completed')
                                                     .snapshots(),
@@ -710,6 +714,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection('Reports')
+                                                    .where('trig',
+                                                        isEqualTo: true)
                                                     .where('status',
                                                         isNotEqualTo:
                                                             'Completed')
@@ -911,6 +917,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                       StreamBuilder<QuerySnapshot>(
                                           stream: FirebaseFirestore.instance
                                               .collection('Reports')
+                                              .where('trig', isEqualTo: true)
                                               .where('status',
                                                   isEqualTo: 'Forwarded')
                                               .snapshots(),

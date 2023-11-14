@@ -273,17 +273,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Attemp Homicide',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Attemp Homicide',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -454,17 +454,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Kidnapping',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Kidnapping',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -635,17 +635,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Theft',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Theft',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -816,17 +816,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Carnapping',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Carnapping',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -997,17 +997,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Act of Lasciviousness',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Act of Lasciviousness',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -1178,17 +1178,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Attempt Murder',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Attempt Murder',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(
@@ -1359,17 +1359,17 @@ class _UserHomePageState extends State<UserHomePage> {
                                                       TextButton(
                                                         onPressed: () {
                                                           addReport(
-                                                            myName,
-                                                            myNumber,
-                                                            myAddress,
-                                                            lat,
-                                                            long,
-                                                            'Others',
-                                                            'Pending',
-                                                            _selectedOption,
-                                                            brgy,
-                                                            imgUrl,
-                                                          );
+                                                              myName,
+                                                              myNumber,
+                                                              myAddress,
+                                                              lat,
+                                                              long,
+                                                              'Others',
+                                                              'Pending',
+                                                              _selectedOption,
+                                                              brgy,
+                                                              imgUrl,
+                                                              true);
                                                           Navigator.pop(
                                                               context);
                                                           ScaffoldMessenger.of(

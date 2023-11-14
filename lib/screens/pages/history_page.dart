@@ -398,7 +398,26 @@ class _HistoryPageState extends State<HistoryPage> {
               1: pw.Alignment.center,
             },
           ),
-          pw.SizedBox(height: 20),
+          pw.SizedBox(height: 50),
+          pw.Align(
+            alignment: pw.Alignment.bottomRight,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Text('________________________________',
+                    style: const pw.TextStyle(
+                      fontSize: 18,
+                    )),
+                pw.SizedBox(height: 10),
+                pw.Text(
+                  style: const pw.TextStyle(
+                    fontSize: 12,
+                  ),
+                  'Signature over printed name',
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
