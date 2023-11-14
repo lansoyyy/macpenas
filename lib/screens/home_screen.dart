@@ -22,7 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isHome = box.read('user') == 'main admin' || box.read('user') == 'admin'
+  bool isHome = box.read('user') == 'main admin' ||
+          box.read('user') == 'admin' ||
+          box.read('user') == 'intelligence'
       ? false
       : true;
 
