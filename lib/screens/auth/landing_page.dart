@@ -272,6 +272,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   one() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -307,8 +308,19 @@ class _LandingScreenState extends State<LandingScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                Navigator.pop(context);
-                three();
+                if (newEmailController.text.isNotEmpty) {
+                  Navigator.pop(context);
+                  three();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: TextRegular(
+                          text: 'Cannot proceed with missing fields!',
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  );
+                }
               },
               child: TextBold(
                 text: 'Next',
@@ -324,6 +336,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   two() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -381,6 +394,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   three() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -707,8 +721,24 @@ class _LandingScreenState extends State<LandingScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                four();
+                if (newfirstnamename.text.isNotEmpty &&
+                    newmiddlenamename.text.isNotEmpty &&
+                    newlastnamename.text.isNotEmpty &&
+                    newnumber.text.isNotEmpty &&
+                    bdayController.text.isNotEmpty &&
+                    newstreet.text.isNotEmpty) {
+                  Navigator.pop(context);
+                  four();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: TextRegular(
+                          text: 'Cannot proceed with missing fields!',
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  );
+                }
               },
               child: TextBold(
                 text: 'Next',
@@ -724,6 +754,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   four() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -831,13 +862,28 @@ class _LandingScreenState extends State<LandingScreen> {
 
   five() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: TextBold(
-            text: 'Pre-Registration',
-            fontSize: 18,
-            color: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  four();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+              ),
+              TextBold(
+                text: 'Pre-Registration',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ],
           ),
           content: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -877,18 +923,30 @@ class _LandingScreenState extends State<LandingScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                if (newmpin.text != newconfirmpin.text) {
+                if (newEmailController.text.isNotEmpty) {
+                  if (newmpin.text != newconfirmpin.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: TextRegular(
+                            text: 'Your MPIN do not match!',
+                            fontSize: 14,
+                            color: Colors.white),
+                      ),
+                    );
+                  } else {
+                    Navigator.pop(context);
+                    six();
+                  }
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: TextRegular(
-                          text: 'Your MPIN do not match!',
+                          text:
+                              'Cannot proceed with invalid inputs! MPIN must be a number',
                           fontSize: 14,
                           color: Colors.white),
                     ),
                   );
-                } else {
-                  Navigator.pop(context);
-                  six();
                 }
               },
               child: TextBold(
@@ -905,13 +963,28 @@ class _LandingScreenState extends State<LandingScreen> {
 
   six() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: TextBold(
-            text: 'Pre-Registration',
-            fontSize: 18,
-            color: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  five();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+              ),
+              TextBold(
+                text: 'Pre-Registration',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ],
           ),
           content: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -1161,7 +1234,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                       decoration: BoxDecoration(
                                         color: Colors.grey,
                                         image: DecorationImage(
-                                            image: NetworkImage(id1Front),
+                                            image: NetworkImage(id1Back),
                                             fit: BoxFit.cover),
                                       ),
                                     ),
@@ -1237,7 +1310,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        id1Front == ''
+                        id2Front == ''
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1348,14 +1421,14 @@ class _LandingScreenState extends State<LandingScreen> {
                                       decoration: BoxDecoration(
                                         color: Colors.grey,
                                         image: DecorationImage(
-                                            image: NetworkImage(id1Front),
+                                            image: NetworkImage(id2Front),
                                             fit: BoxFit.cover),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
-                        id1Back == ''
+                        id2Back == ''
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1466,7 +1539,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                       decoration: BoxDecoration(
                                         color: Colors.grey,
                                         image: DecorationImage(
-                                            image: NetworkImage(id1Front),
+                                            image: NetworkImage(id2Back),
                                             fit: BoxFit.cover),
                                       ),
                                     ),
@@ -1596,6 +1669,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   seven(int refno) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -1671,7 +1745,7 @@ class _LandingScreenState extends State<LandingScreen> {
         },
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2050));
 
     if (pickedDate != null) {
