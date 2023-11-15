@@ -162,9 +162,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                         });
                                       }
                                     }).then((value) {
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              Routes().homescreen);
+                                      if (isVerified && user!.emailVerified) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                Routes().homescreen);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: TextRegular(
+                                                text:
+                                                    'Your account has not been verified! Verify your email and wait for the admins response',
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                        );
+                                      }
                                     });
                                   });
                                 } catch (e) {

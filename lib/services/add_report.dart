@@ -22,7 +22,9 @@ Future addReport(name, contactNumber, address, lat, long, type, status,
     'month': DateTime.now().month,
     'brgy': brgy,
     'img': img,
-    'trig': trig
+    'trig': trig,
+    'patrol': '',
+    'patrolid': '',
   };
 
   await docUser.set(json);

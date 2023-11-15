@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
@@ -856,31 +857,58 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                                             'Confirmation',
                                                                                             style: TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
                                                                                           ),
-                                                                                          content: const Text(
-                                                                                            'Are you sure you want to forward this report to intelligence?',
-                                                                                            style: TextStyle(fontFamily: 'QRegular'),
+                                                                                          content: Column(
+                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                                                            mainAxisSize: MainAxisSize.min,
+                                                                                            children: [
+                                                                                              const Text(
+                                                                                                'Are you sure you want to forward this report to intelligence?',
+                                                                                                style: TextStyle(fontFamily: 'QRegular'),
+                                                                                              ),
+                                                                                              StreamBuilder<QuerySnapshot>(
+                                                                                                  stream: FirebaseFirestore.instance.collection('Users').where('role', isEqualTo: 'intelligence').snapshots(),
+                                                                                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                                                                                    if (snapshot.hasError) {
+                                                                                                      print(snapshot.error);
+                                                                                                      return const Center(child: Text('Error'));
+                                                                                                    }
+                                                                                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                                      return const Padding(
+                                                                                                        padding: EdgeInsets.only(top: 50),
+                                                                                                        child: Center(
+                                                                                                            child: CircularProgressIndicator(
+                                                                                                          color: Colors.black,
+                                                                                                        )),
+                                                                                                      );
+                                                                                                    }
+
+                                                                                                    final new1 = snapshot.requireData;
+                                                                                                    return SizedBox(
+                                                                                                      height: 300,
+                                                                                                      child: ListView.builder(
+                                                                                                        itemCount: new1.docs.length,
+                                                                                                        itemBuilder: (context, index) {
+                                                                                                          return ListTile(
+                                                                                                            onTap: () async {
+                                                                                                              await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
+                                                                                                                'status': 'Forwarded',
+                                                                                                                'patrol': new1.docs[index]['name'],
+                                                                                                                'patrolid': new1.docs[index].id,
+                                                                                                              });
+                                                                                                              Navigator.pop(context);
+                                                                                                            },
+                                                                                                            leading: const Icon(
+                                                                                                              Icons.account_circle_outlined,
+                                                                                                            ),
+                                                                                                            title: TextRegular(text: new1.docs[index]['name'], fontSize: 14, color: Colors.black),
+                                                                                                          );
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    );
+                                                                                                  }),
+                                                                                            ],
                                                                                           ),
-                                                                                          actions: <Widget>[
-                                                                                            MaterialButton(
-                                                                                              onPressed: () => Navigator.of(context).pop(true),
-                                                                                              child: const Text(
-                                                                                                'Close',
-                                                                                                style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
-                                                                                              ),
-                                                                                            ),
-                                                                                            MaterialButton(
-                                                                                              onPressed: () async {
-                                                                                                await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
-                                                                                                  'status': 'Forwarded'
-                                                                                                });
-                                                                                                Navigator.pop(context);
-                                                                                              },
-                                                                                              child: const Text(
-                                                                                                'Continue',
-                                                                                                style: TextStyle(fontFamily: 'QRegular', fontWeight: FontWeight.bold),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
                                                                                         ));
                                                                               },
                                                                               icon: const Icon(
@@ -915,12 +943,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                         height: 10,
                                       ),
                                       StreamBuilder<QuerySnapshot>(
-                                          stream: FirebaseFirestore.instance
-                                              .collection('Reports')
-                                              .where('trig', isEqualTo: true)
-                                              .where('status',
-                                                  isEqualTo: 'Forwarded')
-                                              .snapshots(),
+                                          stream: box.read('user') ==
+                                                  'intelligence'
+                                              ? FirebaseFirestore.instance
+                                                  .collection('Reports')
+                                                  .where('patrolid',
+                                                      isEqualTo: FirebaseAuth
+                                                          .instance
+                                                          .currentUser!
+                                                          .uid)
+                                                  .snapshots()
+                                              : FirebaseFirestore.instance
+                                                  .collection('Reports')
+                                                  .where('trig',
+                                                      isEqualTo: true)
+                                                  .where('status',
+                                                      isEqualTo: 'Forwarded')
+                                                  .snapshots(),
                                           builder: (BuildContext context,
                                               AsyncSnapshot<QuerySnapshot>
                                                   snapshot) {
@@ -1008,14 +1047,36 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                   ? 14
                                                                   : 12,
                                                           color: Colors.black),
-                                                      subtitle: TextRegular(
-                                                          text: data.docs[index]
-                                                              ['name'],
-                                                          fontSize:
-                                                              isLargeScreen
-                                                                  ? 12
-                                                                  : 10,
-                                                          color: Colors.grey),
+                                                      subtitle: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          TextRegular(
+                                                              text: data.docs[
+                                                                      index]
+                                                                  ['name'],
+                                                              fontSize:
+                                                                  isLargeScreen
+                                                                      ? 12
+                                                                      : 10,
+                                                              color:
+                                                                  Colors.grey),
+                                                          TextRegular(
+                                                              text: data.docs[
+                                                                      index]
+                                                                  ['patrol'],
+                                                              fontSize:
+                                                                  isLargeScreen
+                                                                      ? 12
+                                                                      : 10,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ],
+                                                      ),
                                                       // trailing: IconButton(
                                                       //     onPressed: () async {
                                                       //       await FirebaseFirestore
