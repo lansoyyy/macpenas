@@ -30,6 +30,8 @@ class _HistoryPageState extends State<HistoryPage> {
   List names = [];
   List emergencyTypes = [];
   List dates = [];
+
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -206,84 +208,105 @@ class _HistoryPageState extends State<HistoryPage> {
                           color: Colors.black,
                         ),
                       ),
-                      child: SingleChildScrollView(
-                        child: DataTable(columns: [
-                          DataColumn(
-                            label: TextBold(
-                              text: 'Baranggay',
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DataColumn(
-                            label: TextBold(
-                              text: 'Street',
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DataColumn(
-                            label: TextBold(
-                              text: 'Emergency Type',
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DataColumn(
-                            label: TextBold(
-                              text: 'Name',
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DataColumn(
-                            label: TextBold(
-                              text: 'Date',
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ], rows: [
-                          for (int i = 0; i < data.docs.length; i++)
-                            DataRow(cells: [
-                              DataCell(
-                                TextRegular(
-                                  text: data.docs[i]['brgy'],
-                                  fontSize: 14,
+                      child: Scrollbar(
+                        controller: scrollController,
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: SingleChildScrollView(
+                            child: DataTable(columns: [
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Baranggay',
+                                  fontSize: 18,
                                   color: Colors.black,
                                 ),
                               ),
-                              DataCell(
-                                TextRegular(
-                                  text: data.docs[i]['address'],
-                                  fontSize: 14,
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Street',
+                                  fontSize: 18,
                                   color: Colors.black,
                                 ),
                               ),
-                              DataCell(
-                                TextRegular(
-                                  text: data.docs[i]['type'],
-                                  fontSize: 14,
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Emergency Type',
+                                  fontSize: 18,
                                   color: Colors.black,
                                 ),
                               ),
-                              DataCell(
-                                TextRegular(
-                                  text: data.docs[i]['name'],
-                                  fontSize: 14,
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Name',
+                                  fontSize: 18,
                                   color: Colors.black,
                                 ),
                               ),
-                              DataCell(
-                                TextRegular(
-                                  text: DateFormat.yMMMd().add_jm().format(
-                                      data.docs[i]['dateTime'].toDate()),
-                                  fontSize: 14,
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Date',
+                                  fontSize: 18,
                                   color: Colors.black,
                                 ),
                               ),
-                            ])
-                        ]),
+                              DataColumn(
+                                label: TextBold(
+                                  text: 'Action Taken',
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ], rows: [
+                              for (int i = 0; i < data.docs.length; i++)
+                                DataRow(cells: [
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['brgy'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['address'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['type'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['name'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: DateFormat.yMMMd().add_jm().format(
+                                          data.docs[i]['dateTime'].toDate()),
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text: data.docs[i]['status'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ])
+                            ]),
+                          ),
+                        ),
                       ),
                     );
                   }),
