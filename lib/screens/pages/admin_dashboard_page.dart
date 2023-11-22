@@ -82,7 +82,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   String newUrl = '';
   Set<Polygon> polygon = HashSet<Polygon>();
   update(String docId) async {
-    Timer.periodic(const Duration(seconds: 10), (timer) {
+    Timer.periodic(const Duration(seconds: 30), (timer) {
       Geolocator.getCurrentPosition().then((position) async {
         _markers.clear();
         _poly.clear();
@@ -534,7 +534,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                               .id)
                                                                           .update({
                                                                         'status':
-                                                                            'Pending'
+                                                                            'Patrol'
                                                                       });
                                                                     },
                                                                     icon: const Icon(
@@ -571,7 +571,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                     .where('trig',
                                                         isEqualTo: true)
                                                     .where('status',
-                                                        isEqualTo: 'Completed')
+                                                        isEqualTo: 'Patrol')
                                                     .snapshots(),
                                                 builder: (BuildContext context,
                                                     AsyncSnapshot<QuerySnapshot>
@@ -673,6 +673,26 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                         : 10,
                                                                 color: Colors
                                                                     .grey),
+                                                            trailing:
+                                                                IconButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'Reports')
+                                                                          .doc(data
+                                                                              .docs[
+                                                                                  index]
+                                                                              .id)
+                                                                          .update({
+                                                                        'status':
+                                                                            'Completed'
+                                                                      });
+                                                                    },
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .check_box_outline_blank_outlined)),
                                                             // trailing: IconButton(
                                                             //     onPressed: () async {
                                                             //       await FirebaseFirestore
@@ -718,9 +738,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                     .where('trig',
                                                         isEqualTo: true)
                                                     .where('status',
-                                                        isNotEqualTo:
-                                                            'Completed')
-                                                    .snapshots(),
+                                                        whereNotIn: [
+                                                      'Forwarded',
+                                                      'Completed',
+                                                      'Patrol'
+                                                    ]).snapshots(),
                                                 builder: (BuildContext context,
                                                     AsyncSnapshot<QuerySnapshot>
                                                         snapshot) {
@@ -825,25 +847,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                               width: 75,
                                                               child: Row(
                                                                 children: [
-                                                                  IconButton(
-                                                                      onPressed:
-                                                                          () async {
-                                                                        await FirebaseFirestore
-                                                                            .instance
-                                                                            .collection(
-                                                                                'Reports')
-                                                                            .doc(data
-                                                                                .docs[
-                                                                                    index]
-                                                                                .id)
-                                                                            .update({
-                                                                          'status':
-                                                                              'Completed'
-                                                                        });
-                                                                      },
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .check_box_outline_blank_outlined)),
                                                                   box.read('user') ==
                                                                           'main admin'
                                                                       ? data.docs[index]['status'] !=
@@ -857,57 +860,86 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                                             'Confirmation',
                                                                                             style: TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
                                                                                           ),
-                                                                                          content: Column(
-                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                                                            mainAxisSize: MainAxisSize.min,
-                                                                                            children: [
-                                                                                              const Text(
-                                                                                                'Are you sure you want to forward this report to intelligence?',
-                                                                                                style: TextStyle(fontFamily: 'QRegular'),
-                                                                                              ),
-                                                                                              StreamBuilder<QuerySnapshot>(
-                                                                                                  stream: FirebaseFirestore.instance.collection('Users').where('role', isEqualTo: 'intelligence').snapshots(),
-                                                                                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                                                                                    if (snapshot.hasError) {
-                                                                                                      print(snapshot.error);
-                                                                                                      return const Center(child: Text('Error'));
-                                                                                                    }
-                                                                                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                                                      return const Padding(
-                                                                                                        padding: EdgeInsets.only(top: 50),
-                                                                                                        child: Center(
-                                                                                                            child: CircularProgressIndicator(
-                                                                                                          color: Colors.black,
-                                                                                                        )),
-                                                                                                      );
-                                                                                                    }
+                                                                                          content: SizedBox(
+                                                                                            height: 500,
+                                                                                            width: 300,
+                                                                                            child: Column(
+                                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                                              children: [
+                                                                                                const Text(
+                                                                                                  'Are you sure you want to forward this report to intelligence?',
+                                                                                                  style: TextStyle(fontFamily: 'QRegular'),
+                                                                                                ),
+                                                                                                StreamBuilder<QuerySnapshot>(
+                                                                                                    stream: FirebaseFirestore.instance.collection('Users').where('role', isEqualTo: 'intelligence').snapshots(),
+                                                                                                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                                                                                      if (snapshot.hasError) {
+                                                                                                        print(snapshot.error);
+                                                                                                        return const Center(child: Text('Error'));
+                                                                                                      }
+                                                                                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                                        return const Padding(
+                                                                                                          padding: EdgeInsets.only(top: 50),
+                                                                                                          child: Center(
+                                                                                                              child: CircularProgressIndicator(
+                                                                                                            color: Colors.black,
+                                                                                                          )),
+                                                                                                        );
+                                                                                                      }
 
-                                                                                                    final new1 = snapshot.requireData;
-                                                                                                    return SizedBox(
-                                                                                                      height: 300,
-                                                                                                      child: ListView.builder(
-                                                                                                        itemCount: new1.docs.length,
-                                                                                                        itemBuilder: (context, index) {
-                                                                                                          return ListTile(
-                                                                                                            onTap: () async {
-                                                                                                              await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
-                                                                                                                'status': 'Forwarded',
-                                                                                                                'patrol': new1.docs[index]['name'],
-                                                                                                                'patrolid': new1.docs[index].id,
-                                                                                                              });
-                                                                                                              Navigator.pop(context);
-                                                                                                            },
-                                                                                                            leading: const Icon(
-                                                                                                              Icons.account_circle_outlined,
-                                                                                                            ),
-                                                                                                            title: TextRegular(text: new1.docs[index]['name'], fontSize: 14, color: Colors.black),
-                                                                                                          );
+                                                                                                      final new1 = snapshot.requireData;
+                                                                                                      return SizedBox(
+                                                                                                        height: 200,
+                                                                                                        child: ListView.builder(
+                                                                                                          itemCount: new1.docs.length,
+                                                                                                          itemBuilder: (context, index) {
+                                                                                                            return ListTile(
+                                                                                                              onTap: () async {
+                                                                                                                await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
+                                                                                                                  'status': 'Forwarded',
+                                                                                                                  'patrol': new1.docs[index]['name'],
+                                                                                                                  'patrolid': new1.docs[index].id,
+                                                                                                                });
+                                                                                                                Navigator.pop(context);
+                                                                                                              },
+                                                                                                              leading: const Icon(
+                                                                                                                Icons.account_circle_outlined,
+                                                                                                              ),
+                                                                                                              title: TextRegular(text: new1.docs[index]['name'], fontSize: 14, color: Colors.black),
+                                                                                                            );
+                                                                                                          },
+                                                                                                        ),
+                                                                                                      );
+                                                                                                    }),
+                                                                                                const Text(
+                                                                                                  'Forward to:',
+                                                                                                  style: TextStyle(fontFamily: 'QRegular'),
+                                                                                                ),
+                                                                                                SizedBox(
+                                                                                                  height: 200,
+                                                                                                  child: ListView.builder(
+                                                                                                    itemCount: 4,
+                                                                                                    itemBuilder: (context, index) {
+                                                                                                      return ListTile(
+                                                                                                        onTap: () async {
+                                                                                                          await FirebaseFirestore.instance.collection('Reports').doc(data.docs[index].id).update({
+                                                                                                            'status': 'Patrol',
+                                                                                                            'patrol': 'Patrol ${index + 1}',
+                                                                                                            'patrolid': 'Patrol ${index + 1}',
+                                                                                                          });
+                                                                                                          Navigator.pop(context);
                                                                                                         },
-                                                                                                      ),
-                                                                                                    );
-                                                                                                  }),
-                                                                                            ],
+                                                                                                        leading: const Icon(
+                                                                                                          Icons.account_circle_outlined,
+                                                                                                        ),
+                                                                                                        title: TextRegular(text: 'Patrol ${index + 1}', fontSize: 14, color: Colors.black),
+                                                                                                      );
+                                                                                                    },
+                                                                                                  ),
+                                                                                                )
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
                                                                                         ));
                                                                               },
