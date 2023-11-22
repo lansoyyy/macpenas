@@ -212,6 +212,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                             stream: FirebaseFirestore.instance
                                 .collection('Reports')
                                 .where('brgy', isEqualTo: types[i])
+                                .where('trig', isEqualTo: true)
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
