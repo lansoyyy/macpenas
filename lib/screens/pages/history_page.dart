@@ -176,6 +176,7 @@ class _HistoryPageState extends State<HistoryPage> {
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Reports')
+                      .where('trig', isEqualTo: true)
                       // .where('dateTime',
                       //     isGreaterThanOrEqualTo:
                       //         DateTime.parse(bdayController.text))
@@ -238,6 +239,13 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                               DataColumn(
                                 label: TextBold(
+                                  text: 'Cancelled',
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              DataColumn(
+                                label: TextBold(
                                   text: 'Name',
                                   fontSize: 18,
                                   color: Colors.black,
@@ -277,6 +285,16 @@ class _HistoryPageState extends State<HistoryPage> {
                                   DataCell(
                                     TextRegular(
                                       text: data.docs[i]['type'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextRegular(
+                                      text:
+                                          data.docs[i]['status'] == 'Cancelled'
+                                              ? 'Cancelled'
+                                              : 'Not Cancelled',
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
