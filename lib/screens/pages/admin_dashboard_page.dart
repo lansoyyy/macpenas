@@ -941,7 +941,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                                                   style: TextStyle(fontFamily: 'QRegular'),
                                                                                                 ),
                                                                                                 StreamBuilder<QuerySnapshot>(
-                                                                                                    stream: FirebaseFirestore.instance.collection('Users').where('role', isEqualTo: 'intelligence').snapshots(),
+                                                                                                    stream: FirebaseFirestore.instance.collection('Users').where('role', isEqualTo: 'admin').snapshots(),
                                                                                                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                                                                                                       if (snapshot.hasError) {
                                                                                                         print(snapshot.error);
