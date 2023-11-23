@@ -370,6 +370,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void generatePdf(List tableDataList) async {
+    final image = await imageFromAssetBundle('assets/images/logo.png');
     final pdf = pw.Document();
     final tableHeaders = [
       'Baranggay',
@@ -385,7 +386,7 @@ class _HistoryPageState extends State<HistoryPage> {
     for (var i = 0; i < tableDataList.length; i++) {
       tableData.add([
         tableDataList[i]['brgy'],
-        tableDataList[i]['address'],
+        tableDataList[i]['address'].toString().replaceAll('Region 10, ', ''),
         tableDataList[i]['name'],
         tableDataList[i]['type'],
         DateFormat.yMMMd()
@@ -405,6 +406,10 @@ class _HistoryPageState extends State<HistoryPage> {
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
+                pw.Center(
+                  child: pw.Image(image, height: 80, width: 80),
+                ),
+                pw.SizedBox(height: 5),
                 pw.Text('MACPENAS',
                     style: const pw.TextStyle(
                       fontSize: 18,

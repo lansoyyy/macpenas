@@ -181,6 +181,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           ButtonWidget(
                               label: 'Main Administration',
                               onPressed: (() {
+                                box.write('type', 'main admin');
                                 Navigator.pushNamed(
                                     context, Routes().loginscreen);
                               })),
@@ -190,6 +191,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           ButtonWidget(
                               label: 'Administration',
                               onPressed: (() {
+                                box.write('type', 'admin');
                                 Navigator.pushNamed(
                                     context, Routes().loginscreen);
                               })),
@@ -199,6 +201,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           ButtonWidget(
                               label: 'Intelligence',
                               onPressed: (() {
+                                box.write('type', 'intelligence');
                                 Navigator.pushNamed(
                                     context, Routes().loginscreen);
                               })),
@@ -208,6 +211,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           ButtonWidget(
                               label: 'Users',
                               onPressed: (() {
+                                box.write('type', 'user');
                                 Navigator.pushNamed(
                                     context, Routes().loginscreen);
                               })),

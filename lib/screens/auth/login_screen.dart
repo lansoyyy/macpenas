@@ -136,6 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: 'Login',
                               onPressed: (() async {
                                 bool isVerified = false;
+
+                                String type = '';
                                 try {
                                   await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
@@ -159,24 +161,39 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                         setState(() {
                                           isVerified = doc['isVerified'];
+
+                                          type = doc['role'];
                                         });
                                       }
                                     }).then((value) {
-                                      if (isVerified && user!.emailVerified) {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                Routes().homescreen);
-                                      } else {
+                                      if (box.read('type') != type) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: TextRegular(
                                                 text:
-                                                    'Your account has not been verified! Verify your email and wait for the admins response',
+                                                    'Invalid specific role for that user!',
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),
                                         );
+                                      } else {
+                                        if (isVerified && user!.emailVerified) {
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  Routes().homescreen);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: TextRegular(
+                                                  text:
+                                                      'Your account has not been verified! Verify your email and wait for the admins response',
+                                                  fontSize: 14,
+                                                  color: Colors.white),
+                                            ),
+                                          );
+                                        }
                                       }
                                     });
                                   });
