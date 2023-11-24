@@ -243,6 +243,24 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                       (context, index) {
                                                     return Card(
                                                       child: ListTile(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          update(data
+                                                              .docs[index].id);
+                                                          mapController!.animateCamera(
+                                                              CameraUpdate.newCameraPosition(CameraPosition(
+                                                                  zoom: 14,
+                                                                  target: LatLng(
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'lat'],
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'long']))));
+                                                        },
                                                         leading: isLargeScreen
                                                             ? Image.asset(
                                                                 'assets/images/profile.png',
