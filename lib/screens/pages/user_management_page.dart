@@ -308,7 +308,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       ),
                                       DataCell(
                                         TextRegular(
-                                          text: (i + 1).toString(),
+                                          text:
+                                              data.docs[i]['refno'].toString(),
                                           fontSize: 12,
                                           color: Colors.black,
                                         ),
@@ -521,7 +522,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                           ),
                                           DataCell(
                                             TextRegular(
-                                              text: (i + 1).toString(),
+                                              text: data.docs[i]['refno']
+                                                  .toString(),
                                               fontSize: 12,
                                               color: Colors.black,
                                             ),

@@ -288,7 +288,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                                     cells: [
                                       DataCell(
                                         TextRegular(
-                                          text: (i + 1).toString(),
+                                          text:
+                                              data.docs[i]['refno'].toString(),
                                           fontSize: 14,
                                           color: Colors.black,
                                         ),
@@ -514,7 +515,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                                       cells: [
                                         DataCell(
                                           TextRegular(
-                                            text: (i + 1).toString(),
+                                            text: data.docs[i]['refno']
+                                                .toString(),
                                             fontSize: 12,
                                             color: Colors.black,
                                           ),
