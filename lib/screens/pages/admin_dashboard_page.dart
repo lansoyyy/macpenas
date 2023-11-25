@@ -769,7 +769,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                       'Forwarded',
                                                       'Completed',
                                                       'Patrol',
-                                                      'Forwarded to Admin'
+                                                      'Forwarded to Admin',
+                                                      'Cancelled'
                                                     ]).snapshots(),
                                                 builder: (BuildContext context,
                                                     AsyncSnapshot<QuerySnapshot>
