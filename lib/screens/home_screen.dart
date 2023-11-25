@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:macpenas/screens/pages/about_us_page.dart';
@@ -443,6 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       MaterialButton(
                                         onPressed: () async {
+                                          await FirebaseAuth.instance.signOut();
                                           Navigator.of(context)
                                               .pushReplacementNamed(
                                                   Routes().loginscreen);
@@ -1005,6 +1007,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           MaterialButton(
                                             onPressed: () async {
+                                              await FirebaseAuth.instance
+                                                  .signOut();
                                               Navigator.of(context)
                                                   .pushReplacementNamed(
                                                       Routes().loginscreen);

@@ -147,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     User? user =
                                         FirebaseAuth.instance.currentUser;
 
-                                    print(user);
                                     FirebaseFirestore.instance
                                         .collection('Users')
                                         .where('id',
