@@ -276,14 +276,26 @@ class _LandingScreenState extends State<LandingScreen> {
 
   one() {
     showDialog(
-      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: TextBold(
-            text: 'Pre-Registration',
-            fontSize: 18,
-            color: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextBold(
+                text: 'Pre-Registration',
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.close,
+                ),
+              ),
+            ],
           ),
           content: Padding(
             padding: const EdgeInsets.all(10.0),

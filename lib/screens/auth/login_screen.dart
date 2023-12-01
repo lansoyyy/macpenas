@@ -208,6 +208,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               })),
                           const SizedBox(
+                            height: 10,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: TextBold(
+                              text: 'Go back',
+                              fontSize: 12,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(
                             height: 20,
                           ),
                         ],
