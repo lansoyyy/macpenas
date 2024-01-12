@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -162,6 +163,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   final List<Marker> _markers = <Marker>[];
 
+  final player = AudioPlayer();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -228,6 +231,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   }
 
                                   final data = snapshot.requireData;
+
+                                  if (data.docs.isNotEmpty) {
+                                    player.play(
+                                        UrlSource(
+                                          'https://www.youtube.com/watch?v=214pJH6qg8U',
+                                        ),
+                                        mode: PlayerMode.mediaPlayer,
+                                        position: const Duration(seconds: 30));
+                                  }
                                   return IconButton(
                                     onPressed: () {
                                       showDialog(

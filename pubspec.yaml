@@ -58,6 +58,7 @@ dependencies:
   google_maps_flutter: ^2.1.8
   google_maps_flutter_web: ^0.4.0
   google_maps_utils: ^1.5.0+0
+  audioplayers:
 
 dev_dependencies:
   flutter_test:
