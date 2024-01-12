@@ -83,7 +83,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   String newUrl = '';
   Set<Polygon> polygon = HashSet<Polygon>();
   update(String docId) async {
-    Timer.periodic(const Duration(seconds: 30), (timer) {
+    Timer.periodic(const Duration(seconds: 60), (timer) {
       Geolocator.getCurrentPosition().then((position) async {
         _markers.clear();
         _poly.clear();
@@ -506,6 +506,28 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                               index]
                                                                           [
                                                                           'long']))));
+
+
+                                                                          setState(() {
+                                                                           _markers.add(Marker(
+            markerId:  MarkerId( data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'id']),
+            position: LatLng(
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'lat'],
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'long']),
+            infoWindow:  InfoWindow(title:  data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'name'])));
+                                                                     });
                                                             },
                                                             leading:
                                                                 isLargeScreen
@@ -767,6 +789,27 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                             index]
                                                                         [
                                                                         'long']))));
+
+                                                                       setState(() {
+                                                                           _markers.add(Marker(
+            markerId:  MarkerId( data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'id']),
+            position: LatLng(
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'lat'],
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'long']),
+            infoWindow:  InfoWindow(title:  data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'name'])));
+                                                                     });
                                                       },
                                                       leading: isLargeScreen
                                                           ? Column(
@@ -939,6 +982,27 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                               index]
                                                                           [
                                                                           'long']))));
+
+                                                                        setState(() {
+                                                                           _markers.add(Marker(
+            markerId:  MarkerId( data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'id']),
+            position: LatLng(
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'lat'],
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'long']),
+            infoWindow:  InfoWindow(title:  data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'name'])));
+                                                                     });
                                                             },
                                                             leading:
                                                                 isLargeScreen
@@ -1116,6 +1180,27 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                             index]
                                                                         [
                                                                         'long']))));
+
+                                                                     setState(() {
+                                                                           _markers.add(Marker(
+            markerId:  MarkerId( data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'id']),
+            position: LatLng(
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'lat'],
+                                                                      data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'long']),
+            infoWindow:  InfoWindow(title:  data.docs[
+                                                                              index]
+                                                                          [
+                                                                          'name'])));
+                                                                     });
                                                       },
                                                       leading: isLargeScreen
                                                           ? Column(

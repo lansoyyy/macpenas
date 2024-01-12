@@ -76,6 +76,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     "Others"
   ];
 
+  String selected = '';
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -132,7 +134,25 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       },
                     ),
                   ),
-                  const SizedBox(),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  selected != ''
+                      ? Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            child: TextBold(
+                                text: selected,
+                                fontSize: 18,
+                                color: Colors.black),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               const SizedBox(
@@ -165,11 +185,18 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           width: double.infinity,
                           height: 350,
                           child: SfCartesianChart(
+                            onLegendTapped: (legendTapArgs) {
+                              print(legendTapArgs);
+                            },
+                            onDataLabelTapped: (onTapArgs) {
+                              print(onTapArgs.text);
+                            },
                             // Initialize category axis
                             primaryXAxis: CategoryAxis(),
                             series: <BarSeries<SalesData, String>>[
                               // Use BarSeries instead of LineSeries
                               BarSeries<SalesData, String>(
+                                onPointTap: (pointInteractionDetails) {},
                                 // Bind data source
                                 dataSource: <SalesData>[
                                   for (int i = 0; i < crimeTypes.length; i++)
@@ -183,7 +210,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                                           .toDouble(),
                                     ),
                                 ],
-                                xValueMapper: (SalesData sales, _) =>
+                                xValueMapper: (
+                                  SalesData sales,
+                                  _,
+                                ) =>
                                     sales.year,
                                 yValueMapper: (SalesData sales, _) =>
                                     sales.sales,

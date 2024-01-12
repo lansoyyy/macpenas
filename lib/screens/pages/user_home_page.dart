@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,6 +32,7 @@ class _UserHomePageState extends State<UserHomePage> {
       print('Error getting location: $error');
     });
     getMyData();
+    update();
   }
 
   String myName = '';
@@ -54,6 +56,26 @@ class _UserHomePageState extends State<UserHomePage> {
           hasLoaded = true;
         });
       }
+    });
+  }
+
+  update() async {
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      Geolocator.getCurrentPosition().then((position) async {
+        lat = position.latitude;
+        long = position.longitude;
+        // });
+
+        await FirebaseFirestore.instance
+            .collection('Reports')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'lat': position.latitude,
+          'long': position.longitude,
+        });
+      }).catchError((error) {
+        print('Error getting location: $error');
+      });
     });
   }
 
