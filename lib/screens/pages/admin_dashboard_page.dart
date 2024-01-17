@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:audioplayers/audioplayers.dart';
+
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
+import 'package:just_audio/just_audio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -233,15 +234,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   final data = snapshot.requireData;
 
                                   if (data.docs.isNotEmpty) {
-                                    player.play(
-                                        UrlSource(
-                                          'https://www.youtube.com/watch?v=214pJH6qg8U',
-                                        ),
-                                        mode: PlayerMode.mediaPlayer,
-                                        position: const Duration(seconds: 30));
+                                    try {
+                                      AssetsAudioPlayer.newPlayer().open(
+                                        Audio(
+                                            "assets/images/videoplayback.m4a"),
+                                        autoStart: true,
+                                        showNotification: true,
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                    }
+
+                                    print('eee');
+                                    // Audio here
                                   }
                                   return IconButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       showDialog(
                                         context: context,
                                         builder: (context) {
@@ -507,27 +515,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                           [
                                                                           'long']))));
 
-
-                                                                          setState(() {
-                                                                           _markers.add(Marker(
-            markerId:  MarkerId( data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'id']),
-            position: LatLng(
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'lat'],
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'long']),
-            infoWindow:  InfoWindow(title:  data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'name'])));
-                                                                     });
+                                                              setState(() {
+                                                                _markers.add(Marker(
+                                                                    markerId: MarkerId(data
+                                                                            .docs[index]
+                                                                        ['id']),
+                                                                    position: LatLng(
+                                                                        data.docs[index]
+                                                                            [
+                                                                            'lat'],
+                                                                        data.docs[index]
+                                                                            [
+                                                                            'long']),
+                                                                    infoWindow:
+                                                                        InfoWindow(
+                                                                            title:
+                                                                                data.docs[index]['name'])));
+                                                              });
                                                             },
                                                             leading:
                                                                 isLargeScreen
@@ -790,26 +794,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                         [
                                                                         'long']))));
 
-                                                                       setState(() {
-                                                                           _markers.add(Marker(
-            markerId:  MarkerId( data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'id']),
-            position: LatLng(
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'lat'],
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'long']),
-            infoWindow:  InfoWindow(title:  data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'name'])));
-                                                                     });
+                                                        setState(() {
+                                                          _markers.add(Marker(
+                                                              markerId: MarkerId(
+                                                                  data.docs[index]
+                                                                      ['id']),
+                                                              position: LatLng(
+                                                                  data.docs[index]
+                                                                      ['lat'],
+                                                                  data.docs[
+                                                                          index]
+                                                                      ['long']),
+                                                              infoWindow: InfoWindow(
+                                                                  title: data.docs[
+                                                                          index]
+                                                                      ['name'])));
+                                                        });
                                                       },
                                                       leading: isLargeScreen
                                                           ? Column(
@@ -983,26 +983,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                           [
                                                                           'long']))));
 
-                                                                        setState(() {
-                                                                           _markers.add(Marker(
-            markerId:  MarkerId( data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'id']),
-            position: LatLng(
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'lat'],
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'long']),
-            infoWindow:  InfoWindow(title:  data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'name'])));
-                                                                     });
+                                                              setState(() {
+                                                                _markers.add(Marker(
+                                                                    markerId: MarkerId(data
+                                                                            .docs[index]
+                                                                        ['id']),
+                                                                    position: LatLng(
+                                                                        data.docs[index]
+                                                                            [
+                                                                            'lat'],
+                                                                        data.docs[index]
+                                                                            [
+                                                                            'long']),
+                                                                    infoWindow:
+                                                                        InfoWindow(
+                                                                            title:
+                                                                                data.docs[index]['name'])));
+                                                              });
                                                             },
                                                             leading:
                                                                 isLargeScreen
@@ -1181,26 +1178,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                                                         [
                                                                         'long']))));
 
-                                                                     setState(() {
-                                                                           _markers.add(Marker(
-            markerId:  MarkerId( data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'id']),
-            position: LatLng(
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'lat'],
-                                                                      data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'long']),
-            infoWindow:  InfoWindow(title:  data.docs[
-                                                                              index]
-                                                                          [
-                                                                          'name'])));
-                                                                     });
+                                                        setState(() {
+                                                          _markers.add(Marker(
+                                                              markerId: MarkerId(
+                                                                  data.docs[index]
+                                                                      ['id']),
+                                                              position: LatLng(
+                                                                  data.docs[index]
+                                                                      ['lat'],
+                                                                  data.docs[
+                                                                          index]
+                                                                      ['long']),
+                                                              infoWindow: InfoWindow(
+                                                                  title: data.docs[
+                                                                          index]
+                                                                      ['name'])));
+                                                        });
                                                       },
                                                       leading: isLargeScreen
                                                           ? Column(
